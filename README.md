@@ -2,6 +2,15 @@
 
 [![Validate and deploy Atlas](https://github.com/TEJAS-MK2/ATLAS/actions/workflows/pages.yml/badge.svg)](https://github.com/TEJAS-MK2/ATLAS/actions/workflows/pages.yml)
 [![Demo](https://img.shields.io/badge/demo-live-brightgreen?logo=github)](https://tejas-mk2.github.io/ATLAS/)
+[![GitHub stars](https://img.shields.io/github/stars/TEJAS-MK2/ATLAS?style=flat&logo=github)](https://github.com/TEJAS-MK2/ATLAS/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/TEJAS-MK2/ATLAS?style=flat&logo=github)](https://github.com/TEJAS-MK2/ATLAS/forks)
+[![GitHub issues](https://img.shields.io/github/issues/TEJAS-MK2/ATLAS?style=flat&logo=github)](https://github.com/TEJAS-MK2/ATLAS/issues)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/TEJAS-MK2/ATLAS/blob/main/LICENSE)
+[![Last commit](https://img.shields.io/github/last-commit/TEJAS-MK2/ATLAS?logo=git)](https://github.com/TEJAS-MK2/ATLAS/commits/main)
+[![Top language](https://img.shields.io/github/languages/top/TEJAS-MK2/ATLAS)](https://github.com/TEJAS-MK2/ATLAS)
+[![Node.js CI](https://img.shields.io/badge/CI-Node.js%2022-339933?logo=nodedotjs&logoColor=white)](https://github.com/TEJAS-MK2/ATLAS/blob/main/.github/workflows/pages.yml)
+[![Backend](https://img.shields.io/badge/backend-Supabase-3FCF8E?logo=supabase&logoColor=white)](https://supabase.com/)
+[![PWA](https://img.shields.io/badge/PWA-enabled-5A0FC8?logo=pwa&logoColor=white)](https://github.com/TEJAS-MK2/ATLAS)
 
 Atlas is a responsive, browser-based GIS workspace with interactive maps, a 3D Earth explorer, satellite imagery, opt-in GPS recording, OSM feature overlays, route planning and GeoJSON workflows.
 
