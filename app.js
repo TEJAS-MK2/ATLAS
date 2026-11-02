@@ -87,3 +87,72 @@ $('roomCopy').onclick=async()=>{try{await navigator.clipboard.writeText($('roomU
 map.on('moveend zoomend',()=>scheduleRoomSync());
 document.querySelectorAll('input[name=layer]').forEach(el=>el.addEventListener('change',()=>scheduleRoomSync()));
 const roomHash=location.hash.match(/^#room=([0-9a-f-]{36})$/i);if(roomHash)loadRoom(roomHash[1]);
+
+
+// Atlas command palette — keyboard-first access to existing workspace actions.
+const commandPalette=$('commandPalette');
+const commandInput=$('commandInput');
+const commandList=$('commandList');
+const atlasCommands=[
+  {id:'explore',title:'Explore map',detail:'Return to map navigation',keys:'E',run:()=>setTool('pan')},
+  {id:'route',title:'Plan a route',detail:'Open the directions planner',keys:'R',run:()=>setTool('route')},
+  {id:'nearby',title:'Discover nearby places',detail:'Search points of interest',keys:'N',run:()=>setTool('nearby')},
+  {id:'measure',title:'Measure distance',detail:'Trace a distance on the map',keys:'M',run:()=>setTool('measure')},
+  {id:'gps',title:'Open GPS tracking',detail:'Review or start an opt-in GPS session',keys:'G',run:()=>$('trackPanel').classList.remove('hidden')},
+  {id:'locate',title:'Locate this device',detail:'Request browser location permission',keys:'L',run:()=>$('locateBtn').click()},
+  {id:'globe',title:'Open 3D Earth explorer',detail:'Switch to the interactive globe',keys:'3D',run:()=>openGlobe()},
+  {id:'satellite',title:'Switch to satellite imagery',detail:'Use Esri World Imagery basemap',keys:'S',run:()=>{setLayer('satellite');notify('Layer: satellite')}},
+  {id:'streets',title:'Switch to street map',detail:'Use the street basemap',keys:'1',run:()=>{setLayer('streets');notify('Layer: streets')}},
+  {id:'share',title:'Share map position',detail:'Create a link to the current map view',keys:'⌁',run:()=>$('shareBtn').click()},
+  {id:'room',title:'Open live map room',detail:'Create or view a shared room',keys:'⇧R',run:()=>$('shareRoomBtn').click()},
+  {id:'pin',title:'Drop a pin',detail:'Save a named place on the map',keys:'P',run:()=>$('addPinBtn').click()},
+  {id:'export',title:'Export GeoJSON',detail:'Download workspace features',keys:'⇧E',run:()=>$('exportBtn').click()}
+];
+let commandActiveIndex=0;
+function renderCommands(){
+  const query=commandInput.value.trim().toLowerCase();
+  const filtered=atlasCommands.filter(c=>(c.title+' '+c.detail+' '+c.id).toLowerCase().includes(query));
+  commandActiveIndex=Math.min(commandActiveIndex,Math.max(0,filtered.length-1));
+  commandList.innerHTML=filtered.length?filtered.map((c,i)=>'<button type="button" class="command-option'+(i===commandActiveIndex?' active':'')+'" role="option" aria-selected="'+(i===commandActiveIndex)+'" data-command="'+c.id+'"><span class="command-option-icon">'+(i+1).toString().padStart(2,'0')+'</span><span class="command-option-copy"><b>'+escapeHTML(c.title)+'</b><small>'+escapeHTML(c.detail)+'</small></span><kbd>'+escapeHTML(c.keys)+'</kbd></button>').join(''):'<p class="command-empty">No matching commands. Try another search.</p>';
+}
+function openCommandPalette(){
+  if(!commandPalette.open)commandPalette.showModal();
+  commandInput.value='';
+  commandActiveIndex=0;
+  renderCommands();
+  requestAnimationFrame(()=>commandInput.focus());
+}
+function closeCommandPalette(){if(commandPalette.open)commandPalette.close()}
+function runCommand(id){
+  const command=atlasCommands.find(c=>c.id===id);
+  if(!command)return;
+  closeCommandPalette();
+  command.run();
+}
+$('commandOpen').addEventListener('click',openCommandPalette);
+$('commandClose').addEventListener('click',closeCommandPalette);
+commandPalette.addEventListener('click',e=>{if(e.target===commandPalette)closeCommandPalette()});
+commandList.addEventListener('click',e=>{const option=e.target.closest('[data-command]');if(option)runCommand(option.dataset.command)});
+commandInput.addEventListener('input',()=>{commandActiveIndex=0;renderCommands()});
+commandInput.addEventListener('keydown',e=>{
+  const options=[...commandList.querySelectorAll('[data-command]')];
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){
+    e.preventDefault();
+    if(options.length){commandActiveIndex=(commandActiveIndex+(e.key==='ArrowDown'?1:-1)+options.length)%options.length;renderCommands()}
+  }else if(e.key==='Enter'){
+    e.preventDefault();
+    const selected=options[commandActiveIndex];
+    if(selected)runCommand(selected.dataset.command);
+  }
+});
+document.addEventListener('keydown',e=>{
+  const target=e.target;
+  const typing=target instanceof HTMLElement&&(target.isContentEditable||['INPUT','TEXTAREA','SELECT'].includes(target.tagName));
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){
+    e.preventDefault();
+    if(commandPalette.open)closeCommandPalette();else openCommandPalette();
+  }else if(e.key==='Escape'&&commandPalette.open){closeCommandPalette()}
+  else if(!typing&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&e.key==='/'){
+    e.preventDefault();openCommandPalette();
+  }
+});
