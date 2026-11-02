@@ -53,6 +53,22 @@ The design tokens, responsive behaviour, accessibility considerations and manual
 
 Use **Ctrl/⌘ + K** or **/** to open the keyboard-first command palette. Search and launch common actions including route planning, nearby discovery, distance measurement, GPS session controls, device location, the 3D globe, basemap switching, room sharing, pin creation and GeoJSON export. Arrow keys move through results, Enter runs the selected action, and Escape closes the palette.
 
+
+## Project documentation
+
+| Guide | Purpose |
+|---|---|
+| [Security policy](./SECURITY.md) | Responsible vulnerability reporting and security expectations |
+| [Contributing](./CONTRIBUTING.md) | Development setup, coding standards, tests, and pull requests |
+| [Code of Conduct](./CODE_OF_CONDUCT.md) | Community participation standards |
+| [Support](./SUPPORT.md) | Bug reports, feature requests, and troubleshooting |
+| [Changelog](./CHANGELOG.md) | Notable project updates |
+| [Architecture](./docs/ARCHITECTURE.md) | Runtime components, data flow, and trust boundaries |
+| [Privacy](./docs/PRIVACY.md) | Location handling, browser storage, sharing, and provider requests |
+| [Design system](./docs/DESIGN_SYSTEM.md) | Visual tokens, responsive behaviour, and accessibility |
+
+GitHub issue forms and a pull-request template are available under `.github/`. Dependabot checks GitHub Actions dependencies weekly, and CodeQL runs scheduled JavaScript security analysis.
+
 ## Local development
 Requires Node.js 22+.
 
