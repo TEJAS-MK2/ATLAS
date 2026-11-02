@@ -352,3 +352,41 @@ body.light-ui .coordinate-card,body.light-ui .scale-card{background:#f8fcf9ed;co
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+
+/* ATLAS 2.1 — command palette and interaction polish */
+:focus-visible{outline:2px solid #83e7c8!important;outline-offset:3px}
+button:disabled{cursor:not-allowed;opacity:.55}
+::selection{background:#75e0c14a;color:inherit}
+*{scrollbar-width:thin;scrollbar-color:#38545f transparent}
+.command-trigger{flex:none;padding:5px 9px;border:1px solid #38525d;border-radius:7px;background:#1b303a;color:#b8d9cf;font-size:10px;font-weight:700;letter-spacing:.08em;white-space:nowrap;cursor:pointer;transition:border-color .18s,background .18s,color .18s}
+.command-trigger:hover{border-color:#75e0c1;background:#23443f;color:#a6f0d7}
+.command-palette{width:min(620px,calc(100vw - 28px));max-height:min(680px,calc(100dvh - 32px));padding:0;border:1px solid #3a5964;border-radius:18px;background:linear-gradient(155deg,#142934,#0a1922);color:#eaf2f3;box-shadow:0 36px 120px #000c;overflow:hidden}
+.command-palette::backdrop{background:#02090fc9;backdrop-filter:blur(8px)}
+.command-head{display:flex;align-items:center;justify-content:space-between;padding:22px 22px 14px}
+.command-head h2{margin:0;font:600 21px 'Space Grotesk';letter-spacing:-.04em}
+.command-head .eyebrow{margin-bottom:6px}
+.command-search-label{display:block;margin:0 22px 7px;color:#92aab2;font-size:9px;font-weight:700;letter-spacing:1.2px}
+.command-input{display:block;width:calc(100% - 44px);height:48px;margin:0 22px 16px;padding:0 14px;border:1px solid #38535e;border-radius:10px;background:#0b1c26;color:#edf7f4;font:13px 'DM Sans';outline:none}
+.command-input:focus{border-color:#75e0c1;box-shadow:0 0 0 4px #75e0c11b}
+.command-list{max-height:min(440px,calc(100dvh - 260px));overflow:auto;padding:0 12px 12px}
+.command-option{display:flex;align-items:center;gap:12px;width:100%;min-height:58px;padding:9px 10px;border:1px solid transparent;border-radius:10px;background:transparent;text-align:left;color:#dce9e8;cursor:pointer}
+.command-option:hover,.command-option.active{border-color:#345e58;background:linear-gradient(100deg,#1c3c3c,#172e38)}
+.command-option-icon{width:31px;height:31px;display:grid;place-items:center;flex:none;border:1px solid #35544f;border-radius:9px;background:#75e0c112;color:#8ce7c8;font:600 10px 'Space Grotesk'}
+.command-option-copy{display:block;min-width:0;flex:1}
+.command-option-copy b{display:block;font-size:11px;font-weight:700}
+.command-option-copy small{display:block;margin-top:4px;color:#91a8af;font-size:9px}
+.command-option kbd,.command-foot kbd{padding:4px 7px;border:1px solid #3b5660;border-radius:6px;background:#0d202a;color:#a8bdc0;font-size:9px}
+.command-empty{padding:24px;text-align:center;color:#9bb0b5;font-size:11px}
+.command-foot{display:flex;justify-content:flex-end;gap:16px;flex-wrap:wrap;padding:12px 20px;border-top:1px solid #2b434e;background:#091821;color:#8ea5ad;font-size:9px}
+.command-foot span{display:flex;align-items:center;gap:4px}
+body.light-ui .command-palette{background:linear-gradient(155deg,#f8fcfa,#e9f3ee);color:#1b3738;border-color:#c9ddd3}
+body.light-ui .command-input{background:#f2f8f4;color:#193738;border-color:#c9ddd3}
+body.light-ui .command-option{color:#254343}
+body.light-ui .command-option:hover,body.light-ui .command-option.active{background:#e3f3eb;border-color:#c6e5d7}
+body.light-ui .command-option-copy small{color:#617a76}
+body.light-ui .command-foot{background:#edf5f0;border-color:#d7e5dd;color:#5f7772}
+body.light-ui .command-option kbd,body.light-ui .command-foot kbd{background:#e1eee7;border-color:#ccded3;color:#355b52}
+@media(max-width:760px){.command-trigger{padding:4px 6px;font-size:8px;letter-spacing:0}.command-palette{border-radius:14px}.command-head{padding:17px 16px 12px}.command-input{width:calc(100% - 32px);margin-inline:16px}.command-search-label{margin-inline:16px}.command-list{padding-inline:8px}.command-foot{justify-content:center;gap:10px}}
+@media(max-width:360px){.command-trigger{font-size:7px;padding:4px}.search-wrap{gap:5px}.brand small{display:none}}
+@media(prefers-reduced-motion:reduce){.command-option,.command-trigger{transition:none}}
