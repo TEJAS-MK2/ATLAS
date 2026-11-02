@@ -3,6 +3,7 @@ const resources = [
   { path: './', label: 'homepage', includes: '<div class="app-shell">' },
   { path: './index.html', label: 'HTML entrypoint', includes: 'id="map"' },
   { path: './styles.css', label: 'stylesheet', includes: '.app-shell' },
+  { path: './assets/atlas-social.svg', label: 'social preview artwork', includes: '<svg' },
   { path: './app.js', label: 'application module', includes: "L.map('map'" },
   { path: './room-ui.js', label: 'room UI module', includes: 'shareRoomTopBtn' },
   { path: './src/geo.js', label: 'geospatial utilities', includes: 'haversine' },
@@ -36,7 +37,7 @@ async function checkResource(resource) {
 
 const bodies = await Promise.all(resources.map(checkResource));
 const html = bodies[0];
-for (const marker of ['id="map"', 'id="routeGo"', 'id="nearbyGo"', 'id="trackStartStop"', 'id="roomCreate"', 'id="globeModal"']) {
+for (const marker of ['id="map"', 'id="routeGo"', 'id="nearbyGo"', 'id="trackStartStop"', 'id="roomCreate"', 'id="globeModal"', 'property="og:image"', 'name="twitter:card"']) {
   if (!html.includes(marker)) throw new Error(`Homepage is missing required interface element ${marker}`);
 }
 console.log(`ATLAS production smoke test passed: ${resources.length} resources checked at ${base.href}`);
