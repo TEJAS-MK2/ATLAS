@@ -43,6 +43,12 @@ Atlas is a responsive, browser-based GIS workspace with interactive maps, a 3D E
 - Browser network diagnostics where supported
 - Installable PWA with app icons, network-first asset refresh and offline navigation fallback
 
+## Interface experience
+
+Atlas uses a map-first command-workspace layout with a refreshed visual system, refined dark and light appearances, clearer active states, layered surfaces, more legible map controls and adaptive navigation for desktop, tablet and mobile. The map remains the primary workspace while the inspector and navigation adapt to available screen width.
+
+The design tokens, responsive behaviour, accessibility considerations and manual device acceptance checklist are documented in [docs/DESIGN_SYSTEM.md](./docs/DESIGN_SYSTEM.md).
+
 ## Local development
 Requires Node.js 22+.
 
