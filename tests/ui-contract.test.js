@@ -115,3 +115,6 @@ test('GeoJSON overlay manager disables controls when no layer is loaded',()=>{
   assert.match(app,/geoOverlayFeatures=\[\]/);
   assert.match(app,/finally\{\$\('overlayLoad'\)\.disabled=false/);
 });
+
+test('map center displays DMS coordinates and overlay bounds summary',()=>{assert.match(html,/id="centerDms"/);assert.match(html,/id="overlayBounds"/);assert.match(app,/coordinateToDMS\(c\.lat,c\.lng\)/);assert.match(app,/Bounds unavailable/)});
+test('clearing workspace resets GeoJSON feature state as well as the map layer',()=>{assert.match(app,/geoOverlayFeatures=\[\];geoOverlayKind=null/);assert.match(app,/Workspace layers cleared/)});
