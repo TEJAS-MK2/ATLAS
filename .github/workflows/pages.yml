@@ -27,6 +27,9 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+      # The deploy job runs on a fresh runner; check out the repository before
+      # packaging the site, otherwise the Pages artifact contains only an empty ./ directory.
+      - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
         with:
           enablement: true
