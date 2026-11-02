@@ -49,6 +49,10 @@ Atlas uses a map-first command-workspace layout with a refreshed visual system, 
 
 The design tokens, responsive behaviour, accessibility considerations and manual device acceptance checklist are documented in [docs/DESIGN_SYSTEM.md](./docs/DESIGN_SYSTEM.md).
 
+## Command palette
+
+Use **Ctrl/⌘ + K** or **/** to open the keyboard-first command palette. Search and launch common actions including route planning, nearby discovery, distance measurement, GPS session controls, device location, the 3D globe, basemap switching, room sharing, pin creation and GeoJSON export. Arrow keys move through results, Enter runs the selected action, and Escape closes the palette.
+
 ## Local development
 Requires Node.js 22+.
 
