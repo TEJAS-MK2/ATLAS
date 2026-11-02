@@ -41,20 +41,21 @@ Atlas is a responsive, browser-based GIS workspace with interactive maps, a 3D E
 - Nearby POI discovery and park/water/building geometry overlays via OpenStreetMap Overpass
 - Distance measurement, saved places, GeoJSON import/export and track export
 - Browser network diagnostics where supported
-- PWA shell caching for repeat visits
+- Installable PWA with app icons, network-first asset refresh and offline navigation fallback
 
 ## Local development
-Requires Node.js 20+.
+Requires Node.js 22+.
 
 ```bash
 npm test
 npm run check
+node scripts/smoke-test.mjs
 python3 -m http.server 8080
 ```
 Open http://localhost:8080.
 
 ## Deployment
-GitHub Actions runs unit tests and JavaScript syntax checks before publishing the repository root to GitHub Pages.
+GitHub Actions runs unit tests and JavaScript syntax checks before publishing the repository root to GitHub Pages. A separate post-deployment job fetches the live homepage, application modules, styles, service worker, manifest and install icons to catch missing or empty production assets.
 Live site: https://tejas-mk2.github.io/ATLAS/
 
 ## Data and privacy
