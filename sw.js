@@ -1,1 +1,39 @@
-const CACHE='atlas-shell-v3';const SHELL=['./','./index.html','./styles.css','./app.js','./room-ui.js','./src/geo.js','./manifest.webmanifest'];self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting())));self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));self.addEventListener('fetch',e=>{const u=new URL(e.request.url);if(e.request.method!=='GET'||u.origin!==location.origin)return;e.respondWith(caches.match(e.request).then(cached=>cached||fetch(e.request).then(r=>{if(r.ok){const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy))}return r}).catch(()=>caches.match('./index.html'))))});
+const CACHE='atlas-shell-v4';
+const SHELL=['./','./index.html','./styles.css','./app.js','./room-ui.js','./src/geo.js','./manifest.webmanifest','./icons/atlas-192.svg','./icons/atlas-512.svg'];
+
+self.addEventListener('install',event=>{
+  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting()));
+});
+
+self.addEventListener('activate',event=>{
+  event.waitUntil(caches.keys()
+    .then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key))))
+    .then(()=>self.clients.claim()));
+});
+
+// Prefer fresh network responses, but keep same-origin assets available offline.
+// Only navigation requests fall back to index.html; never return HTML for a missing JS/CSS asset.
+self.addEventListener('fetch',event=>{
+  const request=event.request;
+  const url=new URL(request.url);
+  if(request.method!=='GET'||url.origin!==self.location.origin)return;
+
+  event.respondWith((async()=>{
+    const cached=await caches.match(request);
+    try{
+      const response=await fetch(request);
+      if(response.ok){
+        const cache=await caches.open(CACHE);
+        await cache.put(request,response.clone());
+      }
+      return response;
+    }catch(error){
+      if(cached)return cached;
+      if(request.mode==='navigate'){
+        const shell=await caches.match('./index.html');
+        if(shell)return shell;
+      }
+      throw error;
+    }
+  })());
+});
