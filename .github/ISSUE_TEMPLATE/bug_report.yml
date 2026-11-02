@@ -1,0 +1,48 @@
+name: Bug report
+description: Report a reproducible problem in ATLAS.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "Please remove personal location data, room links, tokens, and other secrets from all details and attachments."
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and operating system
+      placeholder: "e.g. Chrome 130 on Android 14"
+    validations:
+      required: true
+  - type: input
+    id: viewport
+    attributes:
+      label: Device and viewport
+      placeholder: "e.g. Android phone, 390 × 844"
+    validations:
+      required: false
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include the smallest reliable sequence of actions.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Logs or screenshots
+      description: Remove credentials, precise personal coordinates, and private room URLs.
+    validations:
+      required: false
