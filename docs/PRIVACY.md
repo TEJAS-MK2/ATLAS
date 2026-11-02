@@ -1,17 +1,19 @@
 # Privacy and Location Data
 
-ATLAS is designed as a browser-first mapping workspace. This document describes the data flows currently implemented; it is not legal advice or a guarantee about third-party providers.
+ATLAS is a browser-first mapping workspace. This document describes implemented data flows; it is not legal advice or a guarantee about third-party providers.
 
 ## Location permissions
 
-- The application does not request GPS permission on initial page load.
+- GPS permission is not requested on initial page load.
 - A user action is required to locate the device or start a GPS tracking session.
 - Browser permission prompts and precise-location access are controlled by the browser and operating system.
-- Stop a tracking session when finished. Review and clear browser data if you no longer want locally stored bookmarks.
+- Stop a tracking session when finished. Review and clear browser data if you no longer want locally stored bookmarks or saved views.
 
 ## Browser-held data
 
-Saved places use browser local storage. GPS track points are held in the active application session until exported; availability across reloads is not guaranteed. Shared room edit capability is held in the browser session where applicable. Anyone with a read-only room link may be able to view the map content shared to that room until it expires.
+Saved places and named map views are stored in browser local storage. A saved map view contains a user-selected label, map center, zoom level, and basemap. GPS track points are held in the active application session until exported; availability across reloads is not guaranteed. Shared room edit capability is held in the browser session where applicable. Anyone with a read-only room link may be able to view the map content shared to that room until it expires.
+
+Browser storage is not a secure vault. Anyone with access to the browser profile or suitable browser extensions may be able to inspect it.
 
 ## Third-party requests
 
@@ -33,7 +35,7 @@ Those providers receive request metadata such as IP address and requested coordi
 
 ## User choices
 
-Do not start GPS tracking unless needed. Avoid sharing live room links publicly when they contain sensitive places. Clear saved places in the application when available, and manage browser site data to remove local application storage.
+Do not start GPS tracking unless needed. Avoid sharing live room links publicly when they contain sensitive places. Remove saved places and map views in the application when available, or manage browser site data to clear local application storage.
 
 ## Changes
 

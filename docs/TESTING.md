@@ -2,19 +2,22 @@
 
 ## Automated checks
 
-Run from the repository root with Node.js 22+:
+Requirements: Node.js 22+ and Python 3 for the local static test server.
 
 ```bash
+npm install
 npm test
 npm run check
+npm run test:e2e
 node scripts/smoke-test.mjs
 ```
 
-- `npm test` runs the Node.js built-in test runner over the repository test files.
+- `npm test` runs the Node.js built-in test runner, including geospatial and security-contract tests.
 - `npm run check` runs syntax checks on the main application modules.
+- `npm run test:e2e` runs Playwright Chromium tests against a local static server. The suite checks map initialization, command palette behaviour, layer controls, GeoJSON import validation and inspection, saved map view persistence, and narrow mobile overflow.
 - `scripts/smoke-test.mjs` checks the published site and required production assets when network access is available.
 
-GitHub Actions runs tests and syntax checks before GitHub Pages deployment, then performs a production smoke check. CodeQL separately analyzes JavaScript/TypeScript.
+GitHub Actions runs unit tests, syntax checks, and browser tests before GitHub Pages deployment, then performs a production smoke check. CodeQL separately analyzes JavaScript/TypeScript.
 
 ## Manual UI acceptance
 
@@ -32,7 +35,8 @@ Verify:
 - Dark and light themes.
 - Map controls and attribution remain visible.
 - Command palette keyboard navigation and focus handling.
-- Layer manager visibility, opacity, count, export, and clear actions.
+- Layer manager visibility, opacity, count, export, search, and clear actions.
+- Saved map views persist and restore the selected basemap and zoom.
 - Route, nearby, measurement, pin, and GeoJSON workflows.
 - No horizontal overflow or obscured controls.
 - Reduced-motion preference and keyboard-only operation.

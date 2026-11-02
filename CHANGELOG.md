@@ -4,9 +4,12 @@ Notable project changes are recorded here. Dates and entries are added when chan
 
 ## Unreleased
 
-- Repository governance and contributor documentation.
-- Security reporting policy and automated JavaScript code scanning.
-- Issue and pull-request templates for more consistent reports and reviews.
+- Added validated GeoJSON imports, feature search/inspection, geometry metrics, and spatial bounds summaries.
+- Added named map views stored locally in the browser, with save, restore, and delete actions.
+- Added Playwright Chromium browser tests to the deployment gate.
+- Expanded coordinate display with decimal and DMS formats.
+- Added repository governance, privacy, security, architecture, and contributor documentation.
+- Added CodeQL analysis and Dependabot configuration.
 
 ## 2.1 — Command workspace
 
