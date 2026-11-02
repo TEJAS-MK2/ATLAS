@@ -79,3 +79,25 @@ test('room creation and loading tolerate blocked session storage',()=>{
 test('programmatic basemap changes synchronize shared rooms',()=>{
   assert.match(app,/activeLayerName'\)\.textContent=layerNames\[name\]\|\|name;scheduleRoomSync\(\)/);
 });
+
+
+test('command palette is present, accessible and exposes its keyboard shortcut',()=>{
+  for(const id of ['commandOpen','commandPalette','commandTitle','commandClose','commandInput','commandList']) assert.match(html,new RegExp('id="'+id+'"'));
+  assert.match(html,/<dialog id="commandPalette"/);
+  assert.match(html,/aria-labelledby="commandTitle"/);
+  assert.match(app,/e\.ctrlKey\|\|e\.metaKey/);
+  assert.match(app,/ArrowDown/);
+  assert.match(app,/ArrowUp/);
+  assert.match(app,/runCommand/);
+});
+test('command palette actions are connected to existing Atlas features',()=>{
+  for(const id of ["'route'","'nearby'","'measure'","'gps'","'locate'","'globe'","'satellite'","'room'","'export'"]) assert.ok(app.includes(id),id);
+  assert.match(app,/setTool\('route'\)/);
+  assert.match(app,/openGlobe\(\)/);
+  assert.match(app,/setLayer\('satellite'\)/);
+});
+test('command palette respects light theme and small mobile viewports',()=>{
+  assert.match(css,/body\.light-ui \.command-palette/);
+  assert.match(css,/@media\(max-width:360px\)/);
+  assert.match(css,/prefers-reduced-motion:reduce/);
+});
