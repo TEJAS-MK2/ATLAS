@@ -34,4 +34,6 @@ test('Pages deployment checks out source before packaging and runs tests first',
   assert.match(deploy,/needs: test/);
   assert.match(deploy,/actions\/checkout@v6/);
   assert.match(deploy,/actions\/upload-pages-artifact@v4/);
+  assert.match(workflow,/smoke:\n    needs: deploy/);
+  assert.match(workflow,/node scripts\/smoke-test\.mjs/);
 });
