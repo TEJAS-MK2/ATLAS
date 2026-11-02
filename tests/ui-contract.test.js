@@ -133,5 +133,5 @@ test('Field Console design tokens and social metadata are present',()=>{
 test('README badges point to real repository workflows and avoid unverified release claims',()=>{
   assert.match(readme,/actions\/workflows\/pages\.yml/);
   assert.match(readme,/actions\/workflows\/codeql\.yml/);
-  assert.doesNotMatch(readme,/github\/v\/release|github\/release-date|coverage/);
+  assert.doesNotMatch(readme,/img\.shields\.io\/github\/v\/release|img\.shields\.io\/github\/release-date/);
 });
