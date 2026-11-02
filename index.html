@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101923"><meta name="description" content="Atlas — a live, privacy-conscious mapping and geospatial intelligence workspace.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://unpkg.com; style-src 'self' 'unsafe-inline' https://unpkg.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com; connect-src 'self' https://nominatim.openstreetmap.org https://photon.komoot.io https://router.project-osrm.org https://overpass-api.de https://ipapi.co; worker-src 'self'; manifest-src 'self';">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="./styles.css"><link rel="manifest" href="./manifest.webmanifest">
+  <title>Atlas — Geospatial Intelligence</title>
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Atlas home"><span class="brand-mark">A</span><span>ATLAS<small>GEOSPATIAL INTELLIGENCE</small></span></a>
+    <div class="search-wrap"><span class="search-icon">⌕</span><input id="searchInput" type="search" placeholder="Search places, addresses, coordinates…" autocomplete="off" aria-label="Search places"><kbd>ENTER</kbd><div id="searchResults" class="search-results hidden"></div></div>
+    <div class="top-actions"><span class="live-indicator"><i></i> LIVE MAP</span><button id="locateBtn" class="icon-btn" title="Locate me" aria-label="Locate me">◎</button><button id="themeBtn" class="icon-btn" title="Toggle appearance" aria-label="Toggle appearance">◐</button></div>
+  </header>
+  <main class="workspace">
+    <aside class="sidebar">
+      <div class="sidebar-heading"><div><p class="eyebrow">WORKSPACE</p><h1>Map console</h1></div><span class="status-pill">READY</span></div>
+      <section class="tool-section"><p class="section-label">EXPLORE</p>
+        <button class="tool active" data-tool="pan"><span>⌖</span><span><b>Explore map</b><small>Pan, zoom and inspect</small></span></button>
+        <button class="tool" data-tool="route"><span>⇢</span><span><b>Route planner</b><small>Plan a route between places</small></span></button>
+        <button class="tool" data-tool="nearby"><span>⌘</span><span><b>Discover nearby</b><small>Find points of interest</small></span></button>
+        <button class="tool" data-tool="measure"><span>↗</span><span><b>Measure distance</b><small>Calculate map distances</small></span></button>
+      </section>
+      <section class="tool-section"><p class="section-label">MAP LAYERS</p>
+        <label class="layer-row"><span><i class="layer-dot streets"></i>Street map</span><input type="radio" name="layer" value="streets" checked></label>
+        <label class="layer-row"><span><i class="layer-dot light"></i>Light canvas</span><input type="radio" name="layer" value="light"></label>
+        <label class="layer-row"><span><i class="layer-dot dark"></i>Dark matter</span><input type="radio" name="layer" value="dark"></label>
+        <label class="layer-row"><span><i class="layer-dot terrain"></i>Terrain</span><input type="radio" name="layer" value="terrain"></label>
+      </section>
+      <section class="tool-section"><p class="section-label">QUICK ACTIONS</p>
+        <button class="action-row" id="addPinBtn"><span>＋</span> Drop a pin <kbd>P</kbd></button>
+        <button class="action-row" id="exportBtn"><span>⇩</span> Export GeoJSON</button>
+        <button class="action-row" id="importBtn"><span>⇧</span> Import GeoJSON<input id="importFile" type="file" accept=".json,.geojson,application/geo+json,application/json" hidden></button>
+        <button class="action-row" id="clearBtn"><span>⌫</span> Clear workspace</button>
+      </section>
+      <section class="saved-section"><div class="saved-head"><p class="section-label">SAVED PLACES</p><span id="savedCount">0</span></div><div id="savedList" class="saved-list"><p class="empty-note">Your saved places will appear here.</p></div></section>
+      <div class="sidebar-footer"><span class="avatar">PC</span><span><b>Personal workspace</b><small>Data stays in this browser</small></span><span class="secure">●</span></div>
+    </aside>
+    <section class="map-stage"><div id="map" role="application" aria-label="Interactive map"></div>
+      <div class="map-top-left"><div class="coordinate-card"><span class="pulse"></span><div><small>CURSOR POSITION</small><b id="cursorCoords">Move over the map</b></div></div></div>
+      <div class="map-top-right"><button id="layersBtn" class="map-control" title="Map layers">▤</button><button id="fullscreenBtn" class="map-control" title="Fullscreen">⛶</button></div>
+      <div class="map-bottom-left"><div class="scale-card"><span id="zoomLevel">ZOOM 12</span><span class="scale-line"></span><span id="scaleText">1 km</span></div></div>
+      <div class="map-bottom-right"><button id="zoomIn" class="map-control">＋</button><button id="zoomOut" class="map-control">−</button><button id="resetView" class="map-control" title="Reset view">⌂</button></div>
+      <div id="routePanel" class="floating-panel hidden"><div class="panel-head"><div><p class="eyebrow">DIRECTIONS</p><h2>Route planner</h2></div><button class="close-panel" data-close="routePanel">×</button></div><label>START<input id="routeStart" placeholder="Origin or click map"></label><label>DESTINATION<input id="routeEnd" placeholder="Destination or click map"></label><button id="routeGo" class="primary-btn">Calculate route <span>→</span></button><div id="routeInfo" class="panel-result">Choose two places to get directions.</div></div>
+      <div id="nearbyPanel" class="floating-panel hidden"><div class="panel-head"><div><p class="eyebrow">DISCOVERY</p><h2>Nearby places</h2></div><button class="close-panel" data-close="nearbyPanel">×</button></div><select id="nearbyType"><option value="amenity">All amenities</option><option value="restaurant">Restaurants</option><option value="cafe">Cafés</option><option value="hospital">Hospitals</option><option value="pharmacy">Pharmacies</option><option value="fuel">Fuel stations</option><option value="tourism">Attractions</option></select><button id="nearbyGo" class="primary-btn">Search this area →</button><div id="nearbyResults" class="panel-result">Search around the current map center.</div></div>
+      <div id="measurePanel" class="floating-panel hidden"><div class="panel-head"><div><p class="eyebrow">TOOLS</p><h2>Distance measure</h2></div><button class="close-panel" data-close="measurePanel">×</button></div><div id="measureValue" class="measure-value">0 m</div><p class="helper">Click points on the map to trace a distance. Double-click to finish.</p><button id="measureClear" class="secondary-btn">Clear measurement</button></div>
+      <div id="pinPanel" class="floating-panel hidden"><div class="panel-head"><div><p class="eyebrow">BOOKMARK</p><h2>Save this location</h2></div><button class="close-panel" data-close="pinPanel">×</button></div><input id="pinName" placeholder="Give this place a name"><p id="pinCoords" class="helper"></p><button id="savePin" class="primary-btn">Save place →</button></div>
+      <div id="toast" class="toast hidden" role="status"></div>
+    </section>
+    <aside class="inspector"><div class="inspector-head"><div><p class="eyebrow">LIVE INTELLIGENCE</p><h2>Map insights</h2></div><span class="live-dot"></span></div>
+      <div class="insight-card"><div class="card-icon">⌖</div><div><small>MAP CENTER</small><b id="centerCoords">22.5726° N, 88.3639° E</b><span id="centerPlace">Kolkata, India</span></div></div>
+      <div class="insight-grid"><div class="metric-card"><small>ZOOM LEVEL</small><b id="metricZoom">12</b><span>Map scale</span></div><div class="metric-card"><small>BOOKMARKS</small><b id="metricPins">0</b><span>Saved locally</span></div></div>
+      <div class="inspector-block"><p class="section-label">DEVICE NETWORK</p><div class="network-row"><span>Connection</span><b id="networkType">Checking…</b></div><div class="network-row"><span>Online status</span><b id="onlineStatus">—</b></div><div class="network-row"><span>Approx. latency</span><b id="latency">Not measured</b></div><p class="privacy-note">Network diagnostics are approximate and run only in this browser. No background tracking.</p></div>
+      <div class="inspector-block"><p class="section-label">SELECTED LOCATION</p><div id="selectionInfo" class="selection-empty">Select any point on the map to inspect its coordinates and details.</div></div>
+      <div class="inspector-footer"><span>ATLAS ENGINE <b>v1.0.0</b></span><span>© 2026</span></div>
+    </aside>
+  </main>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script type="module" src="./app.js"></script>
+</body></html>
