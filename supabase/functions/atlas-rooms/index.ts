@@ -39,7 +39,9 @@ Deno.serve(async req => {
   if (origin && !origins.has(origin)) return reply({ error: "Origin not allowed" }, 403, origin);
   if (Number(req.headers.get("content-length") ?? 0) > 300000) return reply({ error: "Request too large" }, 413, origin);
   try {
-    const body = await req.json();
+    const rawBody = await req.text();
+    if (new TextEncoder().encode(rawBody).byteLength > 300000) return reply({ error: "Request too large" }, 413, origin);
+    const body = JSON.parse(rawBody);
     if (!body || typeof body !== "object" || Array.isArray(body)) return reply({ error: "Invalid request" }, 400, origin);
     if (body.action === "create") {
       if (!await limited(req,"create",5,900)) return reply({ error: "Room creation limit reached" },429,origin);
