@@ -39,6 +39,16 @@ Live site: https://tejas-mk2.github.io/ATLAS/
 - Public demo services have rate limits and no production SLA. Configure licensed/self-hosted providers before high-volume or mission-critical use.
 - This static GitHub Pages edition does not include user accounts, cross-device cloud sync, authoritative live traffic, or server-side location sharing. Those require a secured backend, provider credentials and explicit deployment configuration. No fake authentication or traffic feed is presented.
 
+## Guest-first backend foundation
+
+A dedicated Supabase project has been provisioned in the Mumbai region for future map-sharing services. Atlas intentionally has **no registration, login, password, or account flow**.
+
+- Project ref: `ichnpsxtiltquvtdgohz`
+- Private schema: `atlas_private`
+- The initial `shared_maps` table is private, has forced Row Level Security, and has no client grants or public policies.
+- The static website does not currently read or write this private table. Guest bookmarks remain browser-local, and map-center links remain URL-based.
+- Do not put a Supabase service-role key in the browser. Any future guest cloud-sharing API must be mediated by a server-side Edge Function with input validation, rate limiting, token hashing, expiry and explicit read/write scopes.
+
 ## Stack
 Vanilla JavaScript ES modules, Leaflet, globe.gl, Three.js, OpenStreetMap, Photon, OSRM, Overpass API and Esri World Imagery.
 
