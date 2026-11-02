@@ -1,0 +1,46 @@
+# Testing and Quality Checks
+
+## Automated checks
+
+Run from the repository root with Node.js 22+:
+
+```bash
+npm test
+npm run check
+node scripts/smoke-test.mjs
+```
+
+- `npm test` runs the Node.js built-in test runner over the repository test files.
+- `npm run check` runs syntax checks on the main application modules.
+- `scripts/smoke-test.mjs` checks the published site and required production assets when network access is available.
+
+GitHub Actions runs tests and syntax checks before GitHub Pages deployment, then performs a production smoke check. CodeQL separately analyzes JavaScript/TypeScript.
+
+## Manual UI acceptance
+
+Check the interface at these viewport widths:
+
+| Class | Suggested viewport |
+|---|---:|
+| Wide desktop | 1440 px |
+| Compact desktop | 1280 px |
+| Tablet | 900 px |
+| Phone | 390 px |
+| Narrow phone | 320 px |
+
+Verify:
+- Dark and light themes.
+- Map controls and attribution remain visible.
+- Command palette keyboard navigation and focus handling.
+- Layer manager visibility, opacity, count, export, and clear actions.
+- Route, nearby, measurement, pin, and GeoJSON workflows.
+- No horizontal overflow or obscured controls.
+- Reduced-motion preference and keyboard-only operation.
+
+## Device and permission checks
+
+Automated tests cannot fully validate device geolocation, browser permission prompts, PWA installation, or offline map behaviour. Test those manually on supported devices. Use test locations and never attach private coordinates or room links to public bug reports.
+
+## Reporting results
+
+Record the command, environment, outcome, and any known limitation. Distinguish automated tests, static source checks, browser interaction tests, and real-device acceptance. Do not describe a feature as verified on a device unless it was actually tested there.
