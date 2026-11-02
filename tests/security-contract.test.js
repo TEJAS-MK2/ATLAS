@@ -13,7 +13,7 @@ test('room Edge Function keeps service credentials server-side',()=>{
 });
 
 test('guest room requests enforce body limits, origin checks and per-action rate limits',()=>{
-  assert.match(functionSource,/byteLength\(rawBody\) > 300000/);
+  assert.match(functionSource,/encode\(rawBody\)\.byteLength > 300000/);
   assert.match(functionSource,/Origin not allowed/);
   assert.match(functionSource,/limited\(req,"create",5,900\)/);
   assert.match(functionSource,/limited\(req,"get",90,60\)/);
