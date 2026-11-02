@@ -8,3 +8,14 @@ test('invalid GeoJSON import is rejected without creating a layer',async({page})
 test('320px mobile viewport has no horizontal overflow',async({page})=>{await page.setViewportSize({width:320,height:720});await page.reload();await expect(page.locator('#map.leaflet-container')).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true)});
 
 test('saved map views persist locally and can be restored',async({page})=>{await page.keyboard.press('Control+k');await page.locator('#commandInput').fill('saved map views');await page.locator('[data-command="views"]').click();await page.locator('#viewName').fill('Kolkata workspace');await page.locator('#viewsSave').click();await expect(page.locator('#viewsList')).toContainText('Kolkata workspace');await page.reload();await page.keyboard.press('Control+k');await page.locator('#commandInput').fill('saved map views');await page.locator('[data-command="views"]').click();await expect(page.locator('#viewsList')).toContainText('Kolkata workspace');await page.locator('[data-view-index="0"]').click();await expect(page.locator('#viewsPanel')).not.toBeVisible()});
+
+test('Field Console visual system renders a compact responsive workspace',async({page})=>{
+  await expect(page.locator('.topbar')).toBeVisible();
+  await expect(page.locator('.brand')).toBeVisible();
+  await expect(page.locator('.search-wrap')).toBeVisible();
+  const accent=await page.locator('.brand-mark').evaluate(el=>getComputedStyle(el).backgroundImage);
+  expect(accent).toContain('gradient');
+  await page.setViewportSize({width:390,height:844});
+  await expect(page.locator('.sidebar')).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+});

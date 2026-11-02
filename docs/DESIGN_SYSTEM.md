@@ -1,52 +1,50 @@
-# Atlas interface design system
+# ATLAS visual design system
 
-This document records the 2026 command-workspace refresh so future UI work stays consistent.
+Version 3.1 visual direction: a focused geospatial operations console. The map remains the dominant workspace; navigation and inspection surfaces support it without competing for attention.
 
-## Product direction
+## Design principles
+- **Map first:** controls frame the map instead of turning the page into a generic analytics dashboard.
+- **High signal:** clear hierarchy, compact metadata, strong selected states and restrained accent usage.
+- **Honest telemetry:** display only measurements the application actually obtains. Never imply a live server, GPS, network or traffic status that has not been measured.
+- **Touch ready:** map controls and primary actions remain comfortably targetable on phones.
+- **Accessible motion:** visible keyboard focus, semantic controls, reduced-motion support and contrast-aware dark/light themes.
 
-Atlas is a map-first geospatial workspace. The map remains the primary canvas; surrounding controls should be quiet, legible and fast to scan. The interface uses a restrained dark operations-console palette rather than decorative dashboards or fake telemetry.
-
-## Visual tokens
-
-| Token | Dark value | Purpose |
+## Core tokens
+| Token | Dark | Light |
 |---|---|---|
-| Background | `#08121a` | App canvas |
-| Panel | `#0d1b25` | Navigation and inspector |
-| Raised panel | `#122531` | Cards and controls |
-| Divider | `#203642` | Structural separation |
-| Text | `#eaf2f3` | Primary content |
-| Muted | `#8ba0aa` | Supporting labels |
-| Accent | `#75e0c1` | Active state and primary action |
+| App background | #08131b | #eaf1ee |
+| Panel | #0d1c26 | #fbfdfb |
+| Raised surface | #122531 | #f0f6f2 |
+| Divider | #203945 | #d5e2dc |
+| Primary text | #eaf3f5 | #183538 |
+| Muted text | #8ba1ad | #607b77 |
+| Accent | #77e2c2 | #238b6d |
 
-The light appearance is available through the existing appearance toggle. Both themes retain contrast-aware surfaces and control states.
+Typography uses Space Grotesk for product headings and DM Sans for interface text. Surfaces use layered navy/green gradients, subtle borders, restrained shadows and 10–16px corner radii. Avoid excessive glow, glass effects that reduce legibility, and decorative metric cards with invented values.
 
-## Layout behaviour
+## Responsive layout
+| Width | Layout |
+|---|---|
+| 1500px and wider | Expanded navigation, map and inspector columns |
+| 1181–1499px | Three-column console with compact panels |
+| 901–1180px | Navigation rail and map; inspector yields to map |
+| 651–900px | Compact navigation and map |
+| 381–650px | Full-screen map with compact header and bottom tool dock |
+| 320–380px | Minimal header actions and scroll-safe floating panels |
 
-- Wide desktop: navigation rail, flexible map canvas and intelligence inspector.
-- Compact desktop/tablet: navigation rail and map canvas; inspector yields space to the map.
-- Mobile: map-first layout, compact top search/actions and a bottom tool dock.
-- Narrow phones: secondary theme control yields space before GPS and map actions.
-- Floating tools remain scrollable within the visible map area.
+The CSS refinement preserves existing map/control IDs. Keep Leaflet attribution visible in all layouts.
 
-## Interaction principles
+## Interaction and accessibility
+- Every action should have a visible hover and focus state.
+- Keep focus-visible outlines high contrast and never remove them globally.
+- Respect prefers-reduced-motion.
+- Use semantic buttons and labels for actions and inputs.
+- Keep text legible over map tiles with opaque or blurred control surfaces.
+- Avoid relying on color alone for selected or error states.
+- Do not add fake network health, traffic, live location or server status.
 
-- Active tools and selected layers have visible state.
-- Keyboard focus uses a high-contrast outline.
-- Controls have touch-friendly hit areas and restrained hover/press feedback.
-- Reduced-motion preferences are respected.
-- Map attribution remains visible and readable.
-- No fabricated live data, traffic, network metrics or location presence is introduced for visual effect.
+## Verification matrix
+Run npm test, npm run check, npm run test:e2e and node scripts/smoke-test.mjs before release. Then manually review 1440px, 1280px, 900px, 390px and 320px viewports, both themes, keyboard-only use, reduced motion, map attribution, GPS permissions, PWA install and offline behaviour.
 
 ## Implementation
-
-The refresh is implemented as a final, clearly labelled design-system layer in `styles.css`. It intentionally preserves the existing DOM hooks and JavaScript contracts so map, route, GPS, room, globe, import/export and saved-place behaviours remain wired to the same controls.
-
-## Acceptance checklist
-
-- [ ] Verify desktop layout at 1440px and 1280px.
-- [ ] Verify tablet layout around 900px.
-- [ ] Verify phone layout at 390px and 320px.
-- [ ] Check dark and light appearance.
-- [ ] Check keyboard focus and reduced motion.
-- [ ] Verify map attribution, floating panels and globe modal are not obscured.
-- [ ] Complete device-level GPS permission and offline acceptance tests on real devices.
+The refinement layer is appended to styles.css under ATLAS / FIELD CONSOLE. It intentionally preserves application DOM hooks and core JavaScript behaviours.

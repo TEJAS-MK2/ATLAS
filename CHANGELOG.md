@@ -4,6 +4,12 @@ Notable project changes are recorded here. Dates and entries are added when chan
 
 ## Unreleased
 
+- Refined the interface into the ATLAS Field Console visual system with upgraded dark/light surfaces, navigation, controls and responsive layouts.
+- Added social preview metadata and a custom repository hero graphic.
+- Reorganized README badges into build/security, repository activity and technology groups; removed unverified release and coverage claims.
+- Expanded design-system documentation and added SEO/social metadata.
+
+
 - Added validated GeoJSON imports, feature search/inspection, geometry metrics, and spatial bounds summaries.
 - Added named map views stored locally in the browser, with save, restore, and delete actions.
 - Added Playwright Chromium browser tests to the deployment gate.

@@ -5,6 +5,7 @@ import {readFileSync} from 'node:fs';
 const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
 const app=readFileSync(new URL('../app.js',import.meta.url),'utf8');
 const css=readFileSync(new URL('../styles.css',import.meta.url),'utf8');
+const readme=readFileSync(new URL('../README.md',import.meta.url),'utf8');
 
 test('all statically referenced application elements exist in the page',()=>{
   const ids=new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));
@@ -120,3 +121,17 @@ test('map center displays DMS coordinates and overlay bounds summary',()=>{asser
 test('clearing workspace resets GeoJSON feature state as well as the map layer',()=>{assert.match(app,/geoOverlayFeatures=\[\];geoOverlayKind=null/);assert.match(app,/Workspace layers cleared/)});
 
 test('saved map view manager is wired to local browser storage',()=>{for(const id of ['viewsPanel','viewName','viewsSave','viewsList','viewsInfo'])assert.match(html,new RegExp('id="'+id+'"'));assert.match(app,/localStorage\.setItem\('atlas\.views'/);assert.match(app,/data-view-index/);assert.match(app,/title:'Saved map views'/)});
+
+test('Field Console design tokens and social metadata are present',()=>{
+  assert.match(css,/ATLAS \/ FIELD CONSOLE/);
+  assert.match(css,/--accent:#77e2c2/);
+  assert.match(css,/@media\(max-width:380px\)/);
+  assert.match(html,/property="og:image"/);
+  assert.match(html,/name="twitter:card" content="summary_large_image"/);
+  assert.match(html,/assets\/atlas-social\.svg/);
+});
+test('README badges point to real repository workflows and avoid unverified release claims',()=>{
+  assert.match(readme,/actions\/workflows\/pages\.yml/);
+  assert.match(readme,/actions\/workflows\/codeql\.yml/);
+  assert.doesNotMatch(readme,/github\/v\/release|github\/release-date|coverage/);
+});
