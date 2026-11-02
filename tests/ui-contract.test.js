@@ -101,3 +101,17 @@ test('command palette respects light theme and small mobile viewports',()=>{
   assert.match(css,/@media\(max-width:360px\)/);
   assert.match(css,/prefers-reduced-motion:reduce/);
 });
+
+
+test('GeoJSON overlay manager exposes visibility, opacity, feature count and export',()=>{
+  for(const id of ['overlayVisibility','overlayOpacity','overlayOpacityValue','overlayCount','overlayExport']) assert.match(html,new RegExp('id="'+id+'"'));
+  assert.match(app,/geoOverlay\.setStyle\(/);
+  assert.match(app,/geoOverlayFeatures\.length/);
+  assert.match(app,/application\/geo\+json/);
+  assert.match(app,/overlayVisibility'\)\.onchange/);
+});
+test('GeoJSON overlay manager disables controls when no layer is loaded',()=>{
+  assert.match(app,/disabled=!geoOverlay/);
+  assert.match(app,/geoOverlayFeatures=\[\]/);
+  assert.match(app,/finally\{\$\('overlayLoad'\)\.disabled=false/);
+});
