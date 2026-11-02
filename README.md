@@ -65,6 +65,9 @@ Use **Ctrl/⌘ + K** or **/** to open the keyboard-first command palette. Search
 | [Changelog](./CHANGELOG.md) | Notable project updates |
 | [Architecture](./docs/ARCHITECTURE.md) | Runtime components, data flow, and trust boundaries |
 | [Privacy](./docs/PRIVACY.md) | Location handling, browser storage, sharing, and provider requests |
+| [Threat model](./docs/THREAT_MODEL.md) | Assets, trust boundaries, and security review checklist |
+| [Testing guide](./docs/TESTING.md) | Automated checks and manual acceptance plan |
+| [Provider inventory](./docs/PROVIDERS.md) | External data services, attribution, and operational limits |
 | [Design system](./docs/DESIGN_SYSTEM.md) | Visual tokens, responsive behaviour, and accessibility |
 
 GitHub issue forms and a pull-request template are available under `.github/`. Dependabot checks GitHub Actions dependencies weekly, and CodeQL runs scheduled JavaScript security analysis.
