@@ -39,7 +39,7 @@ Atlas is a responsive, browser-based GIS workspace with interactive maps, a 3D E
 - Shareable map-center links, seven-day guest map rooms with read-only share links, private edit capabilities, five-second viewer refresh, and Google Maps Street View handoff
 - Driving routes via public OSRM demo routing
 - Nearby POI discovery and park/water/building geometry overlays via OpenStreetMap Overpass
-- Distance measurement, saved places, GeoJSON import/export, adjustable overlay visibility/opacity, feature counts and layer export
+- Distance measurement, saved places, validated GeoJSON import/export, adjustable layer visibility/opacity, feature search/inspection, and geometry metrics
 - Browser network diagnostics where supported
 - Installable PWA with app icons, network-first asset refresh and offline navigation fallback
 

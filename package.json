@@ -5,6 +5,10 @@
   "type": "module",
   "scripts": {
     "test": "node --test",
-    "check": "node --check app.js && node --check room-ui.js && node --check src/geo.js && node --check sw.js"
+    "check": "node --check app.js && node --check room-ui.js && node --check src/geo.js && node --check sw.js",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1"
   }
 }
