@@ -41,7 +41,7 @@ Deno.serve(async req => {
   try {
     const rawBody = await req.text();
     if (new TextEncoder().encode(rawBody).byteLength > 300000) return reply({ error: "Request too large" }, 413, origin);
-    let body: unknown;
+    let body: any;
     try { body = JSON.parse(rawBody); } catch { return reply({ error: "Invalid JSON" }, 400, origin); }
     if (!body || typeof body !== "object" || Array.isArray(body)) return reply({ error: "Invalid request" }, 400, origin);
     if (body.action === "create") {
