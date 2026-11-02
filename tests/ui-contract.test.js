@@ -67,3 +67,15 @@ test('compact mobile layouts keep the globe and GPS actions visible',()=>{
   assert.doesNotMatch(css,/\.top-actions #trackBtn\{display:none\}/);
   assert.match(css,/\.top-actions #themeBtn\{display:none\}/);
 });
+test('GPS restart begins a clean track instead of joining sessions',()=>{
+  assert.match(app,/trackPoints=\[\];trackDistance=0;if\(trackLine\)map\.removeLayer\(trackLine\)/);
+});
+
+test('room creation and loading tolerate blocked session storage',()=>{
+  assert.match(app,/try\{sessionStorage\.setItem\(/);
+  assert.match(app,/catch\{roomEditToken=null\}/);
+});
+
+test('programmatic basemap changes synchronize shared rooms',()=>{
+  assert.match(app,/activeLayerName'\)\.textContent=layerNames\[name\]\|\|name;scheduleRoomSync\(\)/);
+});
