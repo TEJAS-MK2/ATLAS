@@ -8,7 +8,7 @@ Atlas is a responsive, browser-based GIS workspace with interactive maps, a 3D E
 - 3D Earth explorer powered by globe.gl / Three.js
 - Place search powered by Photon
 - Permission-based browser geolocation and opt-in GPS track recording
-- Shareable map-center links and Google Maps Street View handoff
+- Shareable map-center links, seven-day guest map rooms with read-only share links, private edit capabilities, five-second viewer refresh, and Google Maps Street View handoff
 - Driving routes via public OSRM demo routing
 - Nearby POI discovery and park/water/building geometry overlays via OpenStreetMap Overpass
 - Distance measurement, saved places, GeoJSON import/export and track export
@@ -37,7 +37,7 @@ Live site: https://tejas-mk2.github.io/ATLAS/
 - The Street View action opens Google Maps in a separate tab; imagery availability and coverage are controlled by Google.
 - The globe uses public texture assets from the globe.gl project.
 - Public demo services have rate limits and no production SLA. Configure licensed/self-hosted providers before high-volume or mission-critical use.
-- This static GitHub Pages edition does not include user accounts, cross-device cloud sync, authoritative live traffic, or server-side location sharing. Those require a secured backend, provider credentials and explicit deployment configuration. No fake authentication or traffic feed is presented.
+- Atlas has no accounts or passwords. Guest-room sharing is available; collaborative multi-user editing, live GPS participant presence and authoritative live traffic are not implemented. No fake traffic feed is presented.
 
 ## Guest-first backend foundation
 
