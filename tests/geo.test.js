@@ -9,3 +9,10 @@ test('GeoJSON validation rejects invalid coordinates and enforces limits',()=>{c
 test('coordinate formatter emits hemispheres and rejects invalid values',()=>{assert.match(coordinateToDMS(22.5,-88.25),/N.*W/);assert.throws(()=>coordinateToDMS(91,0),/bounds/i)});
 test('geometry metrics calculate line length, polygon area and bounds',()=>{const l=geometryMetrics({type:'LineString',coordinates:[[0,0],[0,1]]});assert.ok(l.lengthMeters>110000&&l.lengthMeters<112000);assert.deepEqual(l.bounds,[[0,0],[1,0]]);const p=geometryMetrics({type:'Polygon',coordinates:[[[0,0],[1,0],[1,1],[0,1],[0,0]]]});assert.ok(p.areaSquareMeters>12000000000&&p.areaSquareMeters<13000000000);assert.ok(p.lengthMeters>400000)});
 test('feature filtering searches geometry type and properties',()=>{const f=[{type:'Feature',geometry:{type:'Point',coordinates:[0,0]},properties:{name:'Kolkata Park'}},{type:'Feature',geometry:{type:'LineString',coordinates:[[0,0],[1,1]]},properties:{name:'River'}}];assert.equal(filterFeatures(f,'kolkata').length,1);assert.equal(filterFeatures(f,'LineString').length,1);assert.equal(filterFeatures(f,'missing').length,0);assert.equal(filterFeatures(f,'').length,2)});
+
+test('GeoJSON validation rejects malformed nesting and unclosed polygon rings',()=>{
+ const malformed={type:'FeatureCollection',features:[{type:'Feature',properties:{},geometry:{type:'Point',coordinates:[[1,2]]}}]};
+ assert.throws(()=>validateFeatureCollection(malformed),/invalid coordinate/i);
+ const unclosed={type:'FeatureCollection',features:[{type:'Feature',properties:{},geometry:{type:'Polygon',coordinates:[[[0,0],[1,0],[1,1],[0,1]]]}}]};
+ assert.throws(()=>validateFeatureCollection(unclosed),/must be closed/i);
+});

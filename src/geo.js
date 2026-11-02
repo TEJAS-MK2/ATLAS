@@ -4,21 +4,30 @@ export function validCoordinate(lat,lng){return typeof lat==='number'&&Number.is
 export function sanitizeName(value){return String(value??'').replace(/[<>\u0000-\u001f]/g,'').trim().slice(0,80);}
 export function featureCollection(features=[]){return {type:'FeatureCollection',features};}
 const EARTH_RADIUS=6371008.8;
-function walkCoordinates(value,visit,state){
- if(!Array.isArray(value)||value.length===0)throw new Error('Invalid or empty GeoJSON coordinates.');
- if(typeof value[0]==='number'){
-  if(value.length<2||!validCoordinate(value[1],value[0])||value.slice(2).some(n=>typeof n!=='number'||!Number.isFinite(n)))throw new Error('GeoJSON contains an invalid coordinate.');
-  state.count++;if(state.count>state.maxCoordinates)throw new Error('GeoJSON exceeds the coordinate limit.');
-  visit([value[0],value[1]]);return;
- }
- for(const item of value)walkCoordinates(item,visit,state);
+function countPosition(position,state){
+ if(!Array.isArray(position)||position.length<2||!validCoordinate(position[1],position[0])||position.slice(2).some(n=>typeof n!=='number'||!Number.isFinite(n)))throw new Error('GeoJSON contains an invalid coordinate.');
+ state.count++;if(state.count>state.maxCoordinates)throw new Error('GeoJSON exceeds the coordinate limit.');
+}
+function validateLine(line,state,min=2){
+ if(!Array.isArray(line)||line.length<min)throw new Error('GeoJSON line or ring has too few positions.');
+ line.forEach(p=>countPosition(p,state));
+}
+function validatePolygon(rings,state){
+ if(!Array.isArray(rings)||!rings.length)throw new Error('GeoJSON polygon has no rings.');
+ for(const ring of rings){validateLine(ring,state,4);const first=ring[0],last=ring[ring.length-1];if(first[0]!==last[0]||first[1]!==last[1])throw new Error('GeoJSON polygon ring must be closed.')}
 }
 function validateGeometry(g,state){
  if(g===null)return;
  if(!g||typeof g!=='object'||Array.isArray(g))throw new Error('Invalid GeoJSON geometry.');
  if(g.type==='GeometryCollection'){if(!Array.isArray(g.geometries)||g.geometries.length>1000)throw new Error('Invalid geometry collection.');g.geometries.forEach(x=>validateGeometry(x,state));return}
- if(!['Point','MultiPoint','LineString','MultiLineString','Polygon','MultiPolygon'].includes(g.type))throw new Error('Unsupported GeoJSON geometry type.');
- walkCoordinates(g.coordinates,()=>{},state);
+ const c=g.coordinates;
+ if(g.type==='Point')countPosition(c,state);
+ else if(g.type==='MultiPoint'){if(!Array.isArray(c)||!c.length)throw new Error('Invalid GeoJSON MultiPoint.');c.forEach(p=>countPosition(p,state))}
+ else if(g.type==='LineString')validateLine(c,state,2);
+ else if(g.type==='MultiLineString'){if(!Array.isArray(c)||!c.length)throw new Error('Invalid GeoJSON MultiLineString.');c.forEach(line=>validateLine(line,state,2))}
+ else if(g.type==='Polygon')validatePolygon(c,state);
+ else if(g.type==='MultiPolygon'){if(!Array.isArray(c)||!c.length)throw new Error('Invalid GeoJSON MultiPolygon.');c.forEach(poly=>validatePolygon(poly,state))}
+ else throw new Error('Unsupported GeoJSON geometry type.');
 }
 export function validateFeatureCollection(value,{maxFeatures=5000,maxCoordinates=100000}={}){
  if(!value||typeof value!=='object'||value.type!=='FeatureCollection'||!Array.isArray(value.features))throw new Error('Expected a GeoJSON FeatureCollection.');
