@@ -16,6 +16,11 @@
 [![Repository size](https://img.shields.io/github/repo-size/TEJAS-MK2/ATLAS?logo=github)](https://github.com/TEJAS-MK2/ATLAS)
 [![Languages](https://img.shields.io/github/languages/count/TEJAS-MK2/ATLAS)](https://github.com/TEJAS-MK2/ATLAS)
 [![Open pull requests](https://img.shields.io/github/issues-pr/TEJAS-MK2/ATLAS?logo=github)](https://github.com/TEJAS-MK2/ATLAS/pulls)
+[![Watchers](https://img.shields.io/github/watchers/TEJAS-MK2/ATLAS?style=flat&logo=github)](https://github.com/TEJAS-MK2/ATLAS/watchers)
+[![Closed issues](https://img.shields.io/github/issues-closed/TEJAS-MK2/ATLAS?logo=github)](https://github.com/TEJAS-MK2/ATLAS/issues?q=is%3Aissue+is%3Aclosed)
+[![Closed pull requests](https://img.shields.io/github/issues-pr-closed/TEJAS-MK2/ATLAS?logo=github)](https://github.com/TEJAS-MK2/ATLAS/pulls?q=is%3Apr+is%3Aclosed)
+[![Latest release](https://img.shields.io/github/v/release/TEJAS-MK2/ATLAS?display_name=tag&logo=github)](https://github.com/TEJAS-MK2/ATLAS/releases)
+[![Release date](https://img.shields.io/github/release-date/TEJAS-MK2/ATLAS?logo=github)](https://github.com/TEJAS-MK2/ATLAS/releases)
 
 Atlas is a responsive, browser-based GIS workspace with interactive maps, a 3D Earth explorer, satellite imagery, opt-in GPS recording, OSM feature overlays, route planning and GeoJSON workflows.
 
