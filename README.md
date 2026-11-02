@@ -199,3 +199,68 @@ The following 100 additional badges summarize documented Atlas components, workf
 [![ Guest room guide — Docs ](https://img.shields.io/badge/Guest%20room%20guide-Docs-informational)](https://github.com/TEJAS-MK2/ATLAS)
 
 </details>
+
+## More Atlas badges
+
+A second compact badge collection covering the documented interface, mapping data sources and guest-room architecture.
+
+<details>
+<summary>Show 50 more badges</summary>
+
+### Map interaction
+[![Map panning](https://img.shields.io/badge/Map%20panning-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Map zooming](https://img.shields.io/badge/Map%20zooming-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Layer switching](https://img.shields.io/badge/Layer%20switching-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Map centering](https://img.shields.io/badge/Map%20centering-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Map sharing](https://img.shields.io/badge/Map%20sharing-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Coordinate links](https://img.shields.io/badge/Coordinate%20links-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Map viewport](https://img.shields.io/badge/Map%20viewport-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Interactive controls](https://img.shields.io/badge/Interactive%20controls-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Map exploration](https://img.shields.io/badge/Map%20exploration-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Geospatial UI](https://img.shields.io/badge/Geospatial%20UI-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+### Location & navigation
+[![GPS permission](https://img.shields.io/badge/GPS%20permission-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Location search](https://img.shields.io/badge/Location%20search-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Place discovery](https://img.shields.io/badge/Place%20discovery-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Nearby features](https://img.shields.io/badge/Nearby%20features-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Route display](https://img.shields.io/badge/Route%20display-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Route requests](https://img.shields.io/badge/Route%20requests-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Track sessions](https://img.shields.io/badge/Track%20sessions-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Track points](https://img.shields.io/badge/Track%20points-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Distance tools](https://img.shields.io/badge/Distance%20tools-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Street imagery](https://img.shields.io/badge/Street%20imagery-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+### Data formats & sources
+[![GeoJSON files](https://img.shields.io/badge/GeoJSON%20files-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Open map data](https://img.shields.io/badge/Open%20map%20data-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![OSM Overpass](https://img.shields.io/badge/OSM%20Overpass-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Photon search](https://img.shields.io/badge/Photon%20search-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![OSRM routing](https://img.shields.io/badge/OSRM%20routing-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Esri World Imagery](https://img.shields.io/badge/Esri%20World%20Imagery-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Public basemaps](https://img.shields.io/badge/Public%20basemaps-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Map tiles](https://img.shields.io/badge/Map%20tiles-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Vector features](https://img.shields.io/badge/Vector%20features-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Geographic data](https://img.shields.io/badge/Geographic%20data-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+### Web platform
+[![Browser application](https://img.shields.io/badge/Browser%20application-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Vanilla JavaScript](https://img.shields.io/badge/Vanilla%20JavaScript-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![ES module imports](https://img.shields.io/badge/ES%20module%20imports-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Static site hosting](https://img.shields.io/badge/Static%20site%20hosting-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![HTTPS deployment](https://img.shields.io/badge/HTTPS%20deployment-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![PWA manifest](https://img.shields.io/badge/PWA%20manifest-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Service worker cache](https://img.shields.io/badge/Service%20worker%20cache-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Local browser data](https://img.shields.io/badge/Local%20browser%20data-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![URL state sharing](https://img.shields.io/badge/URL%20state%20sharing-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Responsive interface](https://img.shields.io/badge/Responsive%20interface-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+### Guest rooms & controls
+[![Guest map rooms](https://img.shields.io/badge/Guest%20map%20rooms-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Room snapshots](https://img.shields.io/badge/Room%20snapshots-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Viewer access](https://img.shields.io/badge/Viewer%20access-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Creator controls](https://img.shields.io/badge/Creator%20controls-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Edit capability](https://img.shields.io/badge/Edit%20capability-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Room expiration](https://img.shields.io/badge/Room%20expiration-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Polling refresh](https://img.shields.io/badge/Polling%20refresh-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Server validation](https://img.shields.io/badge/Server%20validation-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Request throttling](https://img.shields.io/badge/Request%20throttling-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+[![Private database](https://img.shields.io/badge/Private%20database-Atlas-informational)](https://github.com/TEJAS-MK2/ATLAS)
+
+</details>
