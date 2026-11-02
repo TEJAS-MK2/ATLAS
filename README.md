@@ -1,5 +1,8 @@
 # Atlas — Geospatial Intelligence Platform
 
+[![Validate and deploy Atlas](https://github.com/TEJAS-MK2/ATLAS/actions/workflows/pages.yml/badge.svg)](https://github.com/TEJAS-MK2/ATLAS/actions/workflows/pages.yml)
+[![Demo](https://img.shields.io/badge/demo-live-brightgreen?logo=github)](https://tejas-mk2.github.io/ATLAS/)
+
 Atlas is a responsive, browser-based GIS workspace with interactive maps, a 3D Earth explorer, satellite imagery, opt-in GPS recording, OSM feature overlays, route planning and GeoJSON workflows.
 
 ## Platform capabilities
@@ -54,6 +57,5 @@ Vanilla JavaScript ES modules, Leaflet, globe.gl, Three.js, OpenStreetMap, Photo
 
 ## License
 See [LICENSE](./LICENSE).
-
 
 Guest sharing details: see [Guest map rooms](./docs/GUEST_ROOMS.md). The live-room feature uses a dedicated Supabase Edge Function and private database schema; room links are read-only and the creator's edit capability stays in the browser session.
