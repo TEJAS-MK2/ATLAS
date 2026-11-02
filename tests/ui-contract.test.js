@@ -118,3 +118,5 @@ test('GeoJSON overlay manager disables controls when no layer is loaded',()=>{
 
 test('map center displays DMS coordinates and overlay bounds summary',()=>{assert.match(html,/id="centerDms"/);assert.match(html,/id="overlayBounds"/);assert.match(app,/coordinateToDMS\(c\.lat,c\.lng\)/);assert.match(app,/Bounds unavailable/)});
 test('clearing workspace resets GeoJSON feature state as well as the map layer',()=>{assert.match(app,/geoOverlayFeatures=\[\];geoOverlayKind=null/);assert.match(app,/Workspace layers cleared/)});
+
+test('saved map view manager is wired to local browser storage',()=>{for(const id of ['viewsPanel','viewName','viewsSave','viewsList','viewsInfo'])assert.match(html,new RegExp('id="'+id+'"'));assert.match(app,/localStorage\.setItem\('atlas\.views'/);assert.match(app,/data-view-index/);assert.match(app,/title:'Saved map views'/)});

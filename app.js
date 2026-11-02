@@ -12,6 +12,16 @@ function setLayer(name){if(!layers[name])return;map.removeLayer(layers[activeLay
 function coords(lat,lng){return Math.abs(lat).toFixed(5)+'° '+(lat>=0?'N':'S')+', '+Math.abs(lng).toFixed(5)+'° '+(lng>=0?'E':'W')}
 function setSelection(latlng,label='Dropped pin'){selected={lat:latlng.lat,lng:latlng.lng,label};$('selectionInfo').innerHTML='<div class="selection-data"><b>'+escapeHTML(label)+'</b><br>Latitude: '+latlng.lat.toFixed(6)+'<br>Longitude: '+latlng.lng.toFixed(6)+'<br>'+escapeHTML(coordinateToDMS(latlng.lat,latlng.lng))+'<br><button id="inspectSave" class="secondary-btn">Save this location</button></div>'; $('inspectSave').onclick=()=>openPin(latlng)}
 function updateMapInfo(){const c=map.getCenter();$('centerCoords').textContent=coords(c.lat,c.lng);$('centerDms').textContent=coordinateToDMS(c.lat,c.lng);$('centerPlace').textContent='Map center · '+(map.getZoom()>=13?'Street-level view':'Regional view');$('metricZoom').textContent=map.getZoom();$('zoomLevel').textContent='ZOOM '+map.getZoom()}
+
+function loadViews(){try{const v=JSON.parse(localStorage.getItem('atlas.views')||'[]');return Array.isArray(v)?v.filter(x=>x&&typeof x.name==='string'&&validCoordinate(x.lat,x.lng)&&Number.isFinite(x.zoom)&&x.zoom>=2&&x.zoom<=19&&['streets','light','dark','terrain','satellite'].includes(x.layer)).slice(0,30):[]}catch{return[]}}
+let savedViews=loadViews();
+function persistViews(){try{localStorage.setItem('atlas.views',JSON.stringify(savedViews));return true}catch{return false}}
+function renderSavedViews(){$('viewsList').innerHTML=savedViews.length?savedViews.map((v,i)=>'<div class="saved-view-row"><button type="button" class="saved-view-open" data-view-index="'+i+'"><b>'+escapeHTML(v.name)+'</b><small>'+escapeHTML(v.layer)+' · zoom '+v.zoom+'</small></button><button type="button" class="saved-view-delete" data-delete-view="'+i+'" aria-label="Delete '+escapeHTML(v.name)+'">×</button></div>').join(''):'<p class="empty-note">Save a map position and basemap to revisit it later.</p>' $('viewsInfo').textContent=savedViews.length+' of 30 saved views'}
+function saveCurrentView(){const previous=savedViews.slice(),center=map.getCenter(),name=sanitizeName($('viewName').value)||'Saved map view';savedViews.unshift({id:crypto.randomUUID?.()||String(Date.now()),name,lat:center.lat,lng:center.lng,zoom:map.getZoom(),layer:activeLayer});savedViews=savedViews.slice(0,30);if(!persistViews()){savedViews=previous;notify('Browser storage is unavailable; this view could not be saved.');return}renderSavedViews();$('viewName').value='';notify('Map view saved on this device.')}
+$('viewsSave').onclick=saveCurrentView;
+$('viewsList').onclick=e=>{const del=e.target.closest('[data-delete-view]');if(del){const previous=savedViews.slice();savedViews.splice(Number(del.dataset.deleteView),1);if(persistViews())renderSavedViews();else{savedViews=previous;notify('Could not update saved views.')}return}const open=e.target.closest('[data-view-index]');if(open){const v=savedViews[Number(open.dataset.viewIndex)];if(!v)return;setLayer(v.layer);map.setView([v.lat,v.lng],v.zoom);$('viewsPanel').classList.add('hidden');notify('Restored '+v.name+'.')}};
+renderSavedViews();
+
 function openPin(ll){pendingPin=ll;$('pinCoords').textContent=coords(ll.lat,ll.lng);$('pinName').value='';$('pinPanel').classList.remove('hidden');$('pinName').focus()}
 function setTool(name){tool=name;document.querySelectorAll('.tool').forEach(b=>b.classList.toggle('active',b.dataset.tool===name));['routePanel','nearbyPanel','measurePanel'].forEach(id=>$(id).classList.add('hidden'));if(name==='route')$('routePanel').classList.remove('hidden');if(name==='nearby')$('nearbyPanel').classList.remove('hidden');if(name==='measure')$('measurePanel').classList.remove('hidden');if(name==='measure')map.doubleClickZoom.disable();else map.doubleClickZoom.enable();map.getContainer().style.cursor=name==='measure'?'crosshair':name==='route'?'crosshair':''}
 function addMarker(lat,lng,title,save=false){const m=L.marker([lat,lng],{icon:pinIcon}).addTo(map).bindPopup('<b>'+escapeHTML(title)+'</b><br>'+coords(lat,lng));markers.push(m);if(save)m.on('click',()=>setSelection({lat,lng},title));return m}
@@ -113,6 +123,7 @@ const atlasCommands=[
   {id:'share',title:'Share map position',detail:'Create a link to the current map view',keys:'⌁',run:()=>$('shareBtn').click()},
   {id:'room',title:'Open live map room',detail:'Create or view a shared room',keys:'⇧R',run:()=>$('shareRoomBtn').click()},
   {id:'pin',title:'Drop a pin',detail:'Save a named place on the map',keys:'P',run:()=>$('addPinBtn').click()},
+  {id:'views',title:'Saved map views',detail:'Save and restore map positions and basemaps',keys:'V',run:()=>$('viewsPanel').classList.remove('hidden')},
   {id:'export',title:'Export GeoJSON',detail:'Download workspace features',keys:'⇧E',run:()=>$('exportBtn').click()}
 ];
 let commandActiveIndex=0;

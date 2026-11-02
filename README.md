@@ -39,7 +39,7 @@ Atlas is a responsive, browser-based GIS workspace with interactive maps, a 3D E
 - Shareable map-center links, seven-day guest map rooms with read-only share links, private edit capabilities, five-second viewer refresh, and Google Maps Street View handoff
 - Driving routes via public OSRM demo routing
 - Nearby POI discovery and park/water/building geometry overlays via OpenStreetMap Overpass
-- Distance measurement, saved places, validated GeoJSON import/export, adjustable layer visibility/opacity, feature search/inspection, geometry metrics, coordinate display in decimal and DMS formats, and spatial bounds summaries
+- Distance measurement, saved places, validated GeoJSON import/export, adjustable layer visibility/opacity, feature search/inspection, geometry metrics, coordinate display in decimal and DMS formats, and spatial bounds summaries, and named map views saved locally in the browser
 - Browser network diagnostics where supported
 - Installable PWA with app icons, network-first asset refresh and offline navigation fallback
 
@@ -51,7 +51,7 @@ The design tokens, responsive behaviour, accessibility considerations and manual
 
 ## Command palette
 
-Use **Ctrl/⌘ + K** or **/** to open the keyboard-first command palette. Search and launch common actions including route planning, nearby discovery, distance measurement, GPS session controls, device location, the 3D globe, basemap switching, room sharing, pin creation and GeoJSON export. Arrow keys move through results, Enter runs the selected action, and Escape closes the palette.
+Use **Ctrl/⌘ + K** or **/** to open the keyboard-first command palette. The Saved map views command stores and restores named map centers, zoom levels, and basemaps locally in the browser. Search and launch common actions including route planning, nearby discovery, distance measurement, GPS session controls, device location, the 3D globe, basemap switching, room sharing, pin creation and GeoJSON export. Arrow keys move through results, Enter runs the selected action, and Escape closes the palette.
 
 
 ## Project documentation
