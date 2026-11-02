@@ -30,7 +30,7 @@ test('shared room pins are isolated from personal bookmarks',()=>{
   assert.match(app,/const roomPinsLayer=L\.layerGroup\(\)\.addTo\(map\)/);
   assert.match(app,/roomPinsLayer\.clearLayers\(\)/);
   assert.doesNotMatch(app,/saved=state\.pins/);
-  assert.match(app,/scheduleRoomSync\(\);addMarker/);
+  assert.match(app,/scheduleRoomSync\(\);savedMarkers\.set\(place\.id,addMarker/);
 });
 
 test('all five basemaps are available from the layer cycle',()=>{
