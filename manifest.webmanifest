@@ -1,1 +1,1 @@
-{"name":"Atlas — Geospatial Intelligence","short_name":"Atlas","start_url":"./","display":"standalone","background_color":"#0d151e","theme_color":"#101923","description":"A live, privacy-conscious mapping workspace.","icons":[]}
+{"name":"Atlas — Geospatial Intelligence","short_name":"Atlas","start_url":"./","scope":"./","display":"standalone","background_color":"#09121b","theme_color":"#0c1721","description":"A professional geospatial intelligence workspace with 3D globe, satellite maps and GPS tools.","icons":[]}

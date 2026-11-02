@@ -1,20 +1,21 @@
-# Atlas — Geospatial Intelligence
+# Atlas — Geospatial Intelligence Platform
 
-A responsive mapping workspace built around open geospatial services. Atlas combines interactive maps, place search, routing, nearby discovery, distance measurement, GeoJSON workflows, saved locations and lightweight browser network diagnostics.
+Atlas is a responsive, browser-based GIS workspace with interactive maps, a 3D Earth explorer, satellite imagery, opt-in GPS recording, OSM feature overlays, route planning and GeoJSON workflows.
 
-## Features
-- Responsive desktop and mobile map console
-- OpenStreetMap street tiles plus CARTO light/dark and OpenTopoMap terrain layers
+## Platform capabilities
+- Responsive desktop, tablet and mobile map console
+- Street, light, dark, terrain and Esri World Imagery satellite basemaps
+- 3D Earth explorer powered by globe.gl / Three.js
 - Place search powered by Photon
-- Browser geolocation (permission-based; never requested automatically)
-- Driving routes via the public OSRM demo endpoint
-- Nearby OpenStreetMap amenity discovery via Overpass API
-- Distance measurement using the haversine formula
-- Save locations locally and import/export GeoJSON
-- Basic PWA shell caching for repeat visits
-- Browser online status and Network Information API diagnostics when supported
+- Permission-based browser geolocation and opt-in GPS track recording
+- Shareable map-center links and Google Maps Street View handoff
+- Driving routes via public OSRM demo routing
+- Nearby POI discovery and park/water/building geometry overlays via OpenStreetMap Overpass
+- Distance measurement, saved places, GeoJSON import/export and track export
+- Browser network diagnostics where supported
+- PWA shell caching for repeat visits
 
-## Run locally
+## Local development
 Requires Node.js 20+.
 
 ```bash
@@ -25,20 +26,21 @@ python3 -m http.server 8080
 Open http://localhost:8080.
 
 ## Deployment
-The GitHub Actions workflow tests the project and deploys the repository root to GitHub Pages on pushes to `main`. In repository Settings → Pages, select **GitHub Actions** as the build and deployment source.
+GitHub Actions runs unit tests and JavaScript syntax checks before publishing the repository root to GitHub Pages.
+Live site: https://tejas-mk2.github.io/ATLAS/
 
-Expected URL: https://tejas-mk2.github.io/MAP/
+## Data and privacy
+- GPS is never requested automatically. A user must start a tracking session and grant browser permission. Stop tracking to end the session.
+- Track points and saved places remain in browser memory/local storage; export GeoJSON to keep a portable copy.
+- Share-map links encode the map center and zoom only. They do not upload location data to an Atlas server.
+- Search, routing and OSM overlay requests are sent to Photon, OSRM and Overpass respectively.
+- The Street View action opens Google Maps in a separate tab; imagery availability and coverage are controlled by Google.
+- The globe uses public texture assets from the globe.gl project.
+- Public demo services have rate limits and no production SLA. Configure licensed/self-hosted providers before high-volume or mission-critical use.
+- This static GitHub Pages edition does not include user accounts, cross-device cloud sync, authoritative live traffic, or server-side location sharing. Those require a secured backend, provider credentials and explicit deployment configuration. No fake authentication or traffic feed is presented.
 
-## Data, privacy and service limits
-- Saved places are stored in this browser's local storage. Clearing browser data removes them; export GeoJSON for a backup.
-- Location is accessed only after the user selects the locate action and grants browser permission.
-- Search, routing and nearby discovery send the query or map area to their respective public services. Do not submit sensitive locations.
-- Public tile and geocoding endpoints have usage policies and availability limits. For production/high-volume use, configure commercial or self-hosted providers.
-- Network diagnostics are approximate. The Network Information API is not available in every browser; no IP address, packet capture or background device surveillance is performed.
-- The app is a browser-based mapping client, not a replacement for emergency navigation or authoritative maps.
-
-## Technology
-Vanilla JavaScript ES modules, Leaflet, OpenStreetMap, Photon, OSRM and Overpass API. No build step or API key is required for the demo services.
+## Stack
+Vanilla JavaScript ES modules, Leaflet, globe.gl, Three.js, OpenStreetMap, Photon, OSRM, Overpass API and Esri World Imagery.
 
 ## License
 See [LICENSE](./LICENSE).
