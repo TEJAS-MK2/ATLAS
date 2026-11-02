@@ -6,15 +6,15 @@ const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
 const app=readFileSync(new URL('../app.js',import.meta.url),'utf8');
 
 test('all statically referenced application elements exist in the page',()=>{
-  const ids=new Set([...html.matchAll(/\\bid="([^"]+)"/g)].map(m=>m[1]));
-  const refs=[...app.matchAll(/\\$\\('([^']+)'\\)/g)].map(m=>m[1]);
+  const ids=new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));
+  const refs=[...app.matchAll(/\$\('([^']+)'\)/g)].map(m=>m[1]);
   const generated=new Set(['inspectSave']);
   const missing=[...new Set(refs.filter(id=>!ids.has(id)&&!generated.has(id)))];
   assert.deepEqual(missing,[]);
 });
 
 test('page element IDs are unique',()=>{
-  const ids=[...html.matchAll(/\\bid="([^"]+)"/g)].map(m=>m[1]);
+  const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
   const duplicates=ids.filter((id,i)=>ids.indexOf(id)!==i);
   assert.deepEqual([...new Set(duplicates)],[]);
 });
