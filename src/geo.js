@@ -42,7 +42,7 @@ export function coordinateToDMS(lat,lng){
  return part(lat,'N','S')+'  '+part(lng,'E','W');
 }
 function walkMetricCoordinates(value,visit){if(!Array.isArray(value))return;if(typeof value[0]==='number'){visit([value[0],value[1]]);return}for(const item of value)walkMetricCoordinates(item,visit)}
-function lineLength(c){let n=0;for(let i=1;i<c.length;i++)n+=haversine({lat:c[i-1][1],lng:c[i-1][0]},{lat:c[i].lat,lng:c[i].lng});return n}
+function lineLength(c){let n=0;for(let i=1;i<c.length;i++)n+=haversine({lat:c[i-1][1],lng:c[i-1][0]},{lat:c[i][1],lng:c[i][0]});return n}
 function ringArea(r){if(r.length<4)return 0;let s=0;for(let i=0;i<r.length-1;i++){const a=r[i],b=r[i+1];s+=(b[0]-a[0])*Math.PI/180*(2+Math.sin(a[1]*Math.PI/180)+Math.sin(b[1]*Math.PI/180))}return Math.abs(s*EARTH_RADIUS*EARTH_RADIUS/2)}
 export function geometryMetrics(feature){
  const g=feature?.type==='Feature'?feature.geometry:feature;if(!g)return {lengthMeters:0,areaSquareMeters:0,bounds:null};
