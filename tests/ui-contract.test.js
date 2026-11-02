@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 
 const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
 const app=readFileSync(new URL('../app.js',import.meta.url),'utf8');
+const css=readFileSync(new URL('../styles.css',import.meta.url),'utf8');
 
 test('all statically referenced application elements exist in the page',()=>{
   const ids=new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));
@@ -50,4 +51,19 @@ test('nearby search supports ways and relation centers without dropping zero coo
 test('OSM overlay geometry preserves open ways as lines',()=>{
   assert.match(app,/closed\?\{type:'Polygon'/);
   assert.match(app,/\{type:'LineString',coordinates:ring\}/);
+});
+test('measurement mode disables map double-click zoom while drawing',()=>{
+  assert.match(app,/map\.doubleClickZoom\.disable\(\)/);
+  assert.match(app,/map\.doubleClickZoom\.enable\(\)/);
+});
+
+test('deleting a saved place removes its current-session marker',()=>{
+  assert.match(app,/savedMarkers\.set\(place\.id,addMarker/);
+  assert.match(app,/savedMarkers\.delete\(removed\.id\)/);
+});
+
+test('compact mobile layouts keep the globe and GPS actions visible',()=>{
+  assert.doesNotMatch(css,/\.top-actions #globeBtn\{display:none\}/);
+  assert.doesNotMatch(css,/\.top-actions #trackBtn\{display:none\}/);
+  assert.match(css,/\.top-actions #themeBtn\{display:none\}/);
 });
