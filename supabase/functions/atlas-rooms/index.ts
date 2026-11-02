@@ -5,11 +5,11 @@ const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 if (!url || !serviceKey) throw new Error("Missing server credentials");
 // Supabase deployment config: verify_jwt=false; this endpoint authorizes room writes with one-time capability tokens.
 const db = createClient(url, serviceKey, { auth: { persistSession: false, autoRefreshToken: false } });
-const origins = new Set(["https://tejas-mk2.github.io", "http://localhost:4173", "http://127.0.0.1:4173"]);
+const origins = new Set(["https://tejas-mk2.github.io", "http://localhost:4173", "http://127.0.0.1:4173", "http://localhost:8080", "http://127.0.0.1:8080"]);
 const cors = (origin: string | null) => ({
   "Access-Control-Allow-Origin": origin && origins.has(origin) ? origin : "https://tejas-mk2.github.io",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS", "Vary": "Origin",
+  "Access-Control-Allow-Methods": "POST, OPTIONS", "Access-Control-Max-Age": "86400", "Vary": "Origin",
 });
 const reply = (data: unknown, status = 200, origin: string | null = null) =>
   new Response(JSON.stringify(data), { status, headers: { ...cors(origin), "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
@@ -41,7 +41,8 @@ Deno.serve(async req => {
   try {
     const rawBody = await req.text();
     if (new TextEncoder().encode(rawBody).byteLength > 300000) return reply({ error: "Request too large" }, 413, origin);
-    const body = JSON.parse(rawBody);
+    let body: unknown;
+    try { body = JSON.parse(rawBody); } catch { return reply({ error: "Invalid JSON" }, 400, origin); }
     if (!body || typeof body !== "object" || Array.isArray(body)) return reply({ error: "Invalid request" }, 400, origin);
     if (body.action === "create") {
       if (!await limited(req,"create",5,900)) return reply({ error: "Room creation limit reached" },429,origin);
@@ -72,6 +73,6 @@ Deno.serve(async req => {
     }
     return reply({ error: "Unknown action" },400,origin);
   } catch {
-    return reply({ error: "Invalid request or temporary service error" },400,origin);
+    return reply({ error: "Temporary service error" },500,origin);
   }
 });
