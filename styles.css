@@ -390,3 +390,7 @@ body.light-ui .command-option kbd,body.light-ui .command-foot kbd{background:#e1
 @media(max-width:760px){.command-trigger{padding:4px 6px;font-size:8px;letter-spacing:0}.command-palette{border-radius:14px}.command-head{padding:17px 16px 12px}.command-input{width:calc(100% - 32px);margin-inline:16px}.command-search-label{margin-inline:16px}.command-list{padding-inline:8px}.command-foot{justify-content:center;gap:10px}}
 @media(max-width:360px){.command-trigger{font-size:7px;padding:4px}.search-wrap{gap:5px}.brand small{display:none}}
 @media(prefers-reduced-motion:reduce){.command-option,.command-trigger{transition:none}}
+
+
+/* GeoJSON layer manager */
+.overlay-manager{margin:12px 0;padding:12px;border:1px solid var(--line,#203642);border-radius:12px;background:var(--surface-raised,#122531);display:grid;gap:12px}.overlay-manager-head{display:flex;justify-content:space-between;align-items:center;font-size:12px}.overlay-manager-head>b{letter-spacing:.09em;font-size:10px;color:var(--muted,#8ba0aa)}.overlay-manager-head span{color:var(--muted,#8ba0aa)}.overlay-manager-head strong{color:var(--text,#eaf2f3);font-variant-numeric:tabular-nums}.overlay-visibility,.overlay-opacity{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px}.overlay-opacity{display:grid;grid-template-columns:1fr auto}.overlay-opacity input{grid-column:1/-1;width:100%;accent-color:var(--accent,#75e0c1)}.overlay-manager button:disabled{opacity:.45;cursor:not-allowed}
