@@ -3,6 +3,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 const url = Deno.env.get("SUPABASE_URL") ?? "";
 const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 if (!url || !serviceKey) throw new Error("Missing server credentials");
+// Supabase deployment config: verify_jwt=false; this endpoint authorizes room writes with one-time capability tokens.
 const db = createClient(url, serviceKey, { auth: { persistSession: false, autoRefreshToken: false } });
 const origins = new Set(["https://tejas-mk2.github.io", "http://localhost:4173", "http://127.0.0.1:4173"]);
 const cors = (origin: string | null) => ({
