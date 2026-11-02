@@ -41,13 +41,14 @@ export function coordinateToDMS(lat,lng){
  const part=(v,pos,neg)=>{const a=Math.abs(v),d=Math.floor(a),mf=(a-d)*60,m=Math.floor(mf),s=((mf-m)*60).toFixed(2);return d+'° '+m+"' "+s+'" '+(v>=0?pos:neg)};
  return part(lat,'N','S')+'  '+part(lng,'E','W');
 }
-function lineLength(c){let n=0;for(let i=1;i<c.length;i++)n+=haversine({lat:c[i-1][1],lng:c[i-1][0]},{lat:c[i][1],lng:c[i][0]});return n}
+function walkMetricCoordinates(value,visit){if(!Array.isArray(value))return;if(typeof value[0]==='number'){visit([value[0],value[1]]);return}for(const item of value)walkMetricCoordinates(item,visit)}
+function lineLength(c){let n=0;for(let i=1;i<c.length;i++)n+=haversine({lat:c[i-1][1],lng:c[i-1][0]},{lat:c[i].lat,lng:c[i].lng});return n}
 function ringArea(r){if(r.length<4)return 0;let s=0;for(let i=0;i<r.length-1;i++){const a=r[i],b=r[i+1];s+=(b[0]-a[0])*Math.PI/180*(2+Math.sin(a[1]*Math.PI/180)+Math.sin(b[1]*Math.PI/180))}return Math.abs(s*EARTH_RADIUS*EARTH_RADIUS/2)}
 export function geometryMetrics(feature){
  const g=feature?.type==='Feature'?feature.geometry:feature;if(!g)return {lengthMeters:0,areaSquareMeters:0,bounds:null};
  let lengthMeters=0,areaSquareMeters=0,minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
  const line=c=>{lengthMeters+=lineLength(c)},polygon=rings=>{rings.forEach((r,i)=>{line(r);if(i===0)areaSquareMeters+=ringArea(r);else areaSquareMeters=Math.max(0,areaSquareMeters-ringArea(r))})};
- const visit=x=>{if(!x)return;if(x.type==='GeometryCollection'){x.geometries.forEach(visit);return}walkCoordinates(x.coordinates,p=>{minX=Math.min(minX,p[0]);maxX=Math.max(maxX,p[0]);minY=Math.min(minY,p[1]);maxY=Math.max(maxY,p[1])},{count:0,maxCoordinates:1000000});if(x.type==='LineString')line(x.coordinates);else if(x.type==='MultiLineString')x.coordinates.forEach(line);else if(x.type==='Polygon')polygon(x.coordinates);else if(x.type==='MultiPolygon')x.coordinates.forEach(polygon)};
+ const visit=x=>{if(!x)return;if(x.type==='GeometryCollection'){x.geometries.forEach(visit);return}walkMetricCoordinates(x.coordinates,p=>{minX=Math.min(minX,p[0]);maxX=Math.max(maxX,p[0]);minY=Math.min(minY,p[1]);maxY=Math.max(maxY,p[1])});if(x.type==='LineString')line(x.coordinates);else if(x.type==='MultiLineString')x.coordinates.forEach(line);else if(x.type==='Polygon')polygon(x.coordinates);else if(x.type==='MultiPolygon')x.coordinates.forEach(polygon)};
  visit(g);return {lengthMeters,areaSquareMeters,bounds:minX===Infinity?null:[[minY,minX],[maxY,maxX]]};
 }
 export function filterFeatures(features,query=''){
