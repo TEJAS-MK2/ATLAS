@@ -54,3 +54,6 @@ Vanilla JavaScript ES modules, Leaflet, globe.gl, Three.js, OpenStreetMap, Photo
 
 ## License
 See [LICENSE](./LICENSE).
+
+
+Guest sharing details: see [Guest map rooms](./docs/GUEST_ROOMS.md). The live-room feature uses a dedicated Supabase Edge Function and private database schema; room links are read-only and the creator's edit capability stays in the browser session.
