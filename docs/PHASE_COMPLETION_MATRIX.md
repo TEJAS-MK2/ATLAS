@@ -24,7 +24,7 @@
 | Release | CI, CodeQL, Pages and production smoke workflows | 4.2 passed; 4.3 candidate must pass its own runs |
 
 ## Outstanding operational review
-1. Rebase/revalidate GPS acceptance PR #12 against current main.
+1. GPS acceptance PR #12's one-point export fix and permission tests are included in this candidate; close PR #12 as superseded after merge.
 2. Review the five open Dependabot action updates against current workflow requirements.
 3. Confirm whether Supabase rate-limit buckets are cleaned up and whether edge IP headers are trustworthy in the deployed environment.
 4. Profile large imported datasets and check memory/interaction responsiveness.
