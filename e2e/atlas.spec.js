@@ -121,3 +121,37 @@ test('ATLAS 3.3 route comparison UI can select an alternate route',async({page})
  await page.locator('[data-route-index="1"]').click();
  await expect(page.locator('[data-route-index="1"]')).toHaveAttribute('aria-pressed','true');
 });
+
+test('ATLAS 4.0 geometry editor updates selected feature vertices without mutation',async({page})=>{
+ const file={name:'editable.geojson',mimeType:'application/geo+json',buffer:Buffer.from(JSON.stringify({type:'FeatureCollection',features:[{type:'Feature',properties:{name:'Editable boundary'},geometry:{type:'Polygon',coordinates:[[[88.36,22.57],[88.37,22.57],[88.37,22.58],[88.36,22.58],[88.36,22.57]]]}}]}))};
+ await page.locator('#importFile').setInputFiles(file);
+ await page.locator('#overlayBtn').click();
+ await page.locator('#overlayFeatureList [data-feature-index="0"]').click();
+ await expect(page.locator('#spatialEditFeature')).toHaveValue('0');
+ await expect(page.locator('#spatialEditLat')).toHaveValue('22.57');
+ await page.locator('#spatialEditLat').fill('22.571');
+ await page.evaluate(()=>{window.__atlasGeometryEdit=null;window.addEventListener('atlas:geometry-edit',e=>window.__atlasGeometryEdit=e.detail,{once:true})});
+ await page.locator('#spatialEditApply').click();
+ await expect.poll(()=>page.evaluate(()=>window.__atlasGeometryEdit?.features?.[0]?.geometry?.coordinates?.[0]?.[0]?.[1])).toBe(22.571);
+ await expect(page.locator('#spatialOperationsStatus')).toContainText('Updated feature 0');
+});
+test('ATLAS 4.0 creates a geodesic buffer and clears analysis overlays',async({page})=>{
+ await page.locator('#overlayBtn').click();
+ await page.locator('#spatialQueryLat').fill('22.5726');
+ await page.locator('#spatialQueryLng').fill('88.3639');
+ await page.evaluate(()=>{window.__atlasAnalysis=null;window.addEventListener('atlas:analysis-rendered',e=>window.__atlasAnalysis=e.detail,{once:true})});
+ await page.locator('#spatialBufferCreate').click();
+ await expect(page.locator('#spatialOperationsStatus')).toContainText('500 m geodesic buffer');
+ await expect.poll(()=>page.evaluate(()=>window.__atlasAnalysis?.features?.[0]?.properties?.atlasRole)).toBe('buffer');
+ await page.locator('#spatialAnalysisClear').click();
+});
+test('ATLAS 4.0 generates a density grid from loaded point features',async({page})=>{
+ const file={name:'points.geojson',mimeType:'application/geo+json',buffer:Buffer.from(JSON.stringify({type:'FeatureCollection',features:[{type:'Feature',properties:{name:'A'},geometry:{type:'Point',coordinates:[88.36,22.57]}},{type:'Feature',properties:{name:'B'},geometry:{type:'Point',coordinates:[88.37,22.58]}}]}))};
+ await page.locator('#importFile').setInputFiles(file);
+ await page.locator('#overlayBtn').click();
+ await page.evaluate(()=>{window.__atlasAnalysis=null;window.addEventListener('atlas:analysis-rendered',e=>window.__atlasAnalysis=e.detail,{once:true})});
+ await page.locator('#spatialHeatmapCreate').click();
+ await expect.poll(()=>page.evaluate(()=>window.__atlasAnalysis?.mode)).toBe('density');
+ await expect.poll(()=>page.evaluate(()=>window.__atlasAnalysis?.features?.length||0)).toBeGreaterThan(0);
+ await expect(page.locator('#spatialOperationsStatus')).toContainText('local density cells');
+});
