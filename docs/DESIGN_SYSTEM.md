@@ -54,3 +54,12 @@ Run npm test, npm run check, npm run test:e2e and node scripts/smoke-test.mjs be
 
 ## Implementation
 The refinement layer is appended to styles.css under ATLAS / FIELD CONSOLE. It intentionally preserves application DOM hooks and core JavaScript behaviours.
+
+
+## ATLAS 3.4 Field Console refresh
+
+- The top bar, navigation rail, inspector, floating tools and map controls share a consistent 10–20px radius scale, layered surfaces and restrained elevation.
+- The map remains the dominant canvas; desktop uses a balanced three-column workspace, tablet yields the inspector to the map, and phone uses a four-tool bottom dock.
+- Touch controls remain visible above the map; floating panels respect safe viewport space and remain scrollable.
+- Focus rings, disabled states, selection states and reduced-motion overrides are explicit. Hover movement is limited to fine pointers.
+- Dark and light themes have independently tuned surface, border and control treatments. No fake live status, traffic data or device telemetry is introduced.
