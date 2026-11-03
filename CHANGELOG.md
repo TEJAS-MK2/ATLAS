@@ -35,6 +35,9 @@ Notable project changes are recorded here. Dates and entries are added when chan
 
 ## Unreleased
 
+- Fixed GPS track export for a one-point session: emits a valid GeoJSON `Point` instead of an invalid one-coordinate `LineString`.
+- Added browser acceptance coverage for granted/denied geolocation permissions and single-fix GeoJSON export.
+
 - Refined the interface into the ATLAS Field Console visual system with upgraded dark/light surfaces, navigation, controls and responsive layouts.
 - Added social preview metadata and a custom repository hero graphic.
 - Reorganized README badges into build/security, repository activity and technology groups; removed unverified release and coverage claims.
