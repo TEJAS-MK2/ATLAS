@@ -2,7 +2,7 @@ import {formatDistance} from './geo.js';
 
 export function diffObservedObjects(previous,current){
   const known=previous instanceof Set?previous:new Set(previous||[]);
-  return (current||[]).filter(item=>item&&item.id!==undefined&&!known.has(String(item.id))).map(item=>({...item,id:String(item.id)}));
+  return (Array.isArray(current)?current:[]).filter(item=>item&&item.id!==undefined&&item.id!==null&&String(item.id).length>0&&!known.has(String(item.id))).map(item=>({...item,id:String(item.id)}));
 }
 export function aggregateHistory(entries=[],now=Date.now()){
   const hourMs=60*60*1000;
