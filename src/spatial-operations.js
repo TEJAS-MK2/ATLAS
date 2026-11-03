@@ -18,7 +18,7 @@ export function collectGeometryPositions(geometry){
       if(Array.isArray(g.geometries))g.geometries.forEach(visitGeometry);
       return;
     }
-    if(g.type==='Polygon'){for(const ring of g.coordinates||[]){visit(ring,null,-1,true);if(updated)break;}}\n    else if(g.type==='MultiPolygon'){for(const polygon of g.coordinates||[]){for(const ring of polygon||[]){visit(ring,null,-1,true);if(updated)break;}if(updated)break;}}\n    else visit(g.coordinates);
+    visit(g.coordinates);
   };
   visitGeometry(geometry);
   return positions;
@@ -48,7 +48,14 @@ export function updateGeometryVertex(feature,vertexIndex,latitude,longitude){
       if(Array.isArray(g.geometries))for(const child of g.geometries){visitGeometry(child);if(updated)break;}
       return;
     }
-    visit(g.coordinates);
+    if(g.type==='Polygon'){
+      for(const ring of g.coordinates||[]){visit(ring,null,-1,true);if(updated)break;}
+    }else if(g.type==='MultiPolygon'){
+      for(const polygon of g.coordinates||[]){
+        for(const ring of polygon||[]){visit(ring,null,-1,true);if(updated)break;}
+        if(updated)break;
+      }
+    }else visit(g.coordinates);
   };
   visitGeometry(next.geometry);
   return updated?next:null;
