@@ -12,12 +12,16 @@ npm run test:e2e
 node scripts/smoke-test.mjs
 ```
 
-- `npm test` runs the Node.js built-in test runner, including geospatial and security-contract tests.
+- `npm test` runs the Node.js built-in test runner, including geospatial, spatial-analytics, history-window, UI-contract and security-contract tests.
 - `npm run check` runs syntax checks on the main application modules.
 - `npm run test:e2e` runs Playwright Chromium tests against a local static server. The suite checks map initialization, command palette behaviour, layer controls, GeoJSON import validation and inspection, saved map view persistence, and narrow mobile overflow.
-- `scripts/smoke-test.mjs` checks the published site and required production assets when network access is available.
+- `scripts/smoke-test.mjs` checks the published site and required production assets when network access is available; it also rejects duplicate resource entries.
 
 GitHub Actions runs unit tests, syntax checks, and browser tests before GitHub Pages deployment, then performs a production smoke check. CodeQL separately analyzes JavaScript/TypeScript.
+
+## Release evidence
+
+For every release candidate, record the exact commit SHA and the linked GitHub Actions run. A green workflow on a different commit is not evidence for the candidate. The production smoke job must run after Pages deployment and pass against the deployed URL. If a workflow or production endpoint cannot be inspected, mark that check as **not verified** rather than inferring success from configuration or badges.
 
 ## Manual UI acceptance
 
