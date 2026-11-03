@@ -239,6 +239,7 @@ test('ATLAS 4.0 analysis clear removes the actual Leaflet layer',async({page})=>
  await expect.poll(()=>page.evaluate(()=>window.__atlasAnalysisState?.[0]?.visible)).toBe(true);
  await page.locator('#spatialAnalysisClear').click();
  await expect.poll(()=>page.evaluate(()=>window.__atlasAnalysisState?.[1]?.removed)).toBe(true);
+ await expect.poll(()=>page.evaluate(()=>window.__atlasAnalysisState?.[1]?.visible)).toBe(false);
  await expect(page.locator('#spatialOperationsStatus')).toContainText('Analysis overlay cleared');
 });
 
