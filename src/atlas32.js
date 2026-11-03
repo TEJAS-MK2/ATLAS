@@ -87,6 +87,27 @@ function init(){
   function queryCoordinates(){const latText=$('spatialQueryLat').value.trim(),lngText=$('spatialQueryLng').value.trim();if(!latText||!lngText||!validCoordinate(Number(latText),Number(lngText)))return null;return {lat:Number(latText),lng:Number(lngText)}}
   $('spatialBufferCreate').addEventListener('click',()=>{const point=queryCoordinates(),radius=Number($('spatialBufferRadius').value);if(!point){$('spatialOperationsStatus').textContent='Enter valid latitude and longitude first.';return;}if(!Number.isFinite(radius)||radius<1||radius>100000){$('spatialOperationsStatus').textContent='Buffer radius must be between 1 and 100,000 metres.';return;}const buffer=createPointBuffer(point.lat,point.lng,radius);if(!buffer){$('spatialOperationsStatus').textContent='Could not create this buffer.';return;}emit('atlas:analysis-overlay',{features:[buffer],mode:'buffer'});$('spatialOperationsStatus').textContent='Created a '+Math.round(radius)+' m geodesic buffer. Source features were not changed.'});
   $('spatialHeatmapCreate').addEventListener('click',()=>{const density=createDensityGrid(features,Number($('spatialDensitySize').value));if(!density.length){$('spatialOperationsStatus').textContent='Load at least two coordinate positions to build a density grid.';return;}emit('atlas:analysis-overlay',{features:density,mode:'density'});$('spatialOperationsStatus').textContent='Generated '+density.length+' local density cells from '+features.length+' source features.'});
+  function loadEditorVertex(){
+    const featureText=$('spatialEditFeature').value.trim(),vertexText=$('spatialEditVertex').value.trim();
+    const featureIndex=Number(featureText),vertexIndex=Number(vertexText);
+    if(!featureText||!vertexText||!Number.isInteger(featureIndex)||featureIndex<0||featureIndex>=features.length||!Number.isInteger(vertexIndex)||vertexIndex<0){
+      $('spatialEditLat').value='';$('spatialEditLng').value='';
+      $('spatialOperationsStatus').textContent='Choose a valid feature and zero-based vertex index.';
+      return false;
+    }
+    const feature=features[featureIndex],positions=collectGeometryPositions(feature?.geometry),position=positions[vertexIndex];
+    if(!position){
+      $('spatialEditLat').value='';$('spatialEditLng').value='';
+      $('spatialOperationsStatus').textContent='Vertex index '+vertexIndex+' does not exist for feature '+featureIndex+'.';
+      return false;
+    }
+    selectedFeatureIndex=featureIndex;
+    $('spatialEditLat').value=String(position[1]);$('spatialEditLng').value=String(position[0]);
+    $('spatialOperationsStatus').textContent='Feature '+featureIndex+' · vertex '+vertexIndex+' loaded. Edit either coordinate and apply.';
+    return true;
+  }
+  $('spatialEditFeature').addEventListener('change',()=>{$('spatialEditVertex').value='0';loadEditorVertex()});
+  $('spatialEditVertex').addEventListener('change',loadEditorVertex);
   $('spatialEditApply').addEventListener('click',()=>{const featureText=$('spatialEditFeature').value.trim(),vertexText=$('spatialEditVertex').value.trim(),latText=$('spatialEditLat').value.trim(),lngText=$('spatialEditLng').value.trim();if(!featureText||!vertexText||!latText||!lngText){$('spatialOperationsStatus').textContent='Select a feature and vertex and fill in both coordinates.';return;}const featureIndex=Number(featureText),vertexIndex=Number(vertexText),lat=Number(latText),lng=Number(lngText);if(!Number.isInteger(featureIndex)||featureIndex<0||featureIndex>=features.length||!Number.isInteger(vertexIndex)||vertexIndex<0||!validCoordinate(lat,lng)){ $('spatialOperationsStatus').textContent='Choose a valid feature and vertex, then enter valid coordinates.';return;}const updated=updateGeometryVertex(features[featureIndex],vertexIndex,lat,lng);if(!updated){$('spatialOperationsStatus').textContent='That vertex does not exist. Vertex indexes start at zero.';return;}const next=features.slice();next[featureIndex]=updated;features=next;emit('atlas:geometry-edit',{features,featureIndex,vertexIndex});updateAnalytics();$('spatialOperationsStatus').textContent='Updated feature '+featureIndex+', vertex '+vertexIndex+'. The original source object was not mutated.'});
   $('spatialAnalysisClear').addEventListener('click',()=>{emit('atlas:analysis-clear');$('spatialOperationsStatus').textContent='Analysis overlay cleared. Source geometry remains unchanged.'});
   window.addEventListener('atlas:feature-selected',e=>{const index=Number(e.detail?.index),feature=features[index];if(!Number.isInteger(index)||!feature)return;const positions=collectGeometryPositions(feature.geometry);if(!positions.length){$('spatialOperationsStatus').textContent='Selected feature has no editable coordinates.';return;}selectedFeatureIndex=index;$('spatialEditFeature').value=String(index);$('spatialEditVertex').value='0';$('spatialEditLng').value=String(positions[0][0]);$('spatialEditLat').value=String(positions[0][1]);$('spatialOperationsStatus').textContent='Feature '+index+' selected · '+positions.length+' vertices/positions. Choose a zero-based vertex index.'});
