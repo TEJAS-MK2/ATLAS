@@ -43,7 +43,22 @@ $('nearbyGo').onclick=async()=>{const c=map.getCenter(),type=$('nearbyType').val
 $('exportBtn').onclick=()=>{const features=saved.map(p=>({type:'Feature',geometry:{type:'Point',coordinates:[p.lng,p.lat]},properties:{name:p.name}}));if(routeLayer){const gj=routeLayer.toGeoJSON();features.push(...gj.features)}if(geoOverlayFeatures.length)features.push(...geoOverlayFeatures);const blob=new Blob([JSON.stringify(featureCollection(features),null,2)],{type:'application/geo+json'});download(blob,'atlas-export.geojson')};function download(blob,name){const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 $('importBtn').onclick=()=> $('importFile').click();$('importFile').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;if(f.size>5*1024*1024){notify('File exceeds 5 MB limit.');e.target.value='';return}try{const gj=validateFeatureCollection(parseSpatialFile(f.name,await f.text()));if(geoOverlay)map.removeLayer(geoOverlay);geoOverlayFeatures=gj.features;geoOverlayKind='imported';rebuildGeoOverlay();geoOverlay?.addTo(map);$('overlayVisibility').checked=true;updateOverlayInfo('Imported '+gj.features.length+' validated GeoJSON features.');if(geoOverlay?.getBounds?.().isValid())map.fitBounds(geoOverlay.getBounds(),{padding:[36,36],maxZoom:16});notify(gj.features.length+' GeoJSON features imported.')}catch(err){notify('Import failed: '+err.message)}e.target.value=''};
 $('themeBtn').onclick=()=>document.body.classList.toggle('light-ui');window.addEventListener('online',()=>{$('onlineStatus').textContent='Online'});window.addEventListener('offline',()=>{$('onlineStatus').textContent='Offline'});function networkInfo(){const c=navigator.connection;$('networkType').textContent=c?.effectiveType?.toUpperCase()||'Browser API unavailable';$('onlineStatus').textContent=navigator.onLine?'Online':'Offline';$('latency').textContent=c?.rtt?c.rtt+' ms (estimate)':'Not exposed'}networkInfo();navigator.connection?.addEventListener?.('change',networkInfo);
-updateSaved();updateMapInfo();if('serviceWorker'in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
+updateSaved();updateMapInfo();
+if('serviceWorker'in navigator&&location.protocol!=='file:'){
+  const hadController=Boolean(navigator.serviceWorker.controller);
+  const updateNotice=$('updateNotice');
+  let updateNoticeShown=false;
+  $('updateReload')?.addEventListener('click',()=>location.reload());
+  $('updateDismiss')?.addEventListener('click',()=>updateNotice?.classList.add('hidden'));
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(!navigator.serviceWorker.controller||!hadController||updateNoticeShown)return;
+    updateNoticeShown=true;
+    updateNotice?.classList.remove('hidden');
+  });
+  navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'})
+    .then(registration=>registration.update().catch(()=>{}))
+    .catch(()=>{});
+}
 
 // Atlas 2.0 — satellite, globe, opt-in GPS sessions and OSM geometry overlays.
 const satelliteLayer=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics'});

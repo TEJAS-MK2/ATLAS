@@ -88,3 +88,12 @@ Notable project changes are recorded here. Dates and entries are added when chan
 - Added interactive map tools, route planning, nearby discovery, saved places, and GeoJSON workflows.
 - Added 3D globe exploration, GPS tracking controls, and map-room sharing.
 - Added installable PWA support and GitHub Pages deployment checks.
+
+
+## 4.2.0 — 2026-11-03
+
+- Reworked the visual system across the top bar, tool dock, map controls, floating panels and live intelligence inspector.
+- Improved mobile navigation and touch targets while retaining the four primary map tools.
+- Added explicit asset versioning and stronger service-worker update checks to prevent stale installed shells.
+- Changed same-origin PWA asset refreshes to network-first requests that bypass the browser HTTP cache, while retaining offline cache fallback.
+- Updated release metadata, documentation and regression contracts.
