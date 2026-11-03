@@ -28,7 +28,7 @@ test('Aurora workspace styles cover desktop, mobile, light mode and reduced moti
   assert.match(css,/body\.light-ui \.insight-card/);
   assert.match(css,/prefers-reduced-motion:reduce/);
   assert.match(css,/focus-visible/);
-  assert.match(css,/min-height:44px/);
+  assert.match(css,/min-height:44px/);\n  assert.match(css,/\.map-control\\{width:44px;height:44px;min-width:44px;min-height:44px/);
 });
 
 test('PWA updates remain user-controlled and keep the offline shell',()=>{
