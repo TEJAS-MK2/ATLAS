@@ -1,4 +1,4 @@
-const CACHE='atlas-shell-v7';
+const CACHE='atlas-shell-v8';
 const SHELL=['./','./index.html','./styles.css','./app.js','./room-ui.js','./src/geo.js','./src/atlas32.js','./src/atlas33.js','./manifest.webmanifest','./icons/atlas-192.svg','./icons/atlas-512.svg'];
 
 self.addEventListener('install',event=>{
