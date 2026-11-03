@@ -14,15 +14,15 @@ This checklist is maintained on the isolated `work/atlas-4.0-ci-repair` branch. 
 
 - [x] Correct the stale release metadata assertion: the application is version 4.0.0, not 3.6.0.
 - [x] Configure CI to run on the isolated repair branch.
-- [ ] Obtain a successful CI run on the current branch head.
-- [ ] `npm ci --no-audit --no-fund` completes.
-- [ ] `npm audit --audit-level=high` reports no high/critical findings requiring remediation.
-- [ ] `npm test` passes all tests.
-- [ ] `npm run check` passes all syntax checks.
-- [ ] Playwright Chromium, Firefox and WebKit suites pass.
+- [x] Obtain a successful CI run on the current branch head (CI run 41701455044, commit 5721d664).
+- [x] `npm ci --no-audit --no-fund` completes.
+- [x] `npm audit --audit-level=high` completes successfully (no high-severity threshold failure).
+- [x] `npm test` passes.
+- [x] `npm run check` passes.
+- [x] Playwright Chromium, Firefox and WebKit suites pass.
 - [ ] Production smoke test passes against the candidate build.
 
-**Current verification status:** not yet verified. The earlier workflow run (commit before the test correction) reported 102 passing tests and one failure in the stale metadata assertion. The corrected branch has not produced a visible Actions run yet. Do not treat the earlier run as validation of this branch.
+**Current verification status:** automated CI is passing on current branch head `5721d664cb7685f93307555e4de52d2197973c33`. CI run [41701455044](https://github.com/TEJAS-MK2/ATLAS/actions/runs/41701455044) completed successfully, including dependency installation, high-severity npm audit gate, unit tests, syntax checks, Playwright browser installation, and E2E tests. CodeQL run [41701455113](https://github.com/TEJAS-MK2/ATLAS/actions/runs/41701455113) also completed successfully. These results do not replace physical-device acceptance, manual security review, or production smoke testing.
 
 ## GIS acceptance
 
