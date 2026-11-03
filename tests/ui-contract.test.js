@@ -240,3 +240,9 @@ test('ATLAS static CSP blocks object embeds and constrains document base and for
  assert.match(html,/base-uri 'self'/);
  assert.match(html,/form-action 'self'/);
 });
+
+
+test('ATLAS geometry editor synchronizes coordinate fields when the vertex index changes',()=>{
+ assert.match(atlas32,/spatialEditVertex'\)\.addEventListener\('change',loadEditorVertex\)/);
+ assert.match(atlas32,/positions\[vertexIndex\]/);
+});
