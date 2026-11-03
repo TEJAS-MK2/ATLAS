@@ -56,7 +56,7 @@ ATLAS is a responsive, browser-based GIS workspace. The map remains the primary 
 | Analyze | Validated GeoJSON import/export, searchable feature inspector, line length, polygon area, spatial bounds and live feature summaries |
 | Organize | Saved places, up to 30 named map views, reusable workspace profiles, configurable dashboard widgets, map sharing and seven-day guest map rooms |
 | Field tools | User-initiated device location, opt-in GPS track recording and 3D Earth explorer |
-| Platform | Responsive interface, dark/light appearance, customizable workspace profiles and dashboard widgets, layer styling studio, local historical analytics, opt-in geospatial change monitoring, PWA shell and offline navigation fallback |
+| Platform | Responsive interface, dark/light appearance, customizable workspace profiles and dashboard widgets, layer styling studio, local historical analytics, opt-in geospatial change monitoring, versioned PWA shell with cached local modules and core CDN libraries; map tiles remain network-dependent offline |
 | Engineering | Unit tests, Chromium browser tests, production smoke checks and CodeQL analysis |
 ## Interface
 The ATLAS Field Console uses a restrained geospatial operations-console visual language: a high-contrast map canvas, quiet navigation, tactile controls, clear selected states and a focused intelligence inspector. Layouts adapt across desktop, tablet and narrow mobile viewports. No fabricated live traffic or telemetry is presented.
@@ -91,7 +91,7 @@ python3 -m http.server 8080
 ```
 Open http://localhost:8080.
 ## Deployment & verification
-The GitHub Pages workflow runs unit tests, JavaScript syntax checks and Chromium browser tests before publishing. A post-deployment smoke test checks the live homepage and required assets. CodeQL separately analyzes JavaScript/TypeScript.
+The GitHub Pages workflow runs unit tests, JavaScript syntax checks and Chromium, Firefox, WebKit and mobile-emulation browser checks before publishing. A post-deployment smoke test checks the live homepage and required assets. CodeQL separately analyzes JavaScript/TypeScript.
 - [Deployment workflow](https://github.com/TEJAS-MK2/ATLAS/actions/workflows/pages.yml)
 - [CodeQL workflow](https://github.com/TEJAS-MK2/ATLAS/actions/workflows/codeql.yml)
 - [Live application](https://tejas-mk2.github.io/ATLAS/)
