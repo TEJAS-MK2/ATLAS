@@ -45,11 +45,15 @@ $('importBtn').onclick=()=> $('importFile').click();$('importFile').onchange=asy
 $('themeBtn').onclick=()=>document.body.classList.toggle('light-ui');window.addEventListener('online',()=>{$('onlineStatus').textContent='Online'});window.addEventListener('offline',()=>{$('onlineStatus').textContent='Offline'});function networkInfo(){const c=navigator.connection;$('networkType').textContent=c?.effectiveType?.toUpperCase()||'Browser API unavailable';$('onlineStatus').textContent=navigator.onLine?'Online':'Offline';$('latency').textContent=c?.rtt?c.rtt+' ms (estimate)':'Not exposed'}networkInfo();navigator.connection?.addEventListener?.('change',networkInfo);
 updateSaved();updateMapInfo();
 if('serviceWorker'in navigator&&location.protocol!=='file:'){
-  let refreshing=false;
+  const hadController=Boolean(navigator.serviceWorker.controller);
+  const updateNotice=$('updateNotice');
+  let updateNoticeShown=false;
+  $('updateReload')?.addEventListener('click',()=>location.reload());
+  $('updateDismiss')?.addEventListener('click',()=>updateNotice?.classList.add('hidden'));
   navigator.serviceWorker.addEventListener('controllerchange',()=>{
-    if(!navigator.serviceWorker.controller||refreshing)return;
-    refreshing=true;
-    location.reload();
+    if(!navigator.serviceWorker.controller||!hadController||updateNoticeShown)return;
+    updateNoticeShown=true;
+    updateNotice?.classList.remove('hidden');
   });
   navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'})
     .then(registration=>registration.update().catch(()=>{}))
