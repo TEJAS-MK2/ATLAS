@@ -31,3 +31,12 @@ test('guest room tables are private and protected by forced RLS',()=>{
   assert.match(migration,/alter table atlas_private\.shared_maps force row level security/);
   assert.match(migration,/revoke all on atlas_private\.shared_maps from public, anon, authenticated/);
 });
+
+
+test('spatial file imports reject XML entity declarations and exports neutralize spreadsheet formulas',()=>{
+  const formats=readFileSync(new URL('../src/formats.js',import.meta.url),'utf8');
+  assert.match(formats,/DOCTYPE\|<!ENTITY/);
+  assert.match(formats,/spreadsheetSafe/);
+  assert.match(formats,/feature_name/);
+  assert.match(formats,/atlasGeometryType/);
+});
