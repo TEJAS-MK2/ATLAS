@@ -14,7 +14,8 @@ Repository tree, application shell, base styles, app and room modules, service w
 1. **Package metadata drift (low):** package.json declared 4.2.0 while package-lock.json still declared 4.0.0 in its root package entries. Align both to 4.3.0 and add a regression assertion.
 2. **Stale user-facing version labels (low):** page title, social metadata, workspace panel labels and build marker still described 4.2/4.0. Update current-facing labels and versioned asset URLs to 4.3.0.
 3. **PWA cache invalidation (medium):** add a distinct 4.3 stylesheet and bump the shell cache to v12 so installed sessions fetch the new visual layer. Preserve network-first refresh and offline fallback.
-4. **CSS cascade complexity (medium):** the existing styles.css is approximately 101 KB with hundreds of selector blocks and repeated selectors from incremental releases. Add a separately versioned design layer instead of extending the legacy file further. Full cascade consolidation remains a follow-up requiring screenshot-based visual regression.
+4. **Place-search race (low):** overlapping Photon requests could return out of order and overwrite results for a newer query. The 4.3 candidate invalidates stale responses when input changes.
+5. **CSS cascade complexity (medium):** the existing styles.css is approximately 101 KB with hundreds of selector blocks and repeated selectors from incremental releases. Add a separately versioned design layer instead of extending the legacy file further. Full cascade consolidation remains a follow-up requiring screenshot-based visual regression.
 6. **Stale release documentation (low):** design, release readiness and phase matrix documents did not reflect the merged 4.2 production baseline. Refresh them and record explicit 4.3 gates.
 
 ### Reviewed; follow-up verification required
