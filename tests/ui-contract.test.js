@@ -233,3 +233,10 @@ test('ATLAS 4.0 import affordance names all supported map formats',()=>{
  assert.match(html,/Import map file/);
  assert.match(app,/geoOverlay\?\.getBounds/);
 });
+
+
+test('ATLAS static CSP blocks object embeds and constrains document base and form targets',()=>{
+ assert.match(html,/object-src 'none'/);
+ assert.match(html,/base-uri 'self'/);
+ assert.match(html,/form-action 'self'/);
+});
