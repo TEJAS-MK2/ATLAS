@@ -57,7 +57,7 @@ ATLAS is a responsive, browser-based GIS workspace. The map remains the primary 
 | Organize | Saved places, up to 30 named map views, reusable workspace profiles, configurable dashboard widgets, map sharing and seven-day guest map rooms |
 | Field tools | User-initiated device location, opt-in GPS track recording and 3D Earth explorer |
 | Platform | Responsive interface, dark/light appearance, customizable workspace profiles and dashboard widgets, layer styling studio, local historical analytics, opt-in geospatial change monitoring, versioned PWA shell with cached local modules and core CDN libraries; map tiles remain network-dependent offline |
-| Engineering | Unit tests, Chromium browser tests, production smoke checks and CodeQL analysis |
+| Engineering | Unit tests, Chromium/Firefox/WebKit browser tests, mobile emulation, production smoke checks and CodeQL analysis |
 ## Interface
 The ATLAS Field Console uses a restrained geospatial operations-console visual language: a high-contrast map canvas, quiet navigation, tactile controls, clear selected states and a focused intelligence inspector. Layouts adapt across desktop, tablet and narrow mobile viewports. No fabricated live traffic or telemetry is presented.
 See [the design system](./docs/DESIGN_SYSTEM.md).
@@ -137,7 +137,14 @@ Released under the [MIT License](./LICENSE).
 
 
 ### Geospatial file interoperability
-- Import GeoJSON, KML, GPX and CSV coordinate tables.
+- Import GeoJSON, KML, GPX and CSV coordinate tables with strict coordinate validation.
 - Export active layers as GeoJSON, KML, GPX or CSV.
-- GeoJSON and KML preserve supported geometry structures; GPX represents paths and polygon boundaries as tracks; CSV is a coordinate-row exchange format and does not preserve geometry topology.
-\n\n## ATLAS 4.0 release hardening\n- The PWA precaches its local ES modules and a small allowlist of required CDN libraries. Basemap tiles and live geospatial provider data remain network-dependent.\n- KML/GPX imports reject malformed coordinates; XML DTD/entity declarations are not accepted. CSV export neutralizes spreadsheet formula prefixes in feature names.\n- Geometry editing, geodesic buffers and density grids handle closed rings and antimeridian-crossing polygons without global-spanning edges.\n- The release gate includes Chromium, Firefox, WebKit and mobile-emulation browser checks, plus production asset smoke tests.\n
+- ATLAS KML ExtendedData preserves MultiPoint, MultiLineString and MultiPolygon types on ATLAS-to-ATLAS round trips.
+- GPX represents paths and polygon boundaries as tracks; CSV is a coordinate-row exchange format and does not preserve geometry topology. Spreadsheet formula prefixes in feature names are neutralized.
+
+
+## ATLAS 4.0 release hardening
+- The PWA precaches its local ES modules and a small allowlist of required CDN libraries. Basemap tiles and live geospatial provider data remain network-dependent.
+- KML/GPX imports reject malformed coordinates; XML DTD/entity declarations are not accepted. CSV export neutralizes spreadsheet formula prefixes in feature names.
+- Geometry editing, geodesic buffers and density grids handle closed rings and antimeridian-crossing polygons without global-spanning edges.
+- The release gate includes Chromium, Firefox, WebKit and mobile-emulation browser checks, plus production asset smoke tests.
