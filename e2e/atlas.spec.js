@@ -1,4 +1,5 @@
 import {test,expect} from '@playwright/test';
+import {readFile} from 'node:fs/promises';
 test.beforeEach(async({page})=>{await page.goto('/');await expect(page.locator('#map')).toBeVisible();await expect(page.locator('#map.leaflet-container')).toBeVisible({timeout:20000})});
 test('application shell and map initialize without horizontal overflow',async({page})=>{await expect(page.locator('.app-shell')).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true)});
 test('command palette opens, filters actions and closes with Escape',async({page})=>{await page.keyboard.press('Control+k');await expect(page.locator('#commandPalette')).toBeVisible();await page.locator('#commandInput').fill('satellite');await expect(page.locator('#commandList')).toContainText('Switch to satellite imagery');await page.keyboard.press('Escape');await expect(page.locator('#commandPalette')).not.toBeVisible()});
@@ -320,4 +321,32 @@ test('ATLAS 4.3 Aurora light theme updates the complete workspace',async({page})
  await expect(page.locator('body')).toHaveClass(/light-ui/);
  const background=await page.locator('.sidebar').evaluate(el=>getComputedStyle(el).backgroundColor);
  expect(background).not.toBe('rgba(0, 0, 0, 0)');
+});
+
+
+test('GPS tracking is opt-in and one recorded fix exports as valid GeoJSON Point',async({page,context})=>{
+ await context.grantPermissions(['geolocation'],{origin:'http://127.0.0.1:4173'});
+ await context.setGeolocation({latitude:22.5726,longitude:88.3639,accuracy:12});
+ await page.locator('#trackBtn').click();
+ await expect(page.locator('#trackPanel')).toBeVisible();
+ await expect(page.locator('#trackStatus')).toHaveText('Tracking stopped');
+ await page.locator('#trackStartStop').click();
+ await expect(page.locator('#trackStatus')).toContainText('Recording',{timeout:10000});
+ await expect(page.locator('#trackPoints')).toHaveText('1');
+ const downloadPromise=page.waitForEvent('download');
+ await page.locator('#trackExport').click();
+ const download=await downloadPromise;
+ const exported=JSON.parse(await readFile(await download.path(),'utf8'));
+ expect(exported.features[0].geometry).toEqual({type:'Point',coordinates:[88.3639,22.5726]});
+ await page.locator('#trackStartStop').click();
+ await expect(page.locator('#trackStatus')).toHaveText('Session paused');
+});
+
+test('GPS permission denial stops the session and reports a recoverable message',async({page,context})=>{
+ await context.grantPermissions([],{origin:'http://127.0.0.1:4173'});
+ await page.locator('#trackBtn').click();
+ await page.locator('#trackStartStop').click();
+ await expect(page.locator('#toast')).toContainText('Location permission denied.',{timeout:10000});
+ await expect(page.locator('#trackStatus')).toHaveText('Session paused');
+ await expect(page.locator('#trackStartStop')).toHaveText('Start new session');
 });
