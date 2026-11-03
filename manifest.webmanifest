@@ -8,7 +8,7 @@
   "orientation": "any",
   "background_color": "#08131b",
   "theme_color": "#0b1c25",
-  "description": "A responsive geospatial operations workspace for interactive maps, routes, satellite imagery and GeoJSON analysis.",
+  "description": "A responsive geospatial intelligence workspace with route alternatives, local analytics, geospatial change monitoring and GeoJSON analysis.",
   "icons": [
     {
       "src": "./icons/atlas-192.svg",

@@ -146,3 +146,17 @@ test('ATLAS 3.2 workspace profiles expose save, restore and local persistence',(
   assert.match(app,/atlas:restore-workspace/);
   assert.match(readFileSync(new URL('../src/atlas32.js',import.meta.url),'utf8'),/atlas\.workspaces/);
 });
+
+test('ATLAS 3.3 monitoring, history and dashboard controls are present and wired',()=>{
+ for(const id of ['atlasMonitorPanel','atlasHistoryPanel','atlasDashboardPanel','monitorStart','monitorStop','monitorPollNow','monitorRadius','monitorInterval','monitorCategory','historyStats','historyChart','dashboardWidgets','dashboardReset']) assert.match(html,new RegExp('id="'+id+'"'));
+ assert.match(html,/src\/atlas33\.js/);
+ assert.match(app,/atlas:route-calculated/);
+ assert.match(readFileSync(new URL('../src/atlas33.js',import.meta.url),'utf8'),/atlas\.history/);
+});
+test('ATLAS 3.3 dashboard widget hooks are unique and map to inspector surfaces',()=>{
+ for(const id of ['center','summary','network','session','selection']) assert.match(html,new RegExp('data-dashboard-widget="'+id+'"'));
+ assert.match(readFileSync(new URL('../src/atlas33.js',import.meta.url),'utf8'),/atlas\.dashboard\.widgets/);
+});
+test('route planner requests alternatives and exposes comparison choices',()=>{
+ assert.match(app,/alternatives=true/);assert.match(app,/data-route-index/);assert.match(app,/atlas:route-calculated/);
+});

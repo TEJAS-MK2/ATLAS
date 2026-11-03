@@ -58,3 +58,57 @@ test('workspace profiles persist and restore map presentation settings',async({p
   await page.locator('#workspaceOpenBtn').click();
   await expect(page.locator('#workspaceList')).toContainText('ATLAS 3.2 field profile');
 });
+
+test('ATLAS 3.3 dashboard widgets can be customized and persist',async({page})=>{
+ await page.locator('[data-atlas33-open="atlasDashboardPanel"]').click();
+ await expect(page.locator('#atlasDashboardPanel')).toBeVisible();
+ await page.locator('#dashboardWidgets input[data-widget="network"]').uncheck();
+ await expect(page.locator('[data-dashboard-widget="network"]')).toBeHidden();
+ await page.reload();
+ await expect(page.locator('[data-dashboard-widget="network"]')).toBeHidden();
+ await page.locator('[data-atlas33-open="atlasDashboardPanel"]').click();
+ await page.locator('#dashboardReset').click();
+ await expect(page.locator('[data-dashboard-widget="network"]')).toBeVisible();
+});
+test('ATLAS 3.3 event monitor establishes a baseline and alerts on newly observed OSM objects',async({page})=>{
+ let calls=0;
+ await page.route('https://overpass-api.de/api/interpreter',async route=>{
+  calls++;
+  const elements=calls===1?[{type:'node',id:101,lat:22.5727,lon:88.3639,tags:{name:'Baseline Cafe',amenity:'cafe'},timestamp:'2026-11-03T04:00:00Z'}]:[
+   {type:'node',id:101,lat:22.5727,lon:88.3639,tags:{name:'Baseline Cafe',amenity:'cafe'},timestamp:'2026-11-03T04:00:00Z'},
+   {type:'node',id:102,lat:22.573,lon:88.364,tags:{name:'New Park Cafe',amenity:'cafe'},timestamp:'2026-11-03T05:00:00Z'}
+  ];
+  await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({elements})});
+ });
+ await page.locator('[data-atlas33-open="atlasMonitorPanel"]').click();
+ await page.locator('#monitorStart').click();
+ await expect(page.locator('#monitorStatus')).toContainText('Watching 1 mapped objects');
+ await page.locator('#monitorPollNow').click();
+ await expect(page.locator('#monitorEvents')).toContainText('New Park Cafe');
+ await expect(page.locator('#monitorStatus')).toContainText('Watching 2 mapped objects');
+ await page.locator('#monitorStop').click();
+ await expect(page.locator('#monitorStatus')).toContainText('Monitoring stopped');
+});
+test('ATLAS 3.3 history panel renders local activity analytics',async({page})=>{
+ await page.locator('[data-atlas33-open="atlasHistoryPanel"]').click();
+ await expect(page.locator('#historyStats')).toContainText('MAP UPDATES');
+ await expect(page.locator('#historyChart svg')).toBeVisible();
+});
+test('ATLAS 3.3 route comparison UI can select an alternate route',async({page})=>{
+ await page.route('https://photon.komoot.io/api/**',async route=>{
+  const url=new URL(route.request().url()),q=url.searchParams.get('q')||'';
+  const coords=q.toLowerCase().includes('destination')?[88.40,22.59]:[88.36,22.57];
+  await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({features:[{geometry:{type:'Point',coordinates:coords},properties:{name:q}}]})});
+ });
+ await page.route('https://router.project-osrm.org/route/v1/**',async route=>{
+  const line=offset=>({type:'LineString',coordinates:[[88.36,22.57],[88.38,22.58+offset],[88.40,22.59]]});
+  await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({code:'Ok',routes:[{distance:5000,duration:600,geometry:line(0)},{distance:6200,duration:720,geometry:line(.005)}]})});
+ });
+ await page.locator('[data-tool="route"]').click();
+ await page.locator('#routeStart').fill('Origin');
+ await page.locator('#routeEnd').fill('Destination');
+ await page.locator('#routeGo').click();
+ await expect(page.locator('#routeInfo')).toContainText('Option 2');
+ await page.locator('[data-route-index="1"]').click();
+ await expect(page.locator('[data-route-index="1"]')).toHaveAttribute('aria-pressed','true');
+});
