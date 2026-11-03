@@ -1,5 +1,5 @@
 <p align="center"><img src="./assets/atlas-social.svg" alt="ATLAS — Geospatial Intelligence" width="100%"></p>
-<h1 align="center">ATLAS 3.6 · Geospatial Field Console</h1>
+<h1 align="center">ATLAS 4.0 · Geospatial Field Console</h1>
 <p align="center"><strong>Explore. Analyze. Navigate. Operate.</strong><br>A map-first geospatial workspace for real-world exploration and spatial workflows.</p>
 <p align="center"><a href="https://tejas-mk2.github.io/ATLAS/"><img alt="Live demo" src="https://img.shields.io/badge/OPEN_LIVE_DEMO-1B8F70?style=for-the-badge&logo=googlemaps&logoColor=white"></a> <a href="https://github.com/TEJAS-MK2/ATLAS/actions/workflows/pages.yml"><img alt="Build and deploy" src="https://img.shields.io/github/actions/workflow/status/TEJAS-MK2/ATLAS/pages.yml?branch=main&style=for-the-badge&label=build%20%26%20deploy&logo=githubactions&logoColor=white"></a> <a href="https://github.com/TEJAS-MK2/ATLAS/actions/workflows/codeql.yml"><img alt="CodeQL" src="https://img.shields.io/github/actions/workflow/status/TEJAS-MK2/ATLAS/codeql.yml?branch=main&style=for-the-badge&label=CodeQL&logo=github"></a></p>
 ## Project status
@@ -56,8 +56,8 @@ ATLAS is a responsive, browser-based GIS workspace. The map remains the primary 
 | Analyze | Validated GeoJSON import/export, searchable feature inspector, line length, polygon area, spatial bounds and live feature summaries |
 | Organize | Saved places, up to 30 named map views, reusable workspace profiles, configurable dashboard widgets, map sharing and seven-day guest map rooms |
 | Field tools | User-initiated device location, opt-in GPS track recording and 3D Earth explorer |
-| Platform | Responsive interface, dark/light appearance, customizable workspace profiles and dashboard widgets, layer styling studio, local historical analytics, opt-in geospatial change monitoring, PWA shell and offline navigation fallback |
-| Engineering | Unit tests, Chromium browser tests, production smoke checks and CodeQL analysis |
+| Platform | Responsive interface, dark/light appearance, customizable workspace profiles and dashboard widgets, layer styling studio, local historical analytics, opt-in geospatial change monitoring, versioned PWA shell with cached local modules and core CDN libraries; map tiles remain network-dependent offline |
+| Engineering | Unit tests, Chromium/Firefox/WebKit browser tests, mobile emulation, production smoke checks and CodeQL analysis |
 ## Interface
 The ATLAS Field Console uses a restrained geospatial operations-console visual language: a high-contrast map canvas, quiet navigation, tactile controls, clear selected states and a focused intelligence inspector. Layouts adapt across desktop, tablet and narrow mobile viewports. No fabricated live traffic or telemetry is presented.
 See [the design system](./docs/DESIGN_SYSTEM.md).
@@ -83,7 +83,7 @@ These features operate on data already loaded into the browser. No new geolocati
 ## Quick start
 Requirements: Node.js 22+ and Python 3.
 ```bash
-npm install
+npm ci
 npm test
 npm run check
 npm run test:e2e
@@ -91,9 +91,10 @@ python3 -m http.server 8080
 ```
 Open http://localhost:8080.
 ## Deployment & verification
-The GitHub Pages workflow runs unit tests, JavaScript syntax checks and Chromium browser tests before publishing. A post-deployment smoke test checks the live homepage and required assets. CodeQL separately analyzes JavaScript/TypeScript.
+The GitHub Pages workflow runs unit tests, JavaScript syntax checks and Chromium, Firefox, WebKit and mobile-emulation browser checks before publishing. A post-deployment smoke test checks the live homepage and required assets. CodeQL separately analyzes JavaScript/TypeScript.
 - [Deployment workflow](https://github.com/TEJAS-MK2/ATLAS/actions/workflows/pages.yml)
 - [CodeQL workflow](https://github.com/TEJAS-MK2/ATLAS/actions/workflows/codeql.yml)
+- [ATLAS 4.0 release checklist](./docs/ATLAS_4_RELEASE_CHECKLIST.md)
 - [Live application](https://tejas-mk2.github.io/ATLAS/)
 ## Privacy & service limits
 - GPS permission is requested only after a user action.
@@ -137,6 +138,14 @@ Released under the [MIT License](./LICENSE).
 
 
 ### Geospatial file interoperability
-- Import GeoJSON, KML, GPX and CSV coordinate tables.
+- Import GeoJSON, KML, GPX and CSV coordinate tables with strict coordinate validation.
 - Export active layers as GeoJSON, KML, GPX or CSV.
-- GeoJSON and KML preserve supported geometry structures; GPX represents paths and polygon boundaries as tracks; CSV is a coordinate-row exchange format and does not preserve geometry topology.
+- ATLAS KML ExtendedData preserves MultiPoint, MultiLineString and MultiPolygon types on ATLAS-to-ATLAS round trips.
+- GPX represents paths and polygon boundaries as tracks; CSV is a coordinate-row exchange format and does not preserve geometry topology. Spreadsheet formula prefixes in feature names are neutralized.
+
+
+## ATLAS 4.0 release hardening
+- The PWA precaches its local ES modules and a small allowlist of required CDN libraries. Basemap tiles and live geospatial provider data remain network-dependent.
+- KML/GPX imports reject malformed coordinates; XML DTD/entity declarations are not accepted. CSV export neutralizes spreadsheet formula prefixes in feature names.
+- Geometry editing, geodesic buffers and density grids handle closed rings and antimeridian-crossing polygons without global-spanning edges.
+- The release gate includes Chromium, Firefox, WebKit and mobile-emulation browser checks, plus production asset smoke tests.

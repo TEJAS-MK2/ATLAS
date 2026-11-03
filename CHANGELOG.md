@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased — ATLAS 4.0 release hardening
+
+- Precache all statically imported ATLAS 4.0 modules and an explicit allowlist of core CDN libraries; bump the service-worker cache version to invalidate stale shells.
+- Fix empty FeatureCollection imports and clear stale geometry editor selection when the active layer changes.
+- Reject incomplete or invalid KML/GPX coordinates and XML DTD/entity declarations.
+- Preserve multi-geometry types in ATLAS KML round trips, accept exported CSV feature-name headers, and neutralize spreadsheet formula prefixes.
+- Remove large-array spread operations from geometry export and handle antimeridian-crossing buffers and density grids with split, valid GeoJSON polygons.
+- Add regression coverage for import edge cases, offline cache contracts, formula-safe CSV, cross-browser compatibility and mobile layout.
+- Fix point-in-polygon selection for antimeridian-crossing outer rings and holes; treat equivalent +180° and -180° point longitudes as the same meridian.
+- Harden the Content Security Policy and expand post-deployment smoke checks for ATLAS 4.0 modules.
+
 ## Unreleased — ATLAS 4.0 data interoperability
 
 - Add KML, GPX and CSV coordinate-table import/export alongside GeoJSON.

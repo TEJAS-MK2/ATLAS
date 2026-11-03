@@ -1,25 +1,27 @@
 import {validCoordinate} from './geo.js';
 
 function xmlDocument(source){
+  if(/<!DOCTYPE|<!ENTITY/i.test(source))throw new Error('XML DTD and entity declarations are not supported.');
   const doc=new DOMParser().parseFromString(source,'application/xml');
   if(doc.querySelector('parsererror'))throw new Error('The XML document is malformed.');
   return doc;
 }
 function descendants(node,name){
+  if(!node)return [];
   const namespaced=Array.from(node.getElementsByTagNameNS?.('*',name)||[]);
   return namespaced.length?namespaced:Array.from(node.getElementsByTagName?.(name)||[]);
 }
 function localName(node){return String(node?.localName||node?.nodeName||'').split(':').pop();}
 function firstDescendant(node,name){return descendants(node,name)[0]||null;}
 function parseCoordinateText(value){
-  const text=String(value||'').trim();
-  if(!text)return [];
-  return text.split(/\s+/).map((token,index)=>{
+  const source=String(value||'').trim();
+  if(!source)return [];
+  return source.split(/\s+/).map(token=>{
     const raw=token.split(',');
-    if(raw.length<2||!raw[0].trim()||!raw[1].trim())throw new Error('KML coordinate '+(index+1)+' is malformed.');
-    const parts=raw.map(part=>part.trim()===''?NaN:Number(part)),lng=parts[0],lat=parts[1];
-    if(!validCoordinate(lat,lng)||parts.slice(2).some(part=>!Number.isFinite(part)))throw new Error('KML coordinate '+(index+1)+' is invalid.');
-    return [lng,lat,...parts.slice(2)];
+    if(raw.length<2||!raw[0].trim()||!raw[1].trim())throw new Error('KML contains an incomplete coordinate token.');
+    const lng=Number(raw[0]),lat=Number(raw[1]);
+    if(!validCoordinate(lat,lng))throw new Error('KML contains an invalid coordinate token: '+token);
+    return [lng,lat];
   });
 }
 function closeRing(ring){
@@ -31,9 +33,7 @@ function parseKmlGeometry(element){
   const type=localName(element);
   if(type==='MultiGeometry'){
     const geometries=Array.from(element.children).map(parseKmlGeometry).filter(Boolean);
-    if(!geometries.length)return null;
-    if(geometries.every(geometry=>geometry.type==='Polygon'))return {type:'MultiPolygon',coordinates:geometries.map(geometry=>geometry.coordinates)};
-    return {type:'GeometryCollection',geometries};
+    return geometries.length?{type:'GeometryCollection',geometries}:null;
   }
   if(type==='Point'){
     const coords=parseCoordinateText(firstDescendant(element,'coordinates')?.textContent);
@@ -52,28 +52,37 @@ function parseKmlGeometry(element){
   }
   return null;
 }
+function restoreKmlGeometryType(geometry,placemark){
+  if(geometry?.type!=='GeometryCollection')return geometry;
+  const typeData=descendants(placemark,'Data').find(node=>node.getAttribute('name')==='atlasGeometryType');
+  const originalType=firstDescendant(typeData,'value')?.textContent?.trim();
+  const children=geometry.geometries||[];
+  if(originalType==='MultiPoint'&&children.every(item=>item.type==='Point'))return {type:'MultiPoint',coordinates:children.map(item=>item.coordinates)};
+  if(originalType==='MultiLineString'&&children.every(item=>item.type==='LineString'))return {type:'MultiLineString',coordinates:children.map(item=>item.coordinates)};
+  if(originalType==='MultiPolygon'&&children.every(item=>item.type==='Polygon'))return {type:'MultiPolygon',coordinates:children.map(item=>item.coordinates)};
+  return geometry;
+}
 function parseKml(source){
   const doc=xmlDocument(source),features=[];
   for(const placemark of descendants(doc,'Placemark')){
     const geometryNode=Array.from(placemark.children).find(child=>['Point','LineString','Polygon','MultiGeometry'].includes(localName(child)));
     if(!geometryNode)continue;
-    const geometry=parseKmlGeometry(geometryNode);
+    const geometry=restoreKmlGeometryType(parseKmlGeometry(geometryNode),placemark);
     if(geometry)features.push({type:'Feature',properties:{name:firstDescendant(placemark,'name')?.textContent?.trim()||'KML feature'},geometry});
   }
   return features;
 }
 function gpxPosition(point){
   const latText=point.getAttribute('lat'),lngText=point.getAttribute('lon');
-  if(latText===null||lngText===null||!latText.trim()||!lngText.trim())throw new Error('GPX coordinate is missing a latitude or longitude attribute.');
+  if(!latText?.trim()||!lngText?.trim())throw new Error('GPX point is missing latitude or longitude.');
   const lat=Number(latText),lng=Number(lngText);
-  if(!validCoordinate(lat,lng))throw new Error('GPX coordinate contains an invalid latitude or longitude.');
+  if(!validCoordinate(lat,lng))throw new Error('GPX point contains an invalid latitude or longitude.');
   return [lng,lat];
 }
 function parseGpx(source){
   const doc=xmlDocument(source),features=[];
   for(const point of descendants(doc,'wpt')){
-    const [lng,lat]=gpxPosition(point);
-    features.push({type:'Feature',properties:{name:firstDescendant(point,'name')?.textContent?.trim()||'GPX waypoint'},geometry:{type:'Point',coordinates:[lng,lat]}});
+    features.push({type:'Feature',properties:{name:firstDescendant(point,'name')?.textContent?.trim()||'GPX waypoint'},geometry:{type:'Point',coordinates:gpxPosition(point)}});
   }
   for(const route of descendants(doc,'rte')){
     const coords=descendants(route,'rtept').map(gpxPosition);
@@ -85,7 +94,6 @@ function parseGpx(source){
   }
   return features;
 }
-
 function parseCsvRows(source){
   const rows=[];let row=[],field='',quoted=false;
   for(let i=0;i<source.length;i++){
@@ -110,8 +118,11 @@ function parseCsv(source){
   const nameIndex=headers.findIndex(value=>['name','title','label','feature_name'].includes(value));
   const features=[];
   for(let i=1;i<rows.length;i++){
-    const latText=String(rows[i][latIndex]??'').trim(),lngText=String(rows[i][lngIndex]??'').trim();if(!latText||!lngText)continue;const lat=Number(latText),lng=Number(lngText);
-    if(!validCoordinate(lat,lng))continue;
+    const rowNumber=i+1;
+    const latText=String(rows[i][latIndex]??'').trim(),lngText=String(rows[i][lngIndex]??'').trim();
+    if(!latText||!lngText)throw new Error('CSV row '+rowNumber+' is missing latitude or longitude.');
+    const lat=Number(latText),lng=Number(lngText);
+    if(!validCoordinate(lat,lng))throw new Error('CSV row '+rowNumber+' contains invalid coordinates.');
     features.push({type:'Feature',properties:{name:nameIndex>=0&&rows[i][nameIndex]?.trim()?rows[i][nameIndex].trim():'CSV point '+i},geometry:{type:'Point',coordinates:[lng,lat]}});
   }
   if(!features.length)throw new Error('CSV contains no valid coordinate rows.');
@@ -142,13 +153,11 @@ function kmlGeometry(geometry){
   return '';
 }
 function collectPositions(geometry){
-  const out=[];
-  const visitCoordinates=value=>{if(!Array.isArray(value))return;if(typeof value[0]==='number'){if(validCoordinate(value[1],value[0]))out.push(value);return;}for(const child of value)visitCoordinates(child);};
-  const visitGeometry=value=>{if(!value||typeof value!=='object')return;if(value.type==='GeometryCollection'){for(const child of value.geometries||[])visitGeometry(child);}else visitCoordinates(value.coordinates);};
+  const out=[],visit=value=>{if(!Array.isArray(value))return;if(typeof value[0]==='number'){if(validCoordinate(value[1],value[0]))out.push(value);return;}for(const child of value)visit(child);};
+  const visitGeometry=g=>{if(!g)return;if(g.type==='GeometryCollection'){for(const child of g.geometries||[])visitGeometry(child);}else visit(g.coordinates);};
   visitGeometry(geometry);
   return out;
 }
-
 function gpxElements(feature){
   const name=xmlEscape(feature.properties?.name||'ATLAS feature'),g=feature.geometry;
   if(!g)return '';
@@ -164,19 +173,19 @@ export function exportSpatialFile(features,format){
   if(!Array.isArray(features)||!features.length)throw new Error('There is no active layer to export.');
   if(format==='geojson')return {content:JSON.stringify({type:'FeatureCollection',features},null,2),mime:'application/geo+json',notice:'GeoJSON preserves feature geometry and properties.'};
   if(format==='kml'){
-    const placemarks=features.map(feature=>'<Placemark><name>'+xmlEscape(feature.properties?.name||'ATLAS feature')+'</name>'+kmlGeometry(feature.geometry)+'</Placemark>').join('');
-    return {content:'<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document>'+placemarks+'</Document></kml>',mime:'application/vnd.google-earth.kml+xml',notice:'KML export complete.'};
+    const placemarks=features.map(feature=>{const type=feature.geometry?.type,metadata=['MultiPoint','MultiLineString','MultiPolygon','GeometryCollection'].includes(type)?'<ExtendedData><Data name="atlasGeometryType"><value>'+xmlEscape(type)+'</value></Data></ExtendedData>':'';return '<Placemark><name>'+xmlEscape(feature.properties?.name||'ATLAS feature')+'</name>'+metadata+kmlGeometry(feature.geometry)+'</Placemark>'}).join('');
+    return {content:'<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document>'+placemarks+'</Document></kml>',mime:'application/vnd.google-earth.kml+xml',notice:'KML export complete. ATLAS metadata preserves multi-geometry types on ATLAS round trips.'};
   }
   if(format==='gpx'){
     const elements=features.map(gpxElements).join('');
     return {content:'<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="ATLAS" xmlns="http://www.topografix.com/GPX/1/1">'+elements+'</gpx>',mime:'application/gpx+xml',notice:'GPX export complete. Polygon rings are exported as tracks.'};
   }
   if(format==='csv'){
+    const spreadsheetSafe=value=>{const text=String(value??'');return /^[\t\r\n ]*[=+\-@]/.test(text)?"'"+text:text};
     const quote=value=>'"'+String(value??'').replace(/"/g,'""')+'"';
-    const safeFeatureName=value=>{const name=String(value??'ATLAS feature');return /^[\s]*[=+@-]/.test(name)?"'"+name:name;};
     const rows=[['feature_name','geometry_type','vertex_index','longitude','latitude'].join(',')];
-    for(const feature of features)collectPositions(feature.geometry).forEach((point,index)=>rows.push([quote(safeFeatureName(feature.properties?.name||'ATLAS feature')),quote(feature.geometry?.type||'Unknown'),index,point[0],point[1]].join(',')));
-    return {content:rows.join('\n'),mime:'text/csv',notice:'CSV exports coordinate rows; geometry topology and properties are not preserved.'};
+    for(const feature of features)collectPositions(feature.geometry).forEach((point,index)=>rows.push([quote(spreadsheetSafe(feature.properties?.name||'ATLAS feature')),quote(feature.geometry?.type||'Unknown'),index,point[0],point[1]].join(',')));
+    return {content:rows.join('\n'),mime:'text/csv',notice:'CSV exports coordinate rows; geometry topology and properties are not preserved. Spreadsheet formula prefixes in names are neutralized.'};
   }
   throw new Error('Unsupported export format.');
 }

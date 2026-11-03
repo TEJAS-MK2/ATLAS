@@ -3,7 +3,7 @@ on:
   pull_request:
     branches: [main, feature/atlas-4.0-spatial-foundation, feature/atlas-4.0-advanced-gis]
   push:
-    branches: [main, feature/atlas-4.0-advanced-gis, feature/atlas-4.0-release-hardening]
+    branches: [main, work/atlas-4.0-ci-repair]
   workflow_dispatch:
 permissions:
   contents: read
@@ -12,14 +12,16 @@ concurrency:
   cancel-in-progress: true
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 22
-      - run: npm install
+      - run: npm ci --no-audit --no-fund
+      - run: npm audit --audit-level=high
       - run: npm test
       - run: npm run check
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm run test:e2e

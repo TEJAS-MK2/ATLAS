@@ -57,6 +57,18 @@ test('closed rings do not treat the duplicated closing vertex as a zero-length e
   assert.equal(pointInRing({lat:0,lng:0},square),true);
 });
 
+test('point-in-polygon selection handles antimeridian-crossing outer rings and holes',()=>{
+  const crossing={type:'Polygon',coordinates:[
+    [[179,0],[-179,0],[-179,4],[179,4],[179,0]],
+    [[179.5,1],[-179.5,1],[-179.5,3],[179.5,3],[179.5,1]]
+  ]};
+  assert.equal(pointInRing({lat:2,lng:180},crossing.coordinates[0]),true);
+  assert.equal(geometryContainsPoint(crossing,{lat:.5,lng:180}),true);
+  assert.equal(geometryContainsPoint(crossing,{lat:2,lng:-180}),false);
+  assert.equal(geometryContainsPoint(crossing,{lat:2,lng:0}),false);
+  assert.equal(geometryContainsPoint({type:'Point',coordinates:[180,0]},{lat:0,lng:-180}),true);
+});
+
 test('polygon containment respects holes and multipolygon components',()=>{
   const withHole={type:'Polygon',coordinates:[square,[[1,1],[3,1],[3,3],[1,3],[1,1]]]};
   assert.equal(geometryContainsPoint(withHole,{lat:.5,lng:.5}),true);
