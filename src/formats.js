@@ -173,6 +173,10 @@ export function exportSpatialFile(features,format){
     const placemarks=features.map(feature=>{const type=feature.geometry?.type,metadata=['MultiPoint','MultiLineString','MultiPolygon','GeometryCollection'].includes(type)?'<ExtendedData><Data name="atlasGeometryType"><value>'+xmlEscape(type)+'</value></Data></ExtendedData>':'';return '<Placemark><name>'+xmlEscape(feature.properties?.name||'ATLAS feature')+'</name>'+metadata+kmlGeometry(feature.geometry)+'</Placemark>'}).join('');
     return {content:'<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document>'+placemarks+'</Document></kml>',mime:'application/vnd.google-earth.kml+xml',notice:'KML export complete. ATLAS metadata preserves multi-geometry types on ATLAS round trips.'};
   }
+  if(format==='gpx'){
+    const elements=features.map(gpxElements).join('');
+    return {content:'<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="ATLAS" xmlns="http://www.topografix.com/GPX/1/1">'+elements+'</gpx>',mime:'application/gpx+xml',notice:'GPX export complete. Polygon rings are exported as tracks.'};
+  }
   if(format==='csv'){
     const spreadsheetSafe=value=>{const text=String(value??'');return /^[\t\r\n ]*[=+\-@]/.test(text)?"'"+text:text};
     const quote=value=>'"'+String(value??'').replace(/"/g,'""')+'"';
