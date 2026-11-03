@@ -180,7 +180,7 @@ test('ATLAS 3.5 release metadata and PWA cache version stay synchronized',()=>{
  assert.equal(packageJson.version,'3.6.0');
  assert.match(html,/<title>ATLAS 3\.6 — Geospatial Field Console<\/title>/);
  assert.match(readme,/<h1 align="center">ATLAS 3\.6 · Geospatial Field Console<\/h1>/);
- assert.match(serviceWorker,/atlas-shell-v9/);
+ assert.match(serviceWorker,/atlas-shell-v10/);
  assert.doesNotMatch(serviceWorker,/atlas-shell-v7/);
 });
 
@@ -197,7 +197,7 @@ test('ATLAS 3.6 release metadata and PWA cache are synchronized',()=>{
   assert.ok(html.includes('<title>ATLAS 3.6 — Geospatial Field Console</title>'));
   assert.ok(readme.includes('ATLAS 3.6 · Geospatial Field Console'));
   assert.ok(html.includes('ATLAS ENGINE <b>v3.6.0</b>'));
-  assert.ok(serviceWorker.includes('atlas-shell-v9'));
+  assert.ok(serviceWorker.includes('atlas-shell-v10'));
 });
 
 
