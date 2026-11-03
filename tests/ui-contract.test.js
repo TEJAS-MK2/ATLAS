@@ -178,10 +178,10 @@ test('historical activity chart uses a rolling window and escapes persisted labe
 });
 
 test('ATLAS 4.0 release metadata and PWA cache version stay synchronized',()=>{
- assert.equal(packageJson.version,'4.0.0');
- assert.match(html,/<title>ATLAS 4\.0 — Geospatial Field Console<\/title>/);
+ assert.equal(packageJson.version,'4.2.0');
+ assert.match(html,/<title>ATLAS 4\.2 — Spatial Intelligence Workspace<\/title>/);
  assert.match(readme,/<h1 align="center">ATLAS 4\.0 · Geospatial Field Console<\/h1>/);
- assert.match(serviceWorker,/atlas-shell-v10/);
+ assert.match(serviceWorker,/atlas-shell-v11/);
  assert.doesNotMatch(serviceWorker,/atlas-shell-v7/);
 });
 
@@ -194,11 +194,11 @@ test('ATLAS 4.0 field-console refinement preserves touch targets and accessibili
   assert.ok(css.includes('focus-visible'));
 });
 test('ATLAS 4.0 release metadata and PWA cache are synchronized',()=>{
-  assert.equal(packageJson.version,'4.0.0');
-  assert.ok(html.includes('<title>ATLAS 4.0 — Geospatial Field Console</title>'));
-  assert.ok(readme.includes('ATLAS 4.0 · Geospatial Field Console'));
-  assert.ok(html.includes('ATLAS ENGINE <b>v4.0.0</b>'));
-  assert.ok(serviceWorker.includes('atlas-shell-v10'));
+  assert.equal(packageJson.version,'4.2.0');
+  assert.ok(html.includes('<title>ATLAS 4.2 — Spatial Intelligence Workspace</title>'));
+  assert.ok(readme.includes('ATLAS 4.2 · Spatial Intelligence Workspace'));
+  assert.ok(html.includes('ATLAS ENGINE <b>v4.2.0</b>'));
+  assert.ok(serviceWorker.includes('atlas-shell-v11'));
 });
 
 
@@ -221,7 +221,7 @@ test('ATLAS 4.0 geospatial interchange exposes KML GPX and CSV controls',()=>{
 
 
 test('ATLAS 4.0 PWA precaches every local module required by the app',()=>{
- assert.match(serviceWorker,/atlas-shell-v10/);
+ assert.match(serviceWorker,/atlas-shell-v11/);
  for(const path of ['./src/spatial.js','./src/spatial-operations.js','./src/formats.js'])assert.ok(serviceWorker.includes(path),path);
  assert.match(serviceWorker,/EXTERNAL_SHELL/);
  assert.match(serviceWorker,/externalShell/);

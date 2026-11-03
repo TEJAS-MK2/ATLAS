@@ -1,5 +1,5 @@
-const CACHE='atlas-shell-v10';
-const SHELL=['./','./index.html','./styles.css','./app.js','./room-ui.js','./src/geo.js','./src/spatial.js','./src/spatial-operations.js','./src/formats.js','./src/atlas32.js','./src/atlas33.js','./manifest.webmanifest','./icons/atlas-192.svg','./icons/atlas-512.svg'];
+const CACHE='atlas-shell-v11';
+const SHELL=['./','./index.html','./styles.css?v=4.2.0','./app.js?v=4.2.0','./room-ui.js?v=4.2.0','./src/geo.js','./src/spatial.js','./src/spatial-operations.js','./src/formats.js','./src/atlas32.js?v=4.2.0','./src/atlas33.js?v=4.2.0','./manifest.webmanifest','./icons/atlas-192.svg','./icons/atlas-512.svg'];
 const EXTERNAL_SHELL=[
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
@@ -18,7 +18,7 @@ async function cacheExternalShell(){
   }));
 }
 
-self.addEventListener('install',event=>{
+self.addEventListener('message',event=>{\n  if(event.data?.type==='SKIP_WAITING')self.skipWaiting();\n});\n\nself.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE)
     .then(cache=>cache.addAll(SHELL))
     .then(cacheExternalShell)
@@ -44,7 +44,7 @@ self.addEventListener('fetch',event=>{
   event.respondWith((async()=>{
     const cached=await caches.match(request);
     try{
-      const response=await fetch(request);
+      const response=await fetch(request,{cache:'no-store'});
       if(response.ok){
         const cache=await caches.open(CACHE);
         await cache.put(request,response.clone());

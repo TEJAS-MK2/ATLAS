@@ -8,10 +8,10 @@ const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'ut
 const sw=readFileSync(new URL('../sw.js',import.meta.url),'utf8');
 
 test('ATLAS 4.0 release metadata is synchronized',()=>{
-  assert.equal(pkg.version,'4.0.0');
-  assert.match(html,/<title>ATLAS 4\.0 — Geospatial Field Console<\/title>/);
+  assert.equal(pkg.version,'4.2.0');
+  assert.match(html,/<title>ATLAS 4\.2 — Spatial Intelligence Workspace<\/title>/);
   assert.match(html,/ATLAS ENGINE <b>v4\.0\.0<\/b>/);
-  assert.match(sw,/atlas-shell-v10/);
+  assert.match(sw,/atlas-shell-v11/);
 });
 
 test('Field Console responsive dock preserves the four core tools on mobile',()=>{

@@ -1,5 +1,5 @@
 <p align="center"><img src="./assets/atlas-social.svg" alt="ATLAS — Geospatial Intelligence" width="100%"></p>
-<h1 align="center">ATLAS 4.0 · Geospatial Field Console</h1>
+<h1 align="center">ATLAS 4.2 · Spatial Intelligence Workspace</h1>
 <p align="center"><strong>Explore. Analyze. Navigate. Operate.</strong><br>A map-first geospatial workspace for real-world exploration and spatial workflows.</p>
 <p align="center"><a href="https://tejas-mk2.github.io/ATLAS/"><img alt="Live demo" src="https://img.shields.io/badge/OPEN_LIVE_DEMO-1B8F70?style=for-the-badge&logo=googlemaps&logoColor=white"></a> <a href="https://github.com/TEJAS-MK2/ATLAS/actions/workflows/pages.yml"><img alt="Build and deploy" src="https://img.shields.io/github/actions/workflow/status/TEJAS-MK2/ATLAS/pages.yml?branch=main&style=for-the-badge&label=build%20%26%20deploy&logo=githubactions&logoColor=white"></a> <a href="https://github.com/TEJAS-MK2/ATLAS/actions/workflows/codeql.yml"><img alt="CodeQL" src="https://img.shields.io/github/actions/workflow/status/TEJAS-MK2/ATLAS/codeql.yml?branch=main&style=for-the-badge&label=CodeQL&logo=github"></a></p>
 ## Project status
@@ -34,6 +34,10 @@
 <img alt="Responsive" src="https://img.shields.io/badge/Layout-responsive-287A91?style=flat-square">
 <img alt="Keyboard first" src="https://img.shields.io/badge/Navigation-keyboard_first-5367A5?style=flat-square">
 </p>
+## ATLAS 4.2 — Spatial Intelligence Workspace
+
+The 4.2 refresh delivers a cohesive desktop/mobile command surface, clearer map and inspector hierarchy, improved control ergonomics, and a cache-safe PWA update path. The production build is explicitly versioned so a stale browser shell is easier to detect and recover from.
+
 ## ATLAS 3.6 — Field Console refinement
 
 The 3.6 UI release strengthens control hierarchy, focus visibility, touch target sizing, safe-area handling and reduced-motion behaviour while preserving the existing map-first workflows.
