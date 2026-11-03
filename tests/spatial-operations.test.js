@@ -19,6 +19,12 @@ test('updates one selected GeoJSON vertex immutably and rejects invalid selectio
  assert.equal(updateGeometryVertex(original,0,91,90),null);
 });
 
+test('editing a MultiPoint keeps equal-position points independent',()=>{
+ const original=feature({type:'MultiPoint',coordinates:[[0,0],[1,0],[1,1],[0,0]]});
+ const changed=updateGeometryVertex(original,0,2,3);
+ assert.deepEqual(changed.geometry.coordinates,[[3,2],[1,0],[1,1],[0,0]]);
+});
+
 test('editing a closed polygon ring keeps its closing coordinate synchronized',()=>{
  const original=feature({type:'Polygon',coordinates:[[[0,0],[1,0],[1,1],[0,1],[0,0]]]});
  const changed=updateGeometryVertex(original,0,2,3);
@@ -37,6 +43,16 @@ test('edits nested GeometryCollection vertices without mutating source data',()=
  assert.deepEqual(collectGeometryPositions(original.geometry),[[88,22],[89,23],[90,24]]);
 });
 
+test('splits buffers at the antimeridian without world-spanning edges',()=>{
+ const buffer=createPointBuffer(0,179.999,1000);
+ assert.ok(['Polygon','MultiPolygon'].includes(buffer.geometry.type));
+ const polygons=buffer.geometry.type==='Polygon'?[buffer.geometry.coordinates]:buffer.geometry.coordinates;
+ for(const polygon of polygons)for(const ring of polygon){
+  assert.ok(ring.every(([lng])=>lng>=-180&&lng<=180));
+  for(let i=1;i<ring.length;i++)assert.ok(Math.abs(ring[i][0]-ring[i-1][0])<1);
+ }
+});
+
 test('creates a closed geodesic buffer polygon with bounded radius',()=>{
  const buffer=createPointBuffer(22.5726,88.3639,500);
  assert.equal(buffer.geometry.type,'Polygon');
@@ -46,6 +62,16 @@ test('creates a closed geodesic buffer polygon with bounded radius',()=>{
  assert.equal(createPointBuffer(91,0,100),null);
  assert.equal(createPointBuffer(0,0,0),null);
  assert.equal(createPointBuffer(0,0,100001),null);
+});
+
+test('density grids use the short longitude arc across the antimeridian',()=>{
+ const points=[feature({type:'Point',coordinates:[179.9,0]}),feature({type:'Point',coordinates:[-179.9,1]})];
+ const grid=createDensityGrid(points,8);
+ assert.ok(grid.length>0);
+ for(const cell of grid){
+  const polygons=cell.geometry.type==='Polygon'?[cell.geometry.coordinates]:cell.geometry.coordinates;
+  for(const polygon of polygons)for(const ring of polygon)assert.ok(ring.every(([lng])=>lng>=-180&&lng<=180));
+ }
 });
 
 test('creates normalized density cells from point and multipoint features',()=>{
