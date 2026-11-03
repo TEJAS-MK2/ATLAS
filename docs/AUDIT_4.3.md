@@ -15,7 +15,7 @@ Repository tree, application shell, base styles, app and room modules, service w
 2. **Stale user-facing version labels (low):** page title, social metadata, workspace panel labels and build marker still described 4.2/4.0. Update current-facing labels and versioned asset URLs to 4.3.0.
 3. **PWA cache invalidation (medium):** add a distinct 4.3 stylesheet and bump the shell cache to v12 so installed sessions fetch the new visual layer. Preserve network-first refresh and offline fallback.
 4. **CSS cascade complexity (medium):** the existing styles.css is approximately 101 KB with hundreds of selector blocks and repeated selectors from incremental releases. Add a separately versioned design layer instead of extending the legacy file further. Full cascade consolidation remains a follow-up requiring screenshot-based visual regression.
-5. **Stale release documentation (low):** design, release readiness and phase matrix documents did not reflect the merged 4.2 production baseline. Refresh them and record explicit 4.3 gates.
+6. **Stale release documentation (low):** design, release readiness and phase matrix documents did not reflect the merged 4.2 production baseline. Refresh them and record explicit 4.3 gates.
 
 ### Reviewed; follow-up verification required
 - **Guest-room rate-limit retention:** the migration creates time-bucketed rows in atlas_private.atlas_rate_limits, but no cleanup schedule is visible in the inspected migrations. Verify whether an external scheduled job exists; add bounded retention if not.
