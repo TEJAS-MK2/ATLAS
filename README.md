@@ -106,6 +106,7 @@ The GitHub Pages workflow runs unit tests, JavaScript syntax checks and Chromium
 | [Privacy](./docs/PRIVACY.md) | Browser storage, location and sharing |
 | [Threat model](./docs/THREAT_MODEL.md) | Assets and security review |
 | [Testing](./docs/TESTING.md) | Automated and manual checks |
+| [Quality baseline](./docs/QUALITY_BASELINE.md) | Reliability findings and release gates |
 | [Providers](./docs/PROVIDERS.md) | External geospatial providers |
 | [Design system](./docs/DESIGN_SYSTEM.md) | Visual tokens and responsive rules |
 ## Contributing
