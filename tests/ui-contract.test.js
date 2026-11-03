@@ -6,6 +6,8 @@ const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
 const app=readFileSync(new URL('../app.js',import.meta.url),'utf8');
 const css=readFileSync(new URL('../styles.css',import.meta.url),'utf8');
 const readme=readFileSync(new URL('../README.md',import.meta.url),'utf8');
+const smoke=readFileSync(new URL('../scripts/smoke-test.mjs',import.meta.url),'utf8');
+const atlas33=readFileSync(new URL('../src/atlas33.js',import.meta.url),'utf8');
 
 test('all statically referenced application elements exist in the page',()=>{
   const ids=new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));
@@ -159,4 +161,15 @@ test('ATLAS 3.3 dashboard widget hooks are unique and map to inspector surfaces'
 });
 test('route planner requests alternatives and exposes comparison choices',()=>{
  assert.match(app,/alternatives=true/);assert.match(app,/data-route-index/);assert.match(app,/atlas:route-calculated/);
+});
+
+test('production smoke resource list contains no duplicate paths',()=>{
+ const paths=[...smoke.matchAll(/path:\s*'([^']+)'/g)].map(match=>match[1]);
+ assert.equal(paths.length,new Set(paths).size);
+ assert.match(smoke,/duplicate resource paths/);
+});
+test('historical activity chart uses a rolling window and escapes persisted labels',()=>{
+ assert.match(atlas33,/rolling 24-hour timeline/);
+ assert.match(atlas33,/Math\.floor\(\(item\.at-cutoff\)\/hourMs\)/);
+ assert.match(atlas33,/safe\(stats\.layers\.join\(', '\)\)/);
 });
