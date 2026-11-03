@@ -134,3 +134,9 @@ Released under the [MIT License](./LICENSE).
 - **Geodesic point buffers:** generate a local polygon buffer from a coordinate and radius (1–100,000 metres).
 - **Density grids:** calculate a local coordinate-density grid from loaded GeoJSON geometries and render it as a separate analysis overlay.
 - Analysis overlays are separate from source layers; clearing them does not delete or modify source features. Operations run in the browser and do not upload geometry.
+
+
+### Geospatial file interoperability
+- Import GeoJSON, KML, GPX and CSV coordinate tables.
+- Export active layers as GeoJSON, KML, GPX or CSV.
+- GeoJSON and KML preserve supported geometry structures; GPX represents paths and polygon boundaries as tracks; CSV is a coordinate-row exchange format and does not preserve geometry topology.
