@@ -199,3 +199,14 @@ test('ATLAS 3.6 release metadata and PWA cache are synchronized',()=>{
   assert.ok(html.includes('ATLAS ENGINE <b>v3.6.0</b>'));
   assert.ok(serviceWorker.includes('atlas-shell-v9'));
 });
+
+
+test('ATLAS 4.0 advanced GIS controls and map operations are connected',()=>{
+ for(const id of ['spatialBufferRadius','spatialBufferCreate','spatialDensitySize','spatialHeatmapCreate','spatialEditFeature','spatialEditVertex','spatialEditLat','spatialEditLng','spatialEditApply','spatialAnalysisClear','spatialOperationsStatus'])assert.match(html,new RegExp('id="'+id+'"'));
+ const operations=readFileSync(new URL('../src/spatial-operations.js',import.meta.url),'utf8');
+ assert.match(operations,/createPointBuffer/);
+ assert.match(operations,/createDensityGrid/);
+ assert.match(operations,/updateGeometryVertex/);
+ assert.match(app,/atlas:analysis-overlay/);
+ assert.match(app,/atlas:geometry-edit/);
+});
