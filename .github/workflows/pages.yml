@@ -11,13 +11,14 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 22
-      - run: npm install
-      - run: npx playwright install --with-deps chromium
+      - run: npm install --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm test
       - run: npm run check
       - run: npm run test:e2e
