@@ -3,7 +3,7 @@
 - Introduced the Aurora spatial workspace design layer in a separately versioned stylesheet.
 - Refined desktop navigation, map controls, floating panels, intelligence cards, dark/light themes and mobile navigation ergonomics.
 - Aligned package and lockfile versions and updated PWA asset/cache versioning.
-- Fixed out-of-order place-search responses and added desktop/mobile visual regression coverage.
+- Fixed out-of-order place-search responses and one-point GPS track export; added GPS permission, desktop and mobile browser acceptance coverage.
 - Refreshed release, design-system and audit documentation; added regression coverage for the new visual layer.
 
 # Changelog
