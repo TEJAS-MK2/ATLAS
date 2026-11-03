@@ -94,7 +94,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,[t
 .coordinate-card small{color:#91b1ad;font-size:8px;letter-spacing:.16em}
 .coordinate-card b{color:#f0faf6;font-size:11px;font-variant-numeric:tabular-nums}
 .pulse{background:#83e9c9;box-shadow:0 0 0 5px rgba(117,228,195,.12),0 0 16px rgba(117,228,195,.5)}
-.map-control{background:rgba(7,24,32,.91);border-color:rgba(159,196,196,.26);backdrop-filter:blur(14px);box-shadow:0 9px 25px rgba(0,0,0,.2);font-size:17px}
+ .map-control{width:44px;height:44px;min-width:44px;min-height:44px;background:rgba(7,24,32,.91);border-color:rgba(159,196,196,.26);backdrop-filter:blur(14px);box-shadow:0 9px 25px rgba(0,0,0,.2);font-size:17px}
 .scale-card{color:#d6e7e1;font-variant-numeric:tabular-nums}
 .floating-panel{width:min(350px,calc(100% - 32px));padding:18px;border:1px solid rgba(159,196,196,.23);border-radius:17px;background:rgba(9,27,36,.96);box-shadow:var(--atlas-shadow);backdrop-filter:blur(22px)}
 .panel-head{padding-bottom:13px;margin-bottom:13px;border-bottom:1px solid var(--atlas-border)}
@@ -170,7 +170,7 @@ body.light-ui .toast,body.light-ui .update-notice{background:rgba(250,253,251,.9
  .map-stage{height:calc(100% - 78px)}
  .map-top-left{top:9px;left:9px}.map-top-right{top:9px;right:9px;gap:4px}
  .coordinate-card{max-width:170px;padding:8px 10px}.coordinate-card b{font-size:9px}
- .map-control{width:40px;height:40px;min-width:40px;min-height:40px;border-radius:11px}
+ .map-control{width:44px;height:44px;min-width:44px;min-height:44px;border-radius:11px}
  .map-bottom-left{bottom:10px;left:9px}.map-bottom-right{bottom:10px;right:9px;gap:5px}
  .atlas33-quickbar{bottom:calc(88px + env(safe-area-inset-bottom));max-width:calc(100% - 100px);gap:3px}
  .atlas33-quickbar button{font-size:9px;padding:8px 7px;white-space:nowrap}
@@ -179,10 +179,11 @@ body.light-ui .toast,body.light-ui .update-notice{background:rgba(250,253,251,.9
  .update-notice{top:70px;left:9px;right:9px;transform:none;max-width:none;gap:7px;padding:9px}
  .update-notice small{white-space:normal}.update-notice span{flex:1}.update-notice button{padding-inline:9px}
 }
+@media(max-width:440px){.map-top-right{width:140px;max-width:140px;flex-wrap:wrap;justify-content:flex-end}.coordinate-card{max-width:145px}}
 @media(max-width:390px){
  .brand small{display:none}.search-wrap{flex:1}.top-actions #themeBtn{display:none}
  .top-actions .icon-btn{width:31px;height:31px;min-width:31px;min-height:31px}
- .map-top-right{gap:3px}.map-control{width:36px;height:36px;min-width:36px;min-height:36px}
+ .map-top-right{gap:3px}.map-control{width:44px;height:44px;min-width:44px;min-height:44px}
  .coordinate-card{max-width:145px}.atlas33-quickbar{max-width:calc(100% - 86px)}
 }
 @media(hover:hover) and (pointer:fine){.tool:hover,.action-row:hover,.saved-item:hover{transform:translateX(2px)}}
