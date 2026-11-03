@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "node --test tests/*.test.js",
-    "check": "node --check app.js && node --check room-ui.js && node --check src/geo.js && node --check src/formats.js && node --check src/spatial.js && node --check src/spatial-operations.js && node --check src/atlas32.js && node --check src/atlas33.js && node --check sw.js",
+    "check": "node --check app.js && node --check room-ui.js && node --check src/geo.js && node --check src/formats.js && node --check src/spatial.js && node --check src/spatial-operations.js && node --check src/atlas32.js && node --check src/atlas33.js && node --check sw.js && node --check scripts/smoke-test.mjs",
     "test:e2e": "playwright test"
   },
   "devDependencies": {
