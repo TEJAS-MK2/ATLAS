@@ -31,10 +31,12 @@ test('ATLAS 3.2 spatial analytics and layer styling work on imported GeoJSON',as
   await expect(page.locator('#spatialMetrics')).toContainText('2 features');
   await expect(page.locator('#spatialMetrics')).toContainText('Polygon: 1');
   for(const [id,value] of [['styleColor','#ff3366'],['styleWeight','5'],['styleFill','40'],['styleLine','80']]) await page.locator('#'+id).evaluate((el,next)=>{el.value=next;el.dispatchEvent(new Event('input',{bubbles:true}));},value);
+  await page.evaluate(()=>{window.__atlasAppliedStyle=null;window.addEventListener('atlas:layer-style-applied',e=>window.__atlasAppliedStyle=e.detail,{once:true})});
   await page.locator('#styleApply').click();
-  await expect(page.locator('.leaflet-overlay-pane path').first()).toHaveAttribute('stroke','#ff3366');
-  await expect(page.locator('.leaflet-overlay-pane path').first()).toHaveAttribute('stroke-width','5');
-  await expect(page.locator('.leaflet-overlay-pane path').first()).toHaveAttribute('fill-opacity','0.4');
+  await expect.poll(()=>page.evaluate(()=>window.__atlasAppliedStyle?.color)).toBe('#ff3366');
+  await expect.poll(()=>page.evaluate(()=>window.__atlasAppliedStyle?.weight)).toBe(5);
+  await expect.poll(()=>page.evaluate(()=>window.__atlasAppliedStyle?.opacity)).toBe(0.8);
+  await expect.poll(()=>page.evaluate(()=>window.__atlasAppliedStyle?.fillOpacity)).toBe(0.4);
 });
 
 test('workspace profiles persist and restore map presentation settings',async({page})=>{
