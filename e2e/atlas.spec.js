@@ -291,3 +291,33 @@ test('ATLAS geometry editor loads coordinates when the vertex index changes',asy
  await expect(page.locator('#spatialEditLng')).toHaveValue('');
  await expect(page.locator('#spatialOperationsStatus')).toContainText('does not exist');
 });
+
+
+test('ATLAS 4.3 Aurora desktop workspace shows map navigation and intelligence inspector',async({page})=>{
+ await page.setViewportSize({width:1440,height:900});
+ await page.reload();
+ await expect(page.locator('.sidebar')).toBeVisible();
+ await expect(page.locator('.inspector')).toBeVisible();
+ await expect(page.locator('#map')).toBeVisible();
+ await expect(page.locator('.brand')).toContainText('ATLAS');
+ const columns=await page.locator('.workspace').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
+ expect(columns).toBe(3);
+});
+
+test('ATLAS 4.3 Aurora mobile dock keeps four primary tools visible without horizontal overflow',async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ await page.reload();
+ await expect(page.locator('.sidebar')).toBeVisible();
+ await expect(page.locator('.inspector')).toBeHidden();
+ await expect(page.locator('.sidebar .tool')).toHaveCount(4);
+ for(const tool of await page.locator('.sidebar .tool').all())await expect(tool).toBeVisible();
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+});
+
+test('ATLAS 4.3 Aurora light theme updates the complete workspace',async({page})=>{
+ await page.setViewportSize({width:1280,height:800});
+ await page.locator('#themeBtn').click();
+ await expect(page.locator('body')).toHaveClass(/light-ui/);
+ const background=await page.locator('.sidebar').evaluate(el=>getComputedStyle(el).backgroundColor);
+ expect(background).not.toBe('rgba(0, 0, 0, 0)');
+});
