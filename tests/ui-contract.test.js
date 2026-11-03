@@ -252,3 +252,20 @@ test('analysis overlay lifecycle reports actual map-layer removal',()=>{
  assert.match(app,/atlas:analysis-cleared/);
  assert.match(app,/map\.hasLayer\(geoAnalysisOverlay\)/);
 });
+
+
+test('ATLAS 4.1 precision workspace design system covers desktop, mobile and light themes',()=>{
+  assert.match(css,/ATLAS 4\.1 \/ Precision workspace UI/);
+  assert.match(css,/--atlas-surface-raised/);
+  assert.match(css,/grid-template-columns:clamp\(246px,19vw,286px\)/);
+  assert.match(css,/@media\(max-width:650px\)/);
+  assert.match(css,/body\.light-ui \.floating-panel/);
+  assert.match(css,/\.floating-panel input:focus-visible/);
+  assert.match(css,/prefers-reduced-motion:reduce/);
+});
+test('ATLAS 4.1 map controls and data panels preserve accessible touch sizing',()=>{
+  assert.match(css,/\.map-control\{display:grid;place-items:center;min-width:42px;min-height:42px\}/);
+  assert.match(css,/\.primary-btn,\.secondary-btn\{min-height:44px/);
+  assert.match(css,/\.coordinate-card b\{font-variant-numeric:tabular-nums\}/);
+  assert.match(css,/overscroll-behavior:contain/);
+});
