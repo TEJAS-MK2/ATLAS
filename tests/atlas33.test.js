@@ -4,7 +4,7 @@ import {diffObservedObjects,aggregateHistory,normalizeMonitorSettings} from '../
 
 test('change watch only reports IDs not present in the baseline',()=>{
  const baseline=new Set(['node/1','way/2']);
- const fresh=diffObservedObjects(baseline,[{id:'node/1'},{id:2,type:'way'},{id:'relation/3',name:'New park'}]);
+ const fresh=diffObservedObjects(baseline,[{id:'node/1'},{id:'way/2',type:'way'},{id:'relation/3',name:'New park'}]);
  assert.deepEqual(fresh.map(x=>x.id),['relation/3']);
 });
 test('history analytics aggregate the last 24 hours and ignore older records',()=>{
