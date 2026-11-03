@@ -94,7 +94,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,[t
 .coordinate-card small{color:#91b1ad;font-size:8px;letter-spacing:.16em}
 .coordinate-card b{color:#f0faf6;font-size:11px;font-variant-numeric:tabular-nums}
 .pulse{background:#83e9c9;box-shadow:0 0 0 5px rgba(117,228,195,.12),0 0 16px rgba(117,228,195,.5)}
- .map-control{width:44px;height:44px;min-width:44px;min-height:44px;background:rgba(7,24,32,.91);border-color:rgba(159,196,196,.26);backdrop-filter:blur(14px);box-shadow:0 9px 25px rgba(0,0,0,.2);font-size:17px}
+ .map-top-right .map-control,.map-bottom-right .map-control{width:44px;height:44px;min-width:44px;min-height:44px}.map-control{width:44px;height:44px;min-width:44px;min-height:44px;background:rgba(7,24,32,.91);border-color:rgba(159,196,196,.26);backdrop-filter:blur(14px);box-shadow:0 9px 25px rgba(0,0,0,.2);font-size:17px}
 .scale-card{color:#d6e7e1;font-variant-numeric:tabular-nums}
 .floating-panel{width:min(350px,calc(100% - 32px));padding:18px;border:1px solid rgba(159,196,196,.23);border-radius:17px;background:rgba(9,27,36,.96);box-shadow:var(--atlas-shadow);backdrop-filter:blur(22px)}
 .panel-head{padding-bottom:13px;margin-bottom:13px;border-bottom:1px solid var(--atlas-border)}
