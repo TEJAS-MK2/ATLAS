@@ -253,3 +253,10 @@ test('ATLAS PWA reopens its cached application shell offline',async({page,contex
  await expect(page.locator('#map.leaflet-container')).toBeVisible({timeout:20000});
  await expect(page.locator('#commandOpen')).toBeVisible();
 });
+
+
+test('ATLAS rejects XML DTD and entity declarations before parsing',async({page})=>{
+ const kml='<!DOCTYPE kml [<!ENTITY injected "unsafe">]><kml xmlns="http://www.opengis.net/kml/2.2"><Placemark><name>&injected;</name><Point><coordinates>88,22</coordinates></Point></Placemark></kml>';
+ await page.locator('#importFile').setInputFiles({name:'entity.kml',mimeType:'application/vnd.google-earth.kml+xml',buffer:Buffer.from(kml)});
+ await expect(page.locator('#toast')).toContainText('Import failed: XML DTD and entity declarations are not supported');
+});
