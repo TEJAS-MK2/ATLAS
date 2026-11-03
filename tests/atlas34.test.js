@@ -9,7 +9,7 @@ const sw=readFileSync(new URL('../sw.js',import.meta.url),'utf8');
 
 test('ATLAS 4.0 release metadata is synchronized',()=>{
   assert.equal(pkg.version,'4.0.0');
-  assert.match(html,/<title>ATLAS 3\.6 — Geospatial Field Console<\/title>/);
+  assert.match(html,/<title>ATLAS 4\.0 — Geospatial Field Console<\/title>/);
   assert.match(html,/v3\.6\.0/);
   assert.match(sw,/atlas-shell-v10/);
 });
