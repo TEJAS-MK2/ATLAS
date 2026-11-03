@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 
 const read=path=>readFileSync(new URL(path,import.meta.url),'utf8');
 const html=read('../index.html'),css=read('../styles.css'),sw=read('../sw.js'),app=read('../app.js');
-const pkg=JSON.parse(read('../package.json')),manifest=JSON.parse(read('../manifest.webmanifest'));
+const pkg=JSON.parse(read('../package.json')),manifest=JSON.parse(read('../manifest.webmanifest')),smoke=read('../scripts/smoke-test.mjs');
 
 test('ATLAS 4.2 release metadata and browser assets are versioned together',()=>{
   assert.equal(pkg.version,'4.2.0');
@@ -13,7 +13,7 @@ test('ATLAS 4.2 release metadata and browser assets are versioned together',()=>
   assert.match(html,/styles\.css\?v=4\.2\.0/);
   assert.match(html,/app\.js\?v=4\.2\.0/);
   assert.equal(manifest.short_name,'ATLAS 4.2');
-  assert.match(sw,/atlas-shell-v11/);
+  assert.match(sw,/atlas-shell-v11/);\n  assert.match(smoke,/<title>ATLAS 4.2 — Spatial Intelligence Workspace<\\/title>/);\n  assert.match(smoke,/atlas-shell-v11/);
 });
 
 test('ATLAS 4.2 PWA checks for updates without relying on the browser HTTP cache',()=>{
