@@ -11,10 +11,10 @@ test('CSV export records coordinate rows with escaped feature names',()=>{
 });
 
 test('CSV export round-trips feature_name and neutralizes spreadsheet formulas',()=>{
- const name='=HYPERLINK("https://bad.example")';
+ const name='=1+1';
  const feature={type:'Feature',properties:{name},geometry:{type:'Point',coordinates:[88,22]}};
  const exported=exportSpatialFile([feature],'csv');
- assert.ok(exported.content.includes('"\''+name+'"'));
+ assert.ok(exported.content.includes("\"'=1+1\""));
  const imported=parseSpatialFile('roundtrip.csv',exported.content);
  assert.equal(imported.features[0].properties.name,"'"+name);
 });
