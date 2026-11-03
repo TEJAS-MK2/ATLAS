@@ -1,5 +1,5 @@
 <p align="center"><img src="./assets/atlas-social.svg" alt="ATLAS — Geospatial Intelligence" width="100%"></p>
-<h1 align="center">ATLAS 4.2 · Spatial Intelligence Workspace</h1>
+<h1 align="center">ATLAS 4.3 · Aurora Spatial Workspace</h1>
 <p align="center"><strong>Explore. Analyze. Navigate. Operate.</strong><br>A map-first geospatial workspace for real-world exploration and spatial workflows.</p>
 <p align="center"><a href="https://tejas-mk2.github.io/ATLAS/"><img alt="Live demo" src="https://img.shields.io/badge/OPEN_LIVE_DEMO-1B8F70?style=for-the-badge&logo=googlemaps&logoColor=white"></a> <a href="https://github.com/TEJAS-MK2/ATLAS/actions/workflows/pages.yml"><img alt="Build and deploy" src="https://img.shields.io/github/actions/workflow/status/TEJAS-MK2/ATLAS/pages.yml?branch=main&style=for-the-badge&label=build%20%26%20deploy&logo=githubactions&logoColor=white"></a> <a href="https://github.com/TEJAS-MK2/ATLAS/actions/workflows/codeql.yml"><img alt="CodeQL" src="https://img.shields.io/github/actions/workflow/status/TEJAS-MK2/ATLAS/codeql.yml?branch=main&style=for-the-badge&label=CodeQL&logo=github"></a></p>
 ## Project status
@@ -34,7 +34,9 @@
 <img alt="Responsive" src="https://img.shields.io/badge/Layout-responsive-287A91?style=flat-square">
 <img alt="Keyboard first" src="https://img.shields.io/badge/Navigation-keyboard_first-5367A5?style=flat-square">
 </p>
-## ATLAS 4.2 — Spatial Intelligence Workspace
+## ATLAS 4.3 — Aurora Spatial Workspace
+
+The 4.3 refresh introduces a dedicated, versioned Aurora visual layer, tighter desktop workspace proportions, a more legible intelligence inspector, calmer map controls and a more deliberate mobile dock. The previous GIS workflows and DOM hooks are preserved.
 
 The 4.2 refresh delivers a cohesive desktop/mobile command surface, clearer map and inspector hierarchy, improved control ergonomics, and a cache-safe PWA update path. The production build is explicitly versioned so a stale browser shell is easier to detect and recover from.
 
@@ -63,7 +65,7 @@ ATLAS is a responsive, browser-based GIS workspace. The map remains the primary 
 | Platform | Responsive interface, dark/light appearance, customizable workspace profiles and dashboard widgets, layer styling studio, local historical analytics, opt-in geospatial change monitoring, versioned PWA shell with cached local modules and core CDN libraries; map tiles remain network-dependent offline |
 | Engineering | Unit tests, Chromium/Firefox/WebKit browser tests, mobile emulation, production smoke checks and CodeQL analysis |
 ## Interface
-The ATLAS Field Console uses a restrained geospatial operations-console visual language: a high-contrast map canvas, quiet navigation, tactile controls, clear selected states and a focused intelligence inspector. Layouts adapt across desktop, tablet and narrow mobile viewports. No fabricated live traffic or telemetry is presented.
+ATLAS Aurora uses a restrained spatial-operations visual language: a dominant map canvas, calm navigation, precise controls, clear selected states and a readable intelligence inspector. Layouts adapt across desktop, tablet and narrow mobile viewports. No fabricated live traffic or telemetry is presented.
 See [the design system](./docs/DESIGN_SYSTEM.md).
 ## ATLAS 3.3 capabilities
 - **Geospatial change watch:** opt-in, active-tab polling of OpenStreetMap/Overpass within a selected radius; newly observed objects are surfaced as in-session alerts. This is not a guaranteed real-time or emergency feed.
