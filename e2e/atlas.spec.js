@@ -30,6 +30,13 @@ test('ATLAS 3.2 spatial analytics and layer styling work on imported GeoJSON',as
   await page.locator('#overlayBtn').click();
   await expect(page.locator('#spatialMetrics')).toContainText('2 features');
   await expect(page.locator('#spatialMetrics')).toContainText('Polygon: 1');
+  await page.locator('#spatialQueryLat').fill('22.575');
+  await page.locator('#spatialQueryLng').fill('88.365');
+  await page.locator('#spatialQueryApply').click();
+  await expect(page.locator('#spatialMetrics')).toContainText('1 features');
+  await expect(page.locator('#spatialSummary')).toContainText('Selected at 22.5750, 88.3650');
+  await page.locator('#spatialQueryClear').click();
+  await expect(page.locator('#spatialMetrics')).toContainText('2 features');
   for(const [id,value] of [['styleColor','#ff3366'],['styleWeight','5'],['styleFill','40'],['styleLine','80']]) await page.locator('#'+id).evaluate((el,next)=>{el.value=next;el.dispatchEvent(new Event('input',{bubbles:true}));},value);
   await page.evaluate(()=>{window.__atlasAppliedStyle=null;window.addEventListener('atlas:layer-style-applied',e=>window.__atlasAppliedStyle=e.detail,{once:true})});
   await page.locator('#styleApply').click();
