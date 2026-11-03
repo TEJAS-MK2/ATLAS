@@ -83,7 +83,7 @@ These features operate on data already loaded into the browser. No new geolocati
 ## Quick start
 Requirements: Node.js 22+ and Python 3.
 ```bash
-npm install
+npm ci
 npm test
 npm run check
 npm run test:e2e
