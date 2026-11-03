@@ -19,6 +19,17 @@ test('updates one selected GeoJSON vertex immutably and rejects invalid selectio
  assert.equal(updateGeometryVertex(original,0,91,90),null);
 });
 
+test('editing a closed polygon ring keeps its closing coordinate synchronized',()=>{
+ const original=feature({type:'Polygon',coordinates:[[[0,0],[1,0],[1,1],[0,1],[0,0]]]});
+ const changed=updateGeometryVertex(original,0,2,3);
+ assert.deepEqual(changed.geometry.coordinates[0][0],[3,2]);
+ assert.deepEqual(changed.geometry.coordinates[0][0],changed.geometry.coordinates[0].at(-1));
+ assert.deepEqual(original.geometry.coordinates[0][0],[0,0]);
+ const closingEdit=updateGeometryVertex(original,4,4,5);
+ assert.deepEqual(closingEdit.geometry.coordinates[0][0],[5,4]);
+ assert.deepEqual(closingEdit.geometry.coordinates[0][0],closingEdit.geometry.coordinates[0].at(-1));
+});
+
 test('edits nested GeometryCollection vertices without mutating source data',()=>{
  const original=feature({type:'GeometryCollection',geometries:[{type:'Point',coordinates:[88,22]},{type:'LineString',coordinates:[[89,23],[90,24]]}]});
  const changed=updateGeometryVertex(original,2,25,91);
