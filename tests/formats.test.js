@@ -10,6 +10,15 @@ test('CSV export records coordinate rows with escaped feature names',()=>{
  assert.match(result.notice,/topology/);
 });
 
+test('CSV export round-trips feature_name and neutralizes spreadsheet formulas',()=>{
+ const name='=HYPERLINK("https://bad.example")';
+ const feature={type:'Feature',properties:{name},geometry:{type:'Point',coordinates:[88,22]}};
+ const exported=exportSpatialFile([feature],'csv');
+ assert.ok(exported.content.includes('"\''+name+'"'));
+ const imported=parseSpatialFile('roundtrip.csv',exported.content);
+ assert.equal(imported.features[0].properties.name,"'"+name);
+});
+
 test('KML export emits escaped names and polygon rings',()=>{
  const result=exportSpatialFile([{type:'Feature',properties:{name:'Park & lake'},geometry:{type:'Polygon',coordinates:[[[0,0],[1,0],[1,1],[0,0]]]}}],'kml');
  assert.match(result.content,/Park &amp; lake/);
