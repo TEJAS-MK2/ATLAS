@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.5.0 — Reliability and quality hardening
+
+- Corrected historical activity analytics to use a rolling 24-hour timeline instead of grouping events by wall-clock hour.
+- Hardened monitoring settings and observed-object identifier handling against malformed browser data.
+- Escaped persisted basemap labels in the history panel and removed a duplicate production smoke-test resource.
+- Added regression coverage for rolling-window boundaries, malformed settings, object identifiers, and smoke-test resource uniqueness.
+
 ## 3.4.0 — Field Console refresh
 
 - Refined the full application shell, navigation, search, map controls, inspector cards, dialogs and floating panels with a consistent visual system.
@@ -17,13 +24,6 @@
 
 
 Notable project changes are recorded here. Dates and entries are added when changes are released; this file is not an exhaustive commit history.
-
-## 3.5.0 — Reliability and quality hardening
-
-- Corrected historical activity analytics to use a rolling 24-hour timeline instead of grouping events by wall-clock hour.
-- Hardened monitoring settings and observed-object identifier handling against malformed browser data.
-- Escaped persisted basemap labels in the history panel and removed a duplicate production smoke-test resource.
-- Added regression coverage for rolling-window boundaries, malformed settings, object identifiers, and smoke-test resource uniqueness.
 
 ## Unreleased
 
