@@ -293,3 +293,9 @@ test('ATLAS 4.3 package, lockfile, page and PWA cache versions stay aligned',()=
   assert.match(serviceWorker,/atlas-shell-v12/);
   assert.match(serviceWorker,/styles-v43\.css\?v=4\.3\.0/);
 });
+
+test('place search ignores stale provider responses after newer input',()=>{
+  assert.match(app,/let searchRequest=0/);
+  assert.match(app,/if\(requestId!==searchRequest\)return/);
+  assert.match(app,/const requestId=\+\+searchRequest/);
+});
