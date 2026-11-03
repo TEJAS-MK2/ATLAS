@@ -703,3 +703,47 @@ body.light-ui .atlas33-quickbar{background:#f7fcf8ed;border-color:#c5d9ce;box-sh
  html{scroll-behavior:auto}
  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
+
+/* ATLAS 3.6 / FIELD CONSOLE — hierarchy, touch ergonomics and resilient surfaces */
+:root{--atlas-radius-sm:10px;--atlas-radius-md:14px;--atlas-radius-lg:20px;--atlas-ease:cubic-bezier(.2,.75,.25,1)}
+:where(button,input,select,textarea){font:inherit}
+:where(button,.tool,.action-row,.map-control,.icon-btn,.layer-row){-webkit-tap-highlight-color:transparent}
+:where(button,.tool,.action-row,.map-control,.icon-btn){transition:background-color .18s var(--atlas-ease),border-color .18s var(--atlas-ease),color .18s var(--atlas-ease),box-shadow .18s var(--atlas-ease),transform .18s var(--atlas-ease)}
+:where(button,.tool,.action-row,.map-control,.icon-btn):focus-visible,:where(input,select,textarea):focus-visible{outline:2px solid var(--accent,#77e2c2);outline-offset:3px}
+.topbar{isolation:isolate;box-shadow:0 1px 0 color-mix(in srgb,var(--border,#203945) 80%,transparent),0 10px 28px #00000012}
+.brand{letter-spacing:.045em}.brand-mark{box-shadow:inset 0 0 0 1px #ffffff25,0 5px 16px #77e2c226}
+.search-wrap{border:1px solid color-mix(in srgb,var(--border,#203945) 85%,transparent);border-radius:14px;background:color-mix(in srgb,var(--panel,#0d1c26) 88%,transparent);transition:border-color .18s,box-shadow .18s}
+.search-wrap:focus-within{border-color:var(--accent,#77e2c2);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent,#77e2c2) 13%,transparent)}
+.sidebar{border-right:1px solid var(--border,#203945);background:linear-gradient(180deg,color-mix(in srgb,var(--panel,#0d1c26) 97%,white 3%),var(--panel,#0d1c26))}
+.sidebar-heading{padding-bottom:18px;border-bottom:1px solid var(--border,#203945)}
+.tool-section{padding-top:17px;padding-bottom:15px;border-bottom:1px solid color-mix(in srgb,var(--border,#203945) 70%,transparent)}
+.tool{border:1px solid transparent;border-radius:13px;margin:3px 0;padding:11px 12px}
+.tool:hover,.action-row:hover{background:color-mix(in srgb,var(--raised,#122531) 78%,var(--accent,#77e2c2) 8%);border-color:color-mix(in srgb,var(--accent,#77e2c2) 25%,var(--border,#203945))}
+.tool.active{background:color-mix(in srgb,var(--accent,#77e2c2) 12%,var(--raised,#122531));border-color:color-mix(in srgb,var(--accent,#77e2c2) 38%,var(--border,#203945));box-shadow:inset 3px 0 0 var(--accent,#77e2c2)}
+.layer-row{min-height:39px;padding:7px 9px;border-radius:10px;transition:background .18s}
+.layer-row:hover{background:var(--raised,#122531)}
+.action-row{min-height:40px;border-radius:10px;padding:8px 10px}
+.map-stage{background:#101c22}
+.coordinate-card,.scale-card,.map-control,.map-top-right,.atlas33-quickbar{border:1px solid #ffffff24;box-shadow:0 8px 28px #06101835;backdrop-filter:blur(16px) saturate(135%)}
+.map-control{border-radius:12px;min-width:40px;min-height:40px}
+.map-control:hover,.icon-btn:hover{transform:translateY(-1px);border-color:var(--accent,#77e2c2)}
+.floating-panel{border:1px solid color-mix(in srgb,var(--border,#203945) 75%,var(--accent,#77e2c2) 15%);border-radius:18px;box-shadow:0 22px 70px #0008,0 2px 10px #0003;backdrop-filter:blur(20px) saturate(130%)}
+.panel-head{padding-bottom:14px;border-bottom:1px solid var(--border,#203945);margin-bottom:16px}
+.primary-btn{min-height:44px;border-radius:12px;font-weight:700;box-shadow:0 7px 18px color-mix(in srgb,var(--accent,#77e2c2) 18%,transparent)}
+.secondary-btn{min-height:42px;border-radius:11px}
+input,select,textarea{border-radius:10px}
+.status-pill{letter-spacing:.12em;font-size:10px}
+.atlas33-quickbar{border-radius:14px;padding:5px;gap:4px}
+.atlas33-quickbar button{border-radius:10px;min-height:36px}
+.command-palette{border:1px solid var(--border,#203945);border-radius:20px;box-shadow:0 24px 90px #0009}
+.saved-section{padding-top:18px}
+.sidebar-footer{border-top:1px solid var(--border,#203945);padding-top:14px}
+body.light-ui .sidebar{background:linear-gradient(180deg,#fff,#f5faf7)}
+body.light-ui .search-wrap{background:#fff;box-shadow:0 3px 14px #193b2a0b}
+body.light-ui .floating-panel{box-shadow:0 18px 55px #1b3a2a24}
+@media(hover:hover) and (pointer:fine){.tool:hover,.action-row:hover{transform:translateX(2px)}}
+@media(max-width:900px){.sidebar{box-shadow:8px 0 30px #00000016}.map-control{min-width:42px;min-height:42px}}
+@media(max-width:650px){.topbar{padding-top:max(8px,env(safe-area-inset-top));}.floating-panel{max-height:calc(100dvh - 110px);overflow:auto;overscroll-behavior:contain}.atlas33-quickbar{bottom:calc(74px + env(safe-area-inset-bottom));}.map-bottom-right{bottom:calc(76px + env(safe-area-inset-bottom))}.map-control{min-width:44px;min-height:44px}.sidebar-footer{padding-bottom:max(12px,env(safe-area-inset-bottom))}}
+@media(max-width:380px){.search-wrap{min-width:0}.command-trigger{padding-inline:7px}.atlas33-quickbar button{font-size:10px;padding-inline:8px}.floating-panel{left:10px;right:10px;width:auto}}
+@media(prefers-reduced-motion:reduce){:where(*,:before,:after){scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+/* End ATLAS 3.6 refinement */
