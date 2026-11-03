@@ -18,7 +18,7 @@ export function summarizeFeatures(features=[]){
 
 export function normalizeWorkspace(value){
   if(!value||typeof value!=='object'||typeof value.name!=='string')return null;
-  const name=value.name.trim().replace(/[<>\\u0000-\\u001f]/g,'').slice(0,48);
+  const name=value.name.trim().replace(/[<>]/g,'').slice(0,48);
   const center=value.center;
   if(!name||!Array.isArray(center)||center.length!==2||!validCoordinate(center[0],center[1]))return null;
   const zoom=Number(value.zoom);
@@ -60,7 +60,7 @@ function init(){
     if(!persist()){profiles=previous;return;}
     $('workspaceName').value='';renderProfiles();
   }
-  $('workspaceOpenBtn').addEventListener('click',()=>{$('workspacePanel').classList.remove('hidden');$('workspaceName').focus()});
+  $('workspaceOpenBtn').addEventListener('click',()=>{emit('atlas:request-map-state');$('workspacePanel').classList.remove('hidden');$('workspaceName').focus()});
   $('workspaceClose').addEventListener('click',()=>$('workspacePanel').classList.add('hidden'));
   $('workspaceSave').addEventListener('click',saveProfile);
   $('workspaceInspector').addEventListener('change',()=>{document.body.classList.toggle('atlas-hide-inspector',!$('workspaceInspector').checked);mapState.inspectorVisible=$('workspaceInspector').checked});
