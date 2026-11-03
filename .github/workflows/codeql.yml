@@ -2,7 +2,7 @@ name: CodeQL Security Analysis
 
 on:
   push:
-    branches: [main, feature/atlas-4.0-spatial-foundation]
+    branches: [main, feature/atlas-4.0-spatial-foundation, feature/atlas-4.0-advanced-gis]
   pull_request:
     branches: [main]
   schedule:
