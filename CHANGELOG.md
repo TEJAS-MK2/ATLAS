@@ -20,6 +20,11 @@ Notable project changes are recorded here. Dates and entries are added when chan
 
 ## Unreleased
 
+- Corrected historical activity analytics to use a rolling 24-hour timeline instead of grouping events by wall-clock hour.
+- Hardened monitoring settings and observed-object identifier handling against malformed browser data.
+- Escaped persisted basemap labels in the history panel and removed a duplicate production smoke-test resource.
+- Added regression coverage for rolling-window boundaries, malformed settings, object identifiers, and smoke-test resource uniqueness.
+
 - Refined the interface into the ATLAS Field Console visual system with upgraded dark/light surfaces, navigation, controls and responsive layouts.
 - Added social preview metadata and a custom repository hero graphic.
 - Reorganized README badges into build/security, repository activity and technology groups; removed unverified release and coverage claims.
