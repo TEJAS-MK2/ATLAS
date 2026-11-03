@@ -63,4 +63,12 @@ The refinement layer is appended to styles.css under ATLAS / FIELD CONSOLE. It i
 - Touch controls remain visible above the map; floating panels respect safe viewport space and remain scrollable.
 - Focus rings, disabled states, selection states and reduced-motion overrides are explicit. Hover movement is limited to fine pointers.
 - Dark and light themes have independently tuned surface, border and control treatments. No fake live status, traffic data or device telemetry is introduced.
-\n\n## ATLAS 3.6 Field Console refinement\n\n- Shared transition and radius tokens unify controls without changing application hooks.\n- Search focus, active tools, map controls and panels receive consistent interaction feedback.\n- Mobile floating panels account for dynamic viewport and safe-area insets; controls meet a 44px touch target where space allows.\n- Keyboard focus remains visible and reduced-motion preferences are respected.\n- The refinement is additive: existing DOM IDs, map layers and tool wiring are preserved.\n
+
+
+## ATLAS 3.6 Field Console refinement
+
+- Shared transition and radius tokens unify controls without changing application hooks.
+- Search focus, active tools, map controls and panels receive consistent interaction feedback.
+- Mobile floating panels account for dynamic viewport and safe-area insets; controls meet a 44px touch target where space allows.
+- Keyboard focus remains visible and reduced-motion preferences are respected.
+- The refinement is additive: existing DOM IDs, map layers and tool wiring are preserved.
