@@ -27,8 +27,8 @@ test('CSV formula neutralization survives an import round trip as literal text',
 });
 
 test('CSV import rejects incomplete and invalid coordinate rows instead of silently dropping data',()=>{
- const incomplete=['name,latitude,longitude','Missing longitude,22.5,'].join('\\n');
- const invalid=['name,latitude,longitude','Outside,91,88'].join('\\n');
+ const incomplete=['name,latitude,longitude','Missing longitude,22.5,'].join('\n');
+ const invalid=['name,latitude,longitude','Outside,91,88'].join('\n');
  assert.throws(()=>parseSpatialFile('incomplete.csv',incomplete),/CSV row 2 is missing latitude or longitude/);
  assert.throws(()=>parseSpatialFile('invalid.csv',invalid),/CSV row 2 contains invalid coordinates/);
 });
