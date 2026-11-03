@@ -66,7 +66,7 @@ ATLAS is a responsive, browser-based GIS workspace. The map remains the primary 
 | Engineering | Unit tests, Chromium/Firefox/WebKit browser tests, mobile emulation, production smoke checks and CodeQL analysis |
 ## Interface
 ATLAS Aurora uses a restrained spatial-operations visual language: a dominant map canvas, calm navigation, precise controls, clear selected states and a readable intelligence inspector. Layouts adapt across desktop, tablet and narrow mobile viewports. No fabricated live traffic or telemetry is presented.
-See [the design system](./docs/DESIGN_SYSTEM.md).
+See [the design system](./docs/DESIGN_SYSTEM.md) and [the 4.3 repository audit](./docs/AUDIT_4.3.md).
 ## ATLAS 3.3 capabilities
 - **Geospatial change watch:** opt-in, active-tab polling of OpenStreetMap/Overpass within a selected radius; newly observed objects are surfaced as in-session alerts. This is not a guaranteed real-time or emergency feed.
 - **Route intelligence:** compare up to three public OSRM driving alternatives by distance and estimated duration.
