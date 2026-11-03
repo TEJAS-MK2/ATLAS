@@ -3,7 +3,7 @@ on:
   pull_request:
     branches: [main, feature/atlas-4.0-spatial-foundation, feature/atlas-4.0-advanced-gis]
   push:
-    branches: [main]
+    branches: [main, work/atlas-4.0-ci-repair]
   workflow_dispatch:
 permissions:
   contents: read
