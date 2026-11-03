@@ -5,7 +5,8 @@
 Requirements: Node.js 22+ and Python 3 for the local static test server.
 
 ```bash
-npm install --no-audit --no-fund
+npm ci --no-audit --no-fund
+npm audit --audit-level=high
 npm test
 npm run check
 npm run test:e2e
