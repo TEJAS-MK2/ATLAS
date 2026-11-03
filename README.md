@@ -94,6 +94,7 @@ Open http://localhost:8080.
 The GitHub Pages workflow runs unit tests, JavaScript syntax checks and Chromium, Firefox, WebKit and mobile-emulation browser checks before publishing. A post-deployment smoke test checks the live homepage and required assets. CodeQL separately analyzes JavaScript/TypeScript.
 - [Deployment workflow](https://github.com/TEJAS-MK2/ATLAS/actions/workflows/pages.yml)
 - [CodeQL workflow](https://github.com/TEJAS-MK2/ATLAS/actions/workflows/codeql.yml)
+- [ATLAS 4.0 release checklist](./docs/ATLAS_4_RELEASE_CHECKLIST.md)
 - [Live application](https://tejas-mk2.github.io/ATLAS/)
 ## Privacy & service limits
 - GPS permission is requested only after a user action.
