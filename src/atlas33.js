@@ -12,7 +12,8 @@ export function aggregateHistory(entries=[],now=Date.now()){
   const views=recent.filter(x=>x.type==='view');
   const routes=recent.filter(x=>x.type==='route');
   const layers=[...new Set(views.map(x=>x.layer).filter(Boolean))];
-  const avgZoom=views.length?views.reduce((n,x)=>n+(Number(x.zoom)||0),0)/views.length:0;
+  const zoomValues=views.map(x=>Number(x.zoom)).filter(x=>Number.isFinite(x));
+  const avgZoom=zoomValues.length?zoomValues.reduce((sum,x)=>sum+x,0)/zoomValues.length:0;
   // The chart is a rolling 24-hour timeline, not 24 buckets keyed by wall-clock hour.
   const buckets=Array.from({length:24},(_,hour)=>({hour,count:0}));
   for(const item of recent){
@@ -22,6 +23,7 @@ export function aggregateHistory(entries=[],now=Date.now()){
   return {total:recent.length,views:views.length,routes:routes.length,layers,avgZoom,buckets};
 }
 export function normalizeMonitorSettings(value={}){
+  value=value&&typeof value==='object'?value:{};
   const radius=Number(value.radius),interval=Number(value.interval),category=String(value.category||'amenity');
   return {radius:[250,500,1000,2500,5000].includes(radius)?radius:1000,interval:Number.isFinite(interval)?Math.max(2,Math.min(60,Math.round(interval))):5,category:['amenity','restaurant','cafe','hospital','pharmacy','fuel','tourism'].includes(category)?category:'amenity'};
 }
@@ -40,9 +42,9 @@ function init(){
  function record(type,detail={}){history.push({at:Date.now(),type,...detail});history=history.slice(-500);persistHistory();renderHistory()}
  function renderHistory(){
   const stats=aggregateHistory(history);
-  $('historyStats').innerHTML='<div class="atlas33-stat-grid"><div><small>MAP UPDATES · 24H</small><b>'+stats.views+'</b></div><div><small>ROUTES · 24H</small><b>'+stats.routes+'</b></div><div><small>AVG. ZOOM</small><b>'+(stats.avgZoom?stats.avgZoom.toFixed(1):'—')+'</b></div><div><small>BASEMAPS USED</small><b>'+stats.layers.length+'</b></div></div><p class="atlas33-muted">'+stats.total+' locally recorded map and route events · '+(stats.layers.join(', ')||'No basemap history')+'</p>';
+  $('historyStats').innerHTML='<div class="atlas33-stat-grid"><div><small>MAP UPDATES · 24H</small><b>'+stats.views+'</b></div><div><small>ROUTES · 24H</small><b>'+stats.routes+'</b></div><div><small>AVG. ZOOM</small><b>'+(stats.avgZoom?stats.avgZoom.toFixed(1):'—')+'</b></div><div><small>BASEMAPS USED</small><b>'+stats.layers.length+'</b></div></div><p class="atlas33-muted">'+stats.total+' locally recorded map and route events · '+(safe(stats.layers.join(', '))||'No basemap history')+'</p>';
   const max=Math.max(1,...stats.buckets.map(x=>x.count));
-  const bars=stats.buckets.map((x,i)=>{const height=Math.max(2,Math.round(x.count/max*76)),xPos=8+i*16;return '<rect x="'+xPos+'" y="'+(86-height)+'" width="9" height="'+height+'" rx="2" class="atlas33-bar"><title>'+String(i).padStart(2,'0')+':00 · '+x.count+' events</title></rect>'}).join('');
+  const bars=stats.buckets.map((x,i)=>{const height=Math.max(2,Math.round(x.count/max*76)),xPos=8+i*16,label=i===23?'last hour':(24-i)+'–'+(23-i)+'h ago';return '<rect x="'+xPos+'" y="'+(86-height)+'" width="9" height="'+height+'" rx="2" class="atlas33-bar"><title>'+label+' · '+x.count+' events</title></rect>'}).join('');
   $('historyChart').innerHTML='<svg viewBox="0 0 400 104" role="img" aria-label="Map activity by local hour over the last 24 hours"><path d="M4 86H396" class="atlas33-chart-axis"/>'+bars+'</svg><div class="atlas33-chart-labels"><span>24 hours ago</span><span>Local time</span><span>Now</span></div>';
  }
  function renderEvents(){
