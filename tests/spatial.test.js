@@ -31,6 +31,13 @@ test('geometry bounds traverse nested and collection coordinates safely',()=>{
   assert.equal(geometryBounds(null),null);
 });
 
+test('geometry bounds choose the short longitude arc across the antimeridian',()=>{
+  const crossing={type:'Polygon',coordinates:[[[179,0],[-179,0],[-179,1],[179,1],[179,0]]]};
+  assert.deepEqual(geometryBounds(crossing),{south:0,west:179,north:1,east:-179});
+  assert.equal(geometryIntersectsBounds(crossing,{south:0,west:175,north:1,east:180}),true);
+  assert.equal(geometryIntersectsBounds(crossing,{south:0,west:0,north:1,east:10}),false);
+});
+
 test('bounds filter returns intersecting valid GeoJSON features only',()=>{
   const items=[feature(polygon),feature({type:'Point',coordinates:[8,8]}),{type:'Feature',geometry:null}];
   assert.deepEqual(filterFeaturesByBounds(items,{south:1,west:1,north:2,east:2}),[items[0]]);
