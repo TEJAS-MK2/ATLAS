@@ -173,11 +173,11 @@ export function exportSpatialFile(features,format){
     return {content:'<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document>'+placemarks+'</Document></kml>',mime:'application/vnd.google-earth.kml+xml',notice:'KML export complete. ATLAS metadata preserves multi-geometry types on ATLAS round trips.'};
   }
   if(format==='csv'){
-    const spreadsheetSafe=value=>{const text=String(value??'');return /^[\\t\\r\\n ]*[=+\\-@]/.test(text)?'\\''+text:text};
+    const spreadsheetSafe=value=>{const text=String(value??'');return /^[\t\r\n ]*[=+\-@]/.test(text)?"'"+text:text};
     const quote=value=>'"'+String(value??'').replace(/"/g,'""')+'"';
     const rows=[['feature_name','geometry_type','vertex_index','longitude','latitude'].join(',')];
     for(const feature of features)collectPositions(feature.geometry).forEach((point,index)=>rows.push([quote(spreadsheetSafe(feature.properties?.name||'ATLAS feature')),quote(feature.geometry?.type||'Unknown'),index,point[0],point[1]].join(',')));
-    return {content:rows.join('\\n'),mime:'text/csv',notice:'CSV exports coordinate rows; geometry topology and properties are not preserved. Spreadsheet formula prefixes in names are neutralized.'};
+    return {content:rows.join('\n'),mime:'text/csv',notice:'CSV exports coordinate rows; geometry topology and properties are not preserved. Spreadsheet formula prefixes in names are neutralized.'};
   }
   throw new Error('Unsupported export format.');
 }
