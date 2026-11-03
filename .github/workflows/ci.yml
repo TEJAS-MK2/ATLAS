@@ -3,7 +3,7 @@ on:
   pull_request:
     branches: [main, feature/atlas-4.0-spatial-foundation, feature/atlas-4.0-advanced-gis]
   push:
-    branches: [main]
+    branches: [main, feature/atlas-4.0-release-hardening]
   workflow_dispatch:
 permissions:
   contents: read
@@ -20,6 +20,11 @@ jobs:
         with:
           node-version: 22
       - run: npm install --no-audit --no-fund
+      - name: Temporary lockfile capture for reproducible install
+        run: |
+          echo ATLAS_LOCKFILE_BEGIN
+          cat package-lock.json
+          echo ATLAS_LOCKFILE_END
       - run: npm test
       - run: npm run check
       - run: npx playwright install --with-deps chromium firefox webkit
