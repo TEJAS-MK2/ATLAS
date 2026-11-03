@@ -286,7 +286,7 @@ test('ATLAS 4.3 Aurora visual layer is linked, versioned and responsive',()=>{
 test('ATLAS 4.3 package, lockfile, page and PWA cache versions stay aligned',()=>{
   assert.equal(packageJson.version,'4.3.0');
   assert.equal(packageLock.packages[''].version,packageJson.version);
-  assert.equal(packageLock.version,3);
+  assert.equal(packageLock.lockfileVersion,3);
   assert.match(html,/<title>ATLAS 4\.3 — Spatial Intelligence Workspace<\/title>/);
   assert.match(html,/data-atlas-build="4\.3\.0"/);
   assert.match(html,/ATLAS ENGINE <b>v4\.3\.0<\/b>/);
