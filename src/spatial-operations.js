@@ -28,13 +28,19 @@ export function updateGeometryVertex(feature,vertexIndex,latitude,longitude){
   if(!feature||feature.type!=='Feature'||!Number.isInteger(vertexIndex)||vertexIndex<0||!validCoordinate(latitude,longitude))return null;
   const next=cloneJson(feature);
   let index=0,updated=false;
-  const visit=value=>{
+  const visit=(value,parent=null,siblingIndex=-1)=>{
     if(!Array.isArray(value)||updated)return;
     if(typeof value[0]==='number'){
-      if(index++===vertexIndex){value[0]=longitude;value[1]=latitude;updated=true;}
+      if(index++===vertexIndex){
+        const closedRing=Array.isArray(parent)&&parent.length>=4&&Array.isArray(parent[0])&&Array.isArray(parent[parent.length-1])&&parent[0][0]===parent[parent.length-1][0]&&parent[0][1]===parent[parent.length-1][1];
+        value[0]=longitude;value[1]=latitude;
+        if(closedRing&&siblingIndex===0)parent[parent.length-1]=[...value];
+        else if(closedRing&&siblingIndex===parent.length-1)parent[0]=[...value];
+        updated=true;
+      }
       return;
     }
-    for(const item of value){visit(item);if(updated)break;}
+    for(let i=0;i<value.length;i++){visit(value[i],value,i);if(updated)break;}
   };
   const visitGeometry=g=>{
     if(!g||typeof g!=='object'||updated)return;
