@@ -15,7 +15,7 @@ node scripts/smoke-test.mjs
 
 - `npm test` runs the Node.js built-in test runner, including geospatial, spatial-query, spatial-operations, file-format, spatial-analytics, history-window, UI-contract and security-contract tests.
 - `npm run check` runs syntax checks on the main application modules.
-- `npm run test:e2e` runs the full Chromium regression suite plus a focused compatibility suite on Firefox, WebKit and Pixel 7 emulation. The compatibility suite checks map startup, responsive overflow, empty imports and PWA module caching.
+- `npm run test:e2e` runs the full Chromium regression suite plus a focused compatibility suite on Firefox, WebKit and Pixel 7 emulation. The compatibility suite checks map startup, responsive overflow, empty imports, PWA module caching, desktop/mobile/light-theme/narrow-phone layouts, geolocation permission states, and valid one-point GPS GeoJSON export.
 - `scripts/smoke-test.mjs` checks the published site and required production assets when network access is available; it also rejects duplicate resource entries.
 
 GitHub Actions installs Chromium, Firefox and WebKit, runs unit tests and syntax checks, executes the browser matrix before GitHub Pages deployment, then performs a production smoke check. CodeQL separately analyzes JavaScript/TypeScript.
