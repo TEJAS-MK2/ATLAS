@@ -260,3 +260,19 @@ test('ATLAS rejects XML DTD and entity declarations before parsing',async({page}
  await page.locator('#importFile').setInputFiles({name:'entity.kml',mimeType:'application/vnd.google-earth.kml+xml',buffer:Buffer.from(kml)});
  await expect(page.locator('#toast')).toContainText('Import failed: XML DTD and entity declarations are not supported');
 });
+
+test('ATLAS geometry editor loads coordinates when the vertex index changes',async({page})=>{
+ const collection={type:'FeatureCollection',features:[{type:'Feature',properties:{name:'Editable path'},geometry:{type:'LineString',coordinates:[[88,22],[89,23],[90,24]]}}]};
+ await page.locator('#importFile').setInputFiles({name:'path.geojson',mimeType:'application/geo+json',buffer:Buffer.from(JSON.stringify(collection))});
+ await page.locator('#overlayBtn').click();
+ await page.locator('#overlayFeatureList [data-feature-index="0"]').click();
+ await page.locator('#spatialEditVertex').fill('2');
+ await page.locator('#spatialEditVertex').dispatchEvent('change');
+ await expect(page.locator('#spatialEditLat')).toHaveValue('24');
+ await expect(page.locator('#spatialEditLng')).toHaveValue('90');
+ await page.locator('#spatialEditVertex').fill('99');
+ await page.locator('#spatialEditVertex').dispatchEvent('change');
+ await expect(page.locator('#spatialEditLat')).toHaveValue('');
+ await expect(page.locator('#spatialEditLng')).toHaveValue('');
+ await expect(page.locator('#spatialOperationsStatus')).toContainText('does not exist');
+});
