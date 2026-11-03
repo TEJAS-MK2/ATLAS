@@ -12,6 +12,8 @@ Do not merge a later phase before its prerequisite is integrated. Do not merge w
 
 ## Automated release gates
 
+- [ ] `npm ci` installs exactly from the committed lockfile.
+- [ ] `npm audit --audit-level=high` reports no high or critical dependency advisories.
 - [ ] `npm test` passes on the final combined main-based PR head.
 - [ ] `npm run check` passes.
 - [ ] Chromium regression and offline-shell tests pass.
