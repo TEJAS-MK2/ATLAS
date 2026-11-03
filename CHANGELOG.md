@@ -1,4 +1,4 @@
-## 4.3.0 — 2026-11-04
+## Unreleased — ATLAS 4.3 candidate
 
 - Introduced the Aurora spatial workspace design layer in a separately versioned stylesheet.
 - Refined desktop navigation, map controls, floating panels, intelligence cards, dark/light themes and mobile navigation ergonomics.
