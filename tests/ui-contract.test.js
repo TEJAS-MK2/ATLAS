@@ -8,6 +8,7 @@ const css=readFileSync(new URL('../styles.css',import.meta.url),'utf8');
 const readme=readFileSync(new URL('../README.md',import.meta.url),'utf8');
 const smoke=readFileSync(new URL('../scripts/smoke-test.mjs',import.meta.url),'utf8');
 const atlas33=readFileSync(new URL('../src/atlas33.js',import.meta.url),'utf8');
+const atlas32=readFileSync(new URL('../src/atlas32.js',import.meta.url),'utf8');
 const packageJson=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8'));
 const serviceWorker=readFileSync(new URL('../sw.js',import.meta.url),'utf8');
 
@@ -176,27 +177,27 @@ test('historical activity chart uses a rolling window and escapes persisted labe
  assert.match(atlas33,/safe\(stats\.layers\.join\(', '\)\)/);
 });
 
-test('ATLAS 3.5 release metadata and PWA cache version stay synchronized',()=>{
- assert.equal(packageJson.version,'3.6.0');
- assert.match(html,/<title>ATLAS 3\.6 — Geospatial Field Console<\/title>/);
- assert.match(readme,/<h1 align="center">ATLAS 3\.6 · Geospatial Field Console<\/h1>/);
+test('ATLAS 4.0 release metadata and PWA cache version stay synchronized',()=>{
+ assert.equal(packageJson.version,'4.0.0');
+ assert.match(html,/<title>ATLAS 4\.0 — Geospatial Field Console<\/title>/);
+ assert.match(readme,/<h1 align="center">ATLAS 4\.0 · Geospatial Field Console<\/h1>/);
  assert.match(serviceWorker,/atlas-shell-v10/);
  assert.doesNotMatch(serviceWorker,/atlas-shell-v7/);
 });
 
 
-test('ATLAS 3.6 field-console refinement preserves touch targets and accessibility',()=>{
-  assert.ok(css.includes('ATLAS 3.6 / FIELD CONSOLE'));
+test('ATLAS 4.0 field-console refinement preserves touch targets and accessibility',()=>{
+  assert.ok(css.includes('ATLAS 4.0 / FIELD CONSOLE'));
   assert.ok(css.includes('min-height:44px'));
   assert.ok(css.includes('env(safe-area-inset-bottom)'));
   assert.ok(css.includes('prefers-reduced-motion:reduce'));
   assert.ok(css.includes('focus-visible'));
 });
-test('ATLAS 3.6 release metadata and PWA cache are synchronized',()=>{
-  assert.equal(packageJson.version,'3.6.0');
-  assert.ok(html.includes('<title>ATLAS 3.6 — Geospatial Field Console</title>'));
-  assert.ok(readme.includes('ATLAS 3.6 · Geospatial Field Console'));
-  assert.ok(html.includes('ATLAS ENGINE <b>v3.6.0</b>'));
+test('ATLAS 4.0 release metadata and PWA cache are synchronized',()=>{
+  assert.equal(packageJson.version,'4.0.0');
+  assert.ok(html.includes('<title>ATLAS 4.0 — Geospatial Field Console</title>'));
+  assert.ok(readme.includes('ATLAS 4.0 · Geospatial Field Console'));
+  assert.ok(html.includes('ATLAS ENGINE <b>v4.0.0</b>'));
   assert.ok(serviceWorker.includes('atlas-shell-v10'));
 });
 
@@ -216,4 +217,55 @@ test('ATLAS 4.0 geospatial interchange exposes KML GPX and CSV controls',()=>{
  assert.match(html,/\.kml/);assert.match(html,/\.gpx/);assert.match(html,/\.csv/);
  assert.match(html,/id="overlayExportFormat"/);
  assert.match(app,/parseSpatialFile/);assert.match(app,/exportSpatialFile/);
+});
+
+
+test('ATLAS 4.0 PWA precaches every local module required by the app',()=>{
+ assert.match(serviceWorker,/atlas-shell-v10/);
+ for(const path of ['./src/spatial.js','./src/spatial-operations.js','./src/formats.js'])assert.ok(serviceWorker.includes(path),path);
+ assert.match(serviceWorker,/EXTERNAL_SHELL/);
+ assert.match(serviceWorker,/externalShell/);
+});
+test('ATLAS 4.0 layer replacement clears stale geometry edit inputs',()=>{
+ assert.match(atlas32,/selectedFeatureIndex=-1;\['spatialEditFeature','spatialEditVertex','spatialEditLat','spatialEditLng'\]/);
+});
+test('ATLAS 4.0 import affordance names all supported map formats',()=>{
+ assert.match(html,/Import map file/);
+ assert.match(app,/geoOverlay\?\.getBounds/);
+});
+
+
+test('ATLAS static CSP blocks object embeds and constrains document base and form targets',()=>{
+ assert.match(html,/object-src 'none'/);
+ assert.match(html,/base-uri 'self'/);
+ assert.match(html,/form-action 'self'/);
+});
+
+
+test('ATLAS geometry editor synchronizes coordinate fields when the vertex index changes',()=>{
+ assert.match(atlas32,/spatialEditVertex'\)\.addEventListener\('change',loadEditorVertex\)/);
+ assert.match(atlas32,/positions\[vertexIndex\]/);
+});
+
+
+test('analysis overlay lifecycle reports actual map-layer removal',()=>{
+ assert.match(app,/atlas:analysis-cleared/);
+ assert.match(app,/map\.hasLayer\(geoAnalysisOverlay\)/);
+});
+
+
+test('ATLAS 4.1 precision workspace design system covers desktop, mobile and light themes',()=>{
+  assert.match(css,/ATLAS 4\.1 \/ Precision workspace UI/);
+  assert.match(css,/--atlas-surface-raised/);
+  assert.match(css,/grid-template-columns:clamp\(246px,19vw,286px\)/);
+  assert.match(css,/@media\(max-width:650px\)/);
+  assert.match(css,/body\.light-ui \.floating-panel/);
+  assert.match(css,/\.floating-panel input:focus-visible/);
+  assert.match(css,/prefers-reduced-motion:reduce/);
+});
+test('ATLAS 4.1 map controls and data panels preserve accessible touch sizing',()=>{
+  assert.match(css,/\.map-control\{display:grid;place-items:center;min-width:42px;min-height:42px\}/);
+  assert.match(css,/\.primary-btn,\.secondary-btn\{min-height:44px/);
+  assert.match(css,/\.coordinate-card b\{font-variant-numeric:tabular-nums\}/);
+  assert.match(css,/overscroll-behavior:contain/);
 });

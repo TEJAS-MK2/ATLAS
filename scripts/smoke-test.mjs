@@ -7,6 +7,9 @@ const resources = [
   { path: './app.js', label: 'application module', includes: "L.map('map'" },
   { path: './room-ui.js', label: 'room UI module', includes: 'shareRoomTopBtn' },
   { path: './src/geo.js', label: 'geospatial utilities', includes: 'haversine' },
+  { path: './src/spatial.js', label: 'spatial query module', includes: 'filterFeaturesContainingPoint' },
+  { path: './src/spatial-operations.js', label: 'spatial operations module', includes: 'createPointBuffer' },
+  { path: './src/formats.js', label: 'geospatial file formats module', includes: 'parseSpatialFile' },
   { path: './src/atlas32.js', label: 'ATLAS 3.2 feature module', includes: 'summarizeFeatures' },
   { path: './src/atlas33.js', label: 'ATLAS 3.3 intelligence module', includes: 'diffObservedObjects' },
   { path: './sw.js', label: 'service worker', includes: "request.mode==='navigate'" },
@@ -44,7 +47,7 @@ async function checkResource(resource) {
 
 const bodies = await Promise.all(resources.map(checkResource));
 const html = bodies[0];
-for (const marker of ['id="map"', 'id="routeGo"', 'id="nearbyGo"', 'id="trackStartStop"', 'id="roomCreate"', 'id="globeModal"', 'id="workspacePanel"', 'id="spatialMetrics"', 'id="styleApply"', 'id="atlasMonitorPanel"', 'id="atlasHistoryPanel"', 'id="atlasDashboardPanel"', 'id="monitorStart"', 'property="og:image"', 'name="twitter:card"']) {
+for (const marker of ['<title>ATLAS 4.0 — Geospatial Field Console</title>', 'ATLAS ENGINE <b>v4.0.0</b>', 'id="map"', 'id="routeGo"', 'id="nearbyGo"', 'id="trackStartStop"', 'id="roomCreate"', 'id="globeModal"', 'id="workspacePanel"', 'id="spatialMetrics"', 'id="styleApply"', 'id="atlasMonitorPanel"', 'id="atlasHistoryPanel"', 'id="atlasDashboardPanel"', 'id="monitorStart"', 'id="spatialBufferCreate"', 'id="spatialHeatmapCreate"', 'id="overlayExportFormat"', 'property="og:image"', 'name="twitter:card"']) {
   if (!html.includes(marker)) throw new Error(`Homepage is missing required interface element ${marker}`);
 }
 console.log(`ATLAS production smoke test passed: ${resources.length} resources checked at ${base.href}`);

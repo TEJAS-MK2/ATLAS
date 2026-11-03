@@ -197,3 +197,97 @@ test('ATLAS 4.0 imports CSV coordinate tables including quoted names',async({pag
  await expect(page.locator('#overlayCount')).toHaveText('2');
  await expect(page.locator('#overlayFeatureList')).toContainText('Park, north');
 });
+
+test('ATLAS 4.0 accepts an empty GeoJSON collection and clears stale edit selection',async({page})=>{
+ const first={type:'FeatureCollection',features:[{type:'Feature',properties:{name:'First layer'},geometry:{type:'Point',coordinates:[88.36,22.57]}}]};
+ await page.locator('#importFile').setInputFiles({name:'first.geojson',mimeType:'application/geo+json',buffer:Buffer.from(JSON.stringify(first))});
+ await page.locator('#overlayBtn').click();
+ await page.locator('#overlayFeatureList [data-feature-index="0"]').click();
+ await expect(page.locator('#spatialEditFeature')).toHaveValue('0');
+ const empty={type:'FeatureCollection',features:[]};
+ await page.locator('#importFile').setInputFiles({name:'empty.geojson',mimeType:'application/geo+json',buffer:Buffer.from(JSON.stringify(empty))});
+ await expect(page.locator('#toast')).toContainText('0 GeoJSON features imported');
+ await expect(page.locator('#overlayCount')).toHaveText('0');
+ await expect(page.locator('#spatialEditFeature')).toHaveValue('');
+ await expect(page.locator('#spatialEditLat')).toHaveValue('');
+ await expect(page.locator('#spatialEditLng')).toHaveValue('');
+});
+
+test('ATLAS 4.0 rejects malformed KML coordinate tokens instead of joining across gaps',async({page})=>{
+ const kml='<kml xmlns="http://www.opengis.net/kml/2.2"><Placemark><name>Broken path</name><LineString><coordinates>88,22 999,23 89,24</coordinates></LineString></Placemark></kml>';
+ await page.locator('#importFile').setInputFiles({name:'broken.kml',mimeType:'application/vnd.google-earth.kml+xml',buffer:Buffer.from(kml)});
+ await expect(page.locator('#toast')).toContainText('Import failed: KML contains an invalid coordinate token');
+ await page.locator('#overlayBtn').click();
+ await expect(page.locator('#overlayCount')).toHaveText('0');
+});
+
+test('ATLAS 4.0 rejects GPX waypoints and track points with missing coordinates',async({page})=>{
+ const gpx='<gpx version="1.1" creator="test" xmlns="http://www.topografix.com/GPX/1/1"><wpt lat="22.57"><name>Missing longitude</name></wpt></gpx>';
+ await page.locator('#importFile').setInputFiles({name:'missing.gpx',mimeType:'application/gpx+xml',buffer:Buffer.from(gpx)});
+ await expect(page.locator('#toast')).toContainText('Import failed: GPX point is missing latitude or longitude');
+ await page.locator('#overlayBtn').click();
+ await expect(page.locator('#overlayCount')).toHaveText('0');
+});
+
+test('ATLAS KML round trips preserve MultiPolygon geometry type and coordinates',async({page})=>{
+ const geometry=await page.evaluate(async()=>{
+  const {exportSpatialFile,parseSpatialFile}=await import('./src/formats.js');
+  const feature={type:'Feature',properties:{name:'Two parcels'},geometry:{type:'MultiPolygon',coordinates:[
+   [[[0,0],[1,0],[1,1],[0,0]]],
+   [[[2,2],[3,2],[3,3],[2,2]]]
+  ]}};
+  return parseSpatialFile('roundtrip.kml',exportSpatialFile([feature],'kml').content).features[0].geometry;
+ });
+ expect(geometry.type).toBe('MultiPolygon');
+ expect(geometry.coordinates).toHaveLength(2);
+});
+
+test('ATLAS 4.0 analysis clear removes the actual Leaflet layer',async({page})=>{
+ await page.locator('#overlayBtn').click();
+ await page.locator('#spatialQueryLat').fill('22.5726');
+ await page.locator('#spatialQueryLng').fill('88.3639');
+ await page.evaluate(()=>{window.__atlasAnalysisState=[];window.addEventListener('atlas:analysis-rendered',e=>window.__atlasAnalysisState.push({event:'rendered',visible:e.detail.visible,mode:e.detail.mode}),{once:true});window.addEventListener('atlas:analysis-cleared',e=>window.__atlasAnalysisState.push({event:'cleared',removed:e.detail.removed,visible:e.detail.visible}),{once:true})});
+ await page.locator('#spatialBufferCreate').click();
+ await expect.poll(()=>page.evaluate(()=>window.__atlasAnalysisState?.[0]?.visible)).toBe(true);
+ await page.locator('#spatialAnalysisClear').click();
+ await expect.poll(()=>page.evaluate(()=>window.__atlasAnalysisState?.[1]?.removed)).toBe(true);
+ await expect.poll(()=>page.evaluate(()=>window.__atlasAnalysisState?.[1]?.visible)).toBe(false);
+ await expect(page.locator('#spatialOperationsStatus')).toContainText('Analysis overlay cleared');
+});
+
+
+test('ATLAS PWA reopens its cached application shell offline',async({page,context})=>{
+ await page.evaluate(async()=>{if(!('serviceWorker'in navigator))throw new Error('Service workers are unavailable');await navigator.serviceWorker.ready});
+ const cached=await page.evaluate(async()=>{
+  const cache=await caches.open('atlas-shell-v10');
+  return Boolean(await cache.match(new URL('./src/formats.js',location.href).href)&&await cache.match(new URL('./src/spatial-operations.js',location.href).href));
+ });
+ expect(cached).toBe(true);
+ await context.setOffline(true);
+ await page.reload();
+ await expect(page.locator('#map.leaflet-container')).toBeVisible({timeout:20000});
+ await expect(page.locator('#commandOpen')).toBeVisible();
+});
+
+
+test('ATLAS rejects XML DTD and entity declarations before parsing',async({page})=>{
+ const kml='<!DOCTYPE kml [<!ENTITY injected "unsafe">]><kml xmlns="http://www.opengis.net/kml/2.2"><Placemark><name>&injected;</name><Point><coordinates>88,22</coordinates></Point></Placemark></kml>';
+ await page.locator('#importFile').setInputFiles({name:'entity.kml',mimeType:'application/vnd.google-earth.kml+xml',buffer:Buffer.from(kml)});
+ await expect(page.locator('#toast')).toContainText('Import failed: XML DTD and entity declarations are not supported');
+});
+
+test('ATLAS geometry editor loads coordinates when the vertex index changes',async({page})=>{
+ const collection={type:'FeatureCollection',features:[{type:'Feature',properties:{name:'Editable path'},geometry:{type:'LineString',coordinates:[[88,22],[89,23],[90,24]]}}]};
+ await page.locator('#importFile').setInputFiles({name:'path.geojson',mimeType:'application/geo+json',buffer:Buffer.from(JSON.stringify(collection))});
+ await page.locator('#overlayBtn').click();
+ await page.locator('#overlayFeatureList [data-feature-index="0"]').click();
+ await page.locator('#spatialEditVertex').fill('2');
+ await page.locator('#spatialEditVertex').dispatchEvent('change');
+ await expect(page.locator('#spatialEditLat')).toHaveValue('24');
+ await expect(page.locator('#spatialEditLng')).toHaveValue('90');
+ await page.locator('#spatialEditVertex').fill('99');
+ await page.locator('#spatialEditVertex').dispatchEvent('change');
+ await expect(page.locator('#spatialEditLat')).toHaveValue('');
+ await expect(page.locator('#spatialEditLng')).toHaveValue('');
+ await expect(page.locator('#spatialOperationsStatus')).toContainText('does not exist');
+});

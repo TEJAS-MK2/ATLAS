@@ -1,8 +1,28 @@
 const CACHE='atlas-shell-v10';
-const SHELL=['./','./index.html','./styles.css','./app.js','./room-ui.js','./src/geo.js','./src/formats.js','./src/spatial.js','./src/spatial-operations.js','./src/atlas32.js','./src/atlas33.js','./manifest.webmanifest','./icons/atlas-192.svg','./icons/atlas-512.svg'];
+const SHELL=['./','./index.html','./styles.css','./app.js','./room-ui.js','./src/geo.js','./src/spatial.js','./src/spatial-operations.js','./src/formats.js','./src/atlas32.js','./src/atlas33.js','./manifest.webmanifest','./icons/atlas-192.svg','./icons/atlas-512.svg'];
+const EXTERNAL_SHELL=[
+  'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+  'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+  'https://unpkg.com/globe.gl@2.41.10/dist/globe.gl.min.js'
+];
+
+async function cacheExternalShell(){
+  const cache=await caches.open(CACHE);
+  await Promise.all(EXTERNAL_SHELL.map(async url=>{
+    try{
+      const response=await fetch(url,{mode:'cors',cache:'no-store'});
+      if(response.ok)await cache.put(url,response);
+    }catch(error){
+      // External libraries are optional during installation; online requests can populate the cache later.
+    }
+  }));
+}
 
 self.addEventListener('install',event=>{
-  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting()));
+  event.waitUntil(caches.open(CACHE)
+    .then(cache=>cache.addAll(SHELL))
+    .then(cacheExternalShell)
+    .then(()=>self.skipWaiting()));
 });
 
 self.addEventListener('activate',event=>{
@@ -11,12 +31,15 @@ self.addEventListener('activate',event=>{
     .then(()=>self.clients.claim()));
 });
 
-// Prefer fresh network responses, but keep same-origin assets available offline.
-// Only navigation requests fall back to index.html; never return HTML for a missing JS/CSS asset.
+// Cache the application shell and a small allowlist of required CDN libraries.
+// Map tiles and provider responses remain network-only and are not promised offline.
 self.addEventListener('fetch',event=>{
   const request=event.request;
   const url=new URL(request.url);
-  if(request.method!=='GET'||url.origin!==self.location.origin)return;
+  if(request.method!=='GET')return;
+  const sameOrigin=url.origin===self.location.origin;
+  const externalShell=EXTERNAL_SHELL.includes(url.href)&&['script','style'].includes(request.destination);
+  if(!sameOrigin&&!externalShell)return;
 
   event.respondWith((async()=>{
     const cached=await caches.match(request);

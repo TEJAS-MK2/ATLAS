@@ -5,7 +5,8 @@
 Requirements: Node.js 22+ and Python 3 for the local static test server.
 
 ```bash
-npm install
+npm ci --no-audit --no-fund
+npm audit --audit-level=high
 npm test
 npm run check
 npm run test:e2e
@@ -14,12 +15,14 @@ node scripts/smoke-test.mjs
 
 - `npm test` runs the Node.js built-in test runner, including geospatial, spatial-query, spatial-operations, file-format, spatial-analytics, history-window, UI-contract and security-contract tests.
 - `npm run check` runs syntax checks on the main application modules.
-- `npm run test:e2e` runs Playwright Chromium tests against a local static server. The suite checks map initialization, command palette behaviour, layer controls, GeoJSON import validation and inspection, saved map view persistence, and narrow mobile overflow.
+- `npm run test:e2e` runs the full Chromium regression suite plus a focused compatibility suite on Firefox, WebKit and Pixel 7 emulation. The compatibility suite checks map startup, responsive overflow, empty imports and PWA module caching.
 - `scripts/smoke-test.mjs` checks the published site and required production assets when network access is available; it also rejects duplicate resource entries.
 
-GitHub Actions runs unit tests, syntax checks, and browser tests before GitHub Pages deployment, then performs a production smoke check. CodeQL separately analyzes JavaScript/TypeScript.
+GitHub Actions installs Chromium, Firefox and WebKit, runs unit tests and syntax checks, executes the browser matrix before GitHub Pages deployment, then performs a production smoke check. CodeQL separately analyzes JavaScript/TypeScript.
 
 ## Release evidence
+
+Use the [ATLAS 4.0 release checklist](./ATLAS_4_RELEASE_CHECKLIST.md) to track final PR ordering, automated gates, physical-device acceptance, deployment evidence and rollback readiness.
 
 For every release candidate, record the exact commit SHA and the linked GitHub Actions run. A green workflow on a different commit is not evidence for the candidate. The production smoke job must run after Pages deployment and pass against the deployed URL. If a workflow or production endpoint cannot be inspected, mark that check as **not verified** rather than inferring success from configuration or badges.
 
@@ -47,7 +50,7 @@ Verify:
 
 ## Device and permission checks
 
-Automated tests cannot fully validate device geolocation, browser permission prompts, PWA installation, or offline map behaviour. Test those manually on supported devices. Use test locations and never attach private coordinates or room links to public bug reports.
+Automated browser tests verify that the PWA precaches its application modules and essential CDN libraries. Map tiles and live provider data remain network-dependent. Automated tests cannot fully validate device geolocation, browser permission prompts, installation UX, or real-device offline recovery. Test those manually on supported devices. Use test locations and never attach private coordinates or room links to public bug reports.
 
 ## Reporting results
 

@@ -84,17 +84,39 @@ function pointOnSegment(point,a,b,epsilon=1e-10){
   return dot<=length+epsilon;
 }
 
+function unwrapLongitude(longitude,reference){
+  let value=longitude;
+  while(value-reference>180)value-=360;
+  while(value-reference< -180)value+=360;
+  return value;
+}
+
+function ringCoordinatesNearPoint(point,ring){
+  if(!ring.every(position=>coordinateFromPosition(position)))return null;
+  const extent=geometryBounds({type:'LineString',coordinates:ring});
+  if(!extent||extent.west<=extent.east)return {point,ring:ring.map(position=>[position[0],position[1]])};
+  const span=(extent.east-extent.west+360)%360;
+  const center=extent.west+span/2;
+  const reference=((center+180)%360+360)%360-180;
+  return {
+    point:{...point,lng:unwrapLongitude(point.lng,reference)},
+    ring:ring.map(position=>[unwrapLongitude(position[0],reference),position[1]])
+  };
+}
+
 export function pointInRing(point,ring){
   if(!point||!validCoordinate(point.lat,point.lng)||!Array.isArray(ring)||ring.length<4)return false;
+  const unwrapped=ringCoordinatesNearPoint(point,ring);
+  if(!unwrapped)return false;
+  const target=unwrapped.point,coordinates=unwrapped.ring;
   let inside=false;
-  for(let i=0,j=ring.length-1;i<ring.length;j=i++){
-    const a=ring[j],b=ring[i];
-    if(!coordinateFromPosition(a)||!coordinateFromPosition(b))return false;
-    if(pointOnSegment(point,a,b))return true;
-    const crosses=(a[1]>point.lat)!==(b[1]>point.lat);
+  for(let i=0,j=coordinates.length-1;i<coordinates.length;j=i++){
+    const a=coordinates[j],b=coordinates[i];
+    if(pointOnSegment(target,a,b))return true;
+    const crosses=(a[1]>target.lat)!==(b[1]>target.lat);
     if(crosses){
-      const intersection=(b[0]-a[0])*(point.lat-a[1])/(b[1]-a[1])+a[0];
-      if(point.lng<intersection)inside=!inside;
+      const intersection=(b[0]-a[0])*(target.lat-a[1])/(b[1]-a[1])+a[0];
+      if(target.lng<intersection)inside=!inside;
     }
   }
   return inside;
@@ -111,14 +133,9 @@ export function geometryContainsPoint(geometry,point){
   if(geometry.type==='GeometryCollection')return Array.isArray(geometry.geometries)&&geometry.geometries.some(item=>geometryContainsPoint(item,point));
   if(geometry.type==='Polygon')return pointInPolygon(point,geometry.coordinates);
   if(geometry.type==='MultiPolygon')return Array.isArray(geometry.coordinates)&&geometry.coordinates.some(poly=>pointInPolygon(point,poly));
-  if(geometry.type==='Point'){
-    const candidate=coordinateFromPosition(geometry.coordinates);
-    return Boolean(candidate&&Math.abs(candidate.lat-point.lat)<=1e-10&&Math.abs(candidate.lng-point.lng)<=1e-10);
-  }
-  if(geometry.type==='MultiPoint')return Array.isArray(geometry.coordinates)&&geometry.coordinates.some(position=>{
-    const candidate=coordinateFromPosition(position);
-    return Boolean(candidate&&Math.abs(candidate.lat-point.lat)<=1e-10&&Math.abs(candidate.lng-point.lng)<=1e-10);
-  });
+  const samePosition=candidate=>Boolean(candidate&&Math.abs(candidate.lat-point.lat)<=1e-10&&Math.min(Math.abs(candidate.lng-point.lng),360-Math.abs(candidate.lng-point.lng))<=1e-10);
+  if(geometry.type==='Point')return samePosition(coordinateFromPosition(geometry.coordinates));
+  if(geometry.type==='MultiPoint')return Array.isArray(geometry.coordinates)&&geometry.coordinates.some(position=>samePosition(coordinateFromPosition(position)));
   return false;
 }
 
