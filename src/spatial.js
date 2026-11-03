@@ -29,12 +29,13 @@ export function boundsIntersect(a,b){
 
 export function geometryBounds(geometry){
   if(!geometry||typeof geometry!=='object'||Array.isArray(geometry))return null;
-  let south=Infinity,west=Infinity,north=-Infinity,east=-Infinity,count=0;
+  let south=Infinity,north=-Infinity,count=0;
+  const longitudes=[];
   const visitPosition=position=>{
     const point=coordinateFromPosition(position);
     if(!point)return;
     south=Math.min(south,point.lat);north=Math.max(north,point.lat);
-    west=Math.min(west,point.lng);east=Math.max(east,point.lng);count++;
+    longitudes.push(((point.lng+180)%360+360)%360);count++;
   };
   const walk=value=>{
     if(!Array.isArray(value))return;
@@ -50,7 +51,17 @@ export function geometryBounds(geometry){
     walk(g.coordinates);
   };
   visit(geometry);
-  return count?{south,west,north,east}:null;
+  if(!count)return null;
+  longitudes.sort((a,b)=>a-b);
+  let largestGap=-1,gapIndex=0;
+  for(let i=0;i<longitudes.length;i++){
+    const next=i===longitudes.length-1?longitudes[0]+360:longitudes[i+1];
+    const gap=next-longitudes[i];
+    if(gap>largestGap){largestGap=gap;gapIndex=i;}
+  }
+  const west=longitudes[(gapIndex+1)%longitudes.length]-180;
+  const east=longitudes[gapIndex]-180;
+  return {south,west,north,east};
 }
 
 export function geometryIntersectsBounds(geometry,bounds){
