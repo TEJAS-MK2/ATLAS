@@ -1,5 +1,5 @@
 <p align="center"><img src="./assets/atlas-social.svg" alt="ATLAS — Geospatial Intelligence" width="100%"></p>
-<h1 align="center">ATLAS 3.6 · Geospatial Field Console</h1>
+<h1 align="center">ATLAS 4.0 · Geospatial Field Console</h1>
 <p align="center"><strong>Explore. Analyze. Navigate. Operate.</strong><br>A map-first geospatial workspace for real-world exploration and spatial workflows.</p>
 <p align="center"><a href="https://tejas-mk2.github.io/ATLAS/"><img alt="Live demo" src="https://img.shields.io/badge/OPEN_LIVE_DEMO-1B8F70?style=for-the-badge&logo=googlemaps&logoColor=white"></a> <a href="https://github.com/TEJAS-MK2/ATLAS/actions/workflows/pages.yml"><img alt="Build and deploy" src="https://img.shields.io/github/actions/workflow/status/TEJAS-MK2/ATLAS/pages.yml?branch=main&style=for-the-badge&label=build%20%26%20deploy&logo=githubactions&logoColor=white"></a> <a href="https://github.com/TEJAS-MK2/ATLAS/actions/workflows/codeql.yml"><img alt="CodeQL" src="https://img.shields.io/github/actions/workflow/status/TEJAS-MK2/ATLAS/codeql.yml?branch=main&style=for-the-badge&label=CodeQL&logo=github"></a></p>
 ## Project status
