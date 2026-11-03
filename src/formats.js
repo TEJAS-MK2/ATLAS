@@ -7,6 +7,7 @@ function xmlDocument(source){
   return doc;
 }
 function descendants(node,name){
+  if(!node)return [];
   const namespaced=Array.from(node.getElementsByTagNameNS?.('*',name)||[]);
   return namespaced.length?namespaced:Array.from(node.getElementsByTagName?.(name)||[]);
 }
