@@ -1,5 +1,5 @@
 const CACHE='atlas-shell-v5';
-const SHELL=['./','./index.html','./styles.css','./app.js','./room-ui.js','./src/geo.js','./manifest.webmanifest','./icons/atlas-192.svg','./icons/atlas-512.svg'];
+const SHELL=['./','./index.html','./styles.css','./app.js','./room-ui.js','./src/geo.js','./src/atlas32.js','./manifest.webmanifest','./icons/atlas-192.svg','./icons/atlas-512.svg'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting()));
