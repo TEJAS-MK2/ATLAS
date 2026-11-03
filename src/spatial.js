@@ -69,6 +69,7 @@ function pointOnSegment(point,a,b,epsilon=1e-10){
   const dot=(point.lng-a[0])*(b[0]-a[0])+(point.lat-a[1])*(b[1]-a[1]);
   if(dot < -epsilon)return false;
   const length=(b[0]-a[0])**2+(b[1]-a[1])**2;
+  if(length<=epsilon*epsilon)return Math.abs(point.lng-a[0])<=epsilon&&Math.abs(point.lat-a[1])<=epsilon;
   return dot<=length+epsilon;
 }
 
