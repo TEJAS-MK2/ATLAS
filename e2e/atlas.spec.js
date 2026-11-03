@@ -19,3 +19,43 @@ test('Field Console visual system renders a compact responsive workspace',async(
   await expect(page.locator('.sidebar')).toBeVisible();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
 });
+
+test('ATLAS 3.2 spatial analytics and layer styling work on imported GeoJSON',async({page})=>{
+  const file={name:'atlas-32.geojson',mimeType:'application/geo+json',buffer:Buffer.from(JSON.stringify({type:'FeatureCollection',features:[
+    {type:'Feature',properties:{name:'Test boundary'},geometry:{type:'Polygon',coordinates:[[[88.36,22.57],[88.37,22.57],[88.37,22.58],[88.36,22.58],[88.36,22.57]]]}},
+    {type:'Feature',properties:{name:'Test road'},geometry:{type:'LineString',coordinates:[[88.36,22.57],[88.37,22.58]]}}
+  ]}))};
+  await page.locator('#importFile').setInputFiles(file);
+  await expect(page.locator('#toast')).toContainText('2 GeoJSON features imported');
+  await page.locator('#overlayBtn').click();
+  await expect(page.locator('#spatialMetrics')).toContainText('2 features');
+  await expect(page.locator('#spatialMetrics')).toContainText('Polygon: 1');
+  await page.locator('#styleColor').fill('#ff3366');
+  await page.locator('#styleWeight').fill('5');
+  await page.locator('#styleFill').fill('40');
+  await page.locator('#styleLine').fill('80');
+  await page.locator('#styleApply').click();
+  await expect(page.locator('.leaflet-overlay-pane path').first()).toHaveAttribute('stroke','#ff3366');
+  await expect(page.locator('.leaflet-overlay-pane path').first()).toHaveAttribute('stroke-width','5');
+  await expect(page.locator('.leaflet-overlay-pane path').first()).toHaveAttribute('fill-opacity','0.4');
+});
+
+test('workspace profiles persist and restore map presentation settings',async({page})=>{
+  await page.locator('input[name="layer"][value="satellite"]').check();
+  await page.locator('#workspaceOpenBtn').click();
+  await page.locator('#workspaceName').fill('ATLAS 3.2 field profile');
+  await page.locator('#workspaceTheme').selectOption('light');
+  await page.locator('#workspaceInspector').uncheck();
+  await page.locator('#workspaceSave').click();
+  await expect(page.locator('#workspaceList')).toContainText('ATLAS 3.2 field profile');
+  await page.locator('#workspaceTheme').selectOption('dark');
+  await page.locator('#workspaceInspector').check();
+  await page.locator('input[name="layer"][value="streets"]').check();
+  await page.locator('[data-atlas-restore="0"]').click();
+  await expect(page.locator('body')).toHaveClass(/light-ui/);
+  await expect(page.locator('body')).toHaveClass(/atlas-hide-inspector/);
+  await expect(page.locator('#activeLayerName')).toHaveText('Satellite');
+  await page.reload();
+  await page.locator('#workspaceOpenBtn').click();
+  await expect(page.locator('#workspaceList')).toContainText('ATLAS 3.2 field profile');
+});
