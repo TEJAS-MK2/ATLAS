@@ -962,3 +962,12 @@ body.light-ui .atlas33-quickbar{background:rgba(249,253,251,.96);border-color:#d
 @media(hover:hover) and (pointer:fine){.tool:hover,.action-row:hover,.saved-item:hover{transform:translateX(2px)}.insight-card:hover,.metric-card:hover{transform:translateY(-2px);border-color:rgba(114,226,194,.3)}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 /* End ATLAS 4.2 */
+
+/* ATLAS 4.2 — non-disruptive update prompt */
+.update-notice{position:absolute;z-index:720;top:78px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;max-width:calc(100% - 28px);padding:10px 12px 10px 15px;border:1px solid rgba(114,226,194,.35);border-radius:14px;background:rgba(8,25,34,.97);box-shadow:0 16px 48px rgba(0,0,0,.38);backdrop-filter:blur(18px);color:#edf8f4}
+.update-notice span{display:grid;gap:3px;min-width:0}.update-notice b{font-size:10px;letter-spacing:.02em}.update-notice small{font-size:9px;color:#a8c1c0;white-space:nowrap}
+.update-notice button{min-height:36px;border:1px solid #315a56;border-radius:9px;padding:0 12px;background:#1b3b40;color:#b9f6e2;font-size:9px;font-weight:700;white-space:nowrap}
+.update-notice button:hover{background:#28534f}.update-notice button:last-child{width:32px;padding:0;font-size:17px}
+body.light-ui .update-notice{background:rgba(249,253,251,.98);border-color:#bcded0;color:#24463d}
+body.light-ui .update-notice small{color:#637e75}body.light-ui .update-notice button{background:#e5f3ec;border-color:#c8e2d4;color:#245c4a}
+@media(max-width:540px){.update-notice{top:70px;left:9px;right:9px;transform:none;max-width:none;gap:7px;padding:9px}.update-notice small{white-space:normal}.update-notice span{flex:1}.update-notice button{padding-inline:9px}}
