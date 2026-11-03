@@ -135,3 +135,14 @@ test('README badges point to real repository workflows and avoid unverified rele
   assert.match(readme,/actions\/workflows\/codeql\.yml/);
   assert.doesNotMatch(readme,/img\.shields\.io\/github\/v\/release|img\.shields\.io\/github\/release-date/);
 });
+
+test('ATLAS 3.2 spatial analytics and layer styling controls are present',()=>{
+  for(const id of ['spatialMetrics','spatialSearch','spatialSummary','styleColor','styleWeight','styleFill','styleLine','styleApply']) assert.match(html,new RegExp('id="'+id+'"'));
+  assert.match(app,/atlas:overlay-data/);
+  assert.match(app,/atlas:layer-style/);
+});
+test('ATLAS 3.2 workspace profiles expose save, restore and local persistence',()=>{
+  for(const id of ['workspacePanel','workspaceName','workspaceInspector','workspaceTheme','workspaceSave','workspaceList','workspaceOpenBtn']) assert.match(html,new RegExp('id="'+id+'"'));
+  assert.match(app,/atlas:restore-workspace/);
+  assert.match(readFileSync(new URL('../src/atlas32.js',import.meta.url),'utf8'),/atlas\.workspaces/);
+});

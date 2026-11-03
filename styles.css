@@ -428,3 +428,21 @@ body.light-ui .topbar{background:linear-gradient(180deg,#fbfefc,#f0f6f2);border-
 @media(max-width:380px){.brand small{display:none}.search-wrap{max-width:none;flex:1}.top-actions .icon-btn{width:29px;height:29px;min-width:29px;min-height:29px}.top-actions #themeBtn{display:none}.coordinate-card{max-width:145px}}
 @media(hover:hover) and (pointer:fine){.tool:hover,.action-row:hover,.saved-item:hover{transform:translateX(2px)}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* ATLAS 3.2 — analytics, layer styling and workspace profiles */
+.atlas32-studio{display:grid;gap:10px;margin:14px 0;padding:13px;border:1px solid var(--line,#29434e);border-radius:12px;background:#0b1c25a8}
+.atlas32-studio label{display:grid;gap:6px;font-size:10px;color:var(--muted,#8ba1ad)}
+.atlas32-studio input[type=color]{width:100%;height:34px;padding:3px;border:1px solid var(--line);border-radius:8px;background:var(--panel2)}
+.atlas32-studio input[type=range]{width:100%;accent-color:var(--accent)}
+.atlas32-studio .section-label{margin:0}
+.atlas32-divider{height:1px;background:var(--line);margin:3px 0}
+.atlas32-workspace-panel{width:min(390px,calc(100% - 28px));max-height:min(78vh,720px);overflow:auto}
+.atlas32-check{display:flex!important;align-items:center;gap:9px!important}
+.atlas32-check input{accent-color:var(--accent)}
+.atlas-hide-inspector .workspace{grid-template-columns:clamp(236px,18vw,286px) minmax(300px,1fr)}
+.atlas-hide-inspector .inspector{display:none!important}
+@media(max-width:900px){.atlas-hide-inspector .workspace{grid-template-columns:220px minmax(280px,1fr)}}
+@media(max-width:650px){.atlas-hide-inspector .workspace{display:block}.atlas32-workspace-panel{top:54px;left:10px;width:min(390px,calc(100% - 20px))}}
+body.light-ui .atlas32-studio{background:#f1f7f3;border-color:#d3e2d9}
+body.light-ui .atlas32-studio input[type=color]{background:#fff}
+@media(max-width:380px){.map-top-right{gap:3px}.map-top-right .map-control{width:28px;height:28px;min-width:28px;min-height:28px}.coordinate-card{max-width:100px}}
