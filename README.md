@@ -34,7 +34,15 @@
 <img alt="Responsive" src="https://img.shields.io/badge/Layout-responsive-287A91?style=flat-square">
 <img alt="Keyboard first" src="https://img.shields.io/badge/Navigation-keyboard_first-5367A5?style=flat-square">
 </p>
-## ATLAS 3.6 — Field Console refinement\n\nThe 3.6 UI release strengthens control hierarchy, focus visibility, touch target sizing, safe-area handling and reduced-motion behaviour while preserving the existing map-first workflows.\n\n## ATLAS 3.5 — Reliability release\n\nThe 3.5 release corrects rolling 24-hour activity analytics, hardens persisted monitoring data, escapes stored dashboard labels and strengthens regression and production smoke-test coverage. Existing map, routing, GPS, GeoJSON, workspace and collaboration workflows remain intact.\n\n## ATLAS 3.4 — Field Console
+## ATLAS 3.6 — Field Console refinement
+
+The 3.6 UI release strengthens control hierarchy, focus visibility, touch target sizing, safe-area handling and reduced-motion behaviour while preserving the existing map-first workflows.
+
+## ATLAS 3.5 — Reliability release
+
+The 3.5 release corrects rolling 24-hour activity analytics, hardens persisted monitoring data, escapes stored dashboard labels and strengthens regression and production smoke-test coverage. Existing map, routing, GPS, GeoJSON, workspace and collaboration workflows remain intact.
+
+## ATLAS 3.4 — Field Console
 
 The 3.4 interface refresh sharpens the map-first workspace with a clearer visual hierarchy, refined dark/light surfaces, compact touch navigation, consistent control states, stronger focus treatment and improved small-screen layout. Existing mapping workflows and privacy boundaries are preserved.
 
