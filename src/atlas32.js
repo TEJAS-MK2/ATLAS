@@ -31,7 +31,7 @@ const $=id=>document.getElementById(id);
 const emit=(name,detail)=>window.dispatchEvent(new CustomEvent(name,{detail}));
 function safe(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function init(){
-  const required=['spatialMetrics','spatialSearch','spatialSummary','styleColor','styleWeight','styleFill','styleLine','styleApply','workspacePanel','workspaceName','workspaceInspector','workspaceTheme','workspaceSave','workspaceList','workspaceOpenBtn','workspaceClose'];
+  const required=['spatialMetrics','spatialSearch','spatialSummary','styleColor','styleWeight','styleFill','styleLine','styleApply','workspacePanel','workspaceName','workspaceInspector','workspaceTheme','workspaceSave','workspaceList','workspaceOpenBtn','workspaceMapBtn','workspaceClose'];
   if(required.some(id=>!$(id)))return;
   let features=[],mapState={center:[22.5726,88.3639],zoom:12,layer:'streets',theme:'dark',inspectorVisible:true};
   let profiles=readProfiles();
@@ -60,7 +60,9 @@ function init(){
     if(!persist()){profiles=previous;return;}
     $('workspaceName').value='';renderProfiles();
   }
-  $('workspaceOpenBtn').addEventListener('click',()=>{emit('atlas:request-map-state');$('workspacePanel').classList.remove('hidden');$('workspaceName').focus()});
+  const openWorkspace=()=>{emit('atlas:request-map-state');$('workspacePanel').classList.remove('hidden');$('workspaceName').focus()};
+  $('workspaceOpenBtn').addEventListener('click',openWorkspace);
+  $('workspaceMapBtn').addEventListener('click',openWorkspace);
   $('workspaceClose').addEventListener('click',()=>$('workspacePanel').classList.add('hidden'));
   $('workspaceSave').addEventListener('click',saveProfile);
   $('workspaceInspector').addEventListener('change',()=>{document.body.classList.toggle('atlas-hide-inspector',!$('workspaceInspector').checked);mapState.inspectorVisible=$('workspaceInspector').checked});
