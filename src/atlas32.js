@@ -52,7 +52,7 @@ function init(){
     return {...mapState,theme:$('workspaceTheme').value,inspectorVisible:$('workspaceInspector').checked};
   }
   function saveProfile(){
-    const name=$('workspaceName').value.trim().replace(/[<>\\u0000-\\u001f]/g,'').slice(0,48);
+    const name=$('workspaceName').value.trim().replace(/[<>]/g,'').slice(0,48);
     if(!name){$('workspaceName').focus();return;}
     const previous=profiles.slice();
     profiles.unshift(normalizeWorkspace({id:globalThis.crypto?.randomUUID?.()||String(Date.now()),name,...capture()}));
