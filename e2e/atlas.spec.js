@@ -350,3 +350,16 @@ test('GPS permission denial stops the session and reports a recoverable message'
  await expect(page.locator('#trackStatus')).toHaveText('Session paused');
  await expect(page.locator('#trackStartStop')).toHaveText('Start new session');
 });
+
+
+test('ATLAS 4.3 Aurora narrow-phone map controls remain separated and touch-sized',async({page})=>{
+ await page.setViewportSize({width:320,height:720});
+ await page.reload();
+ const left=await page.locator('.map-top-left').boundingBox();
+ const right=await page.locator('.map-top-right').boundingBox();
+ expect(left).not.toBeNull();
+ expect(right).not.toBeNull();
+ expect(left.x+left.width+6).toBeLessThanOrEqual(right.x);
+ expect(await page.locator('.map-top-right .map-control').first().evaluate(el=>el.getBoundingClientRect().width)).toBe(44);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+});
