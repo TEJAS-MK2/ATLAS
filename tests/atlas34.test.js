@@ -7,11 +7,11 @@ const css=readFileSync(new URL('../styles.css',import.meta.url),'utf8');
 const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8'));
 const sw=readFileSync(new URL('../sw.js',import.meta.url),'utf8');
 
-test('ATLAS 3.5 release metadata is synchronized',()=>{
-  assert.equal(pkg.version,'3.5.0');
-  assert.match(html,/<title>ATLAS 3\.5 — Geospatial Field Console<\/title>/);
-  assert.match(html,/v3\.5\.0/);
-  assert.match(sw,/atlas-shell-v8/);
+test('ATLAS 3.6 release metadata is synchronized',()=>{
+  assert.equal(pkg.version,'3.6.0');
+  assert.match(html,/<title>ATLAS 3\.6 — Geospatial Field Console<\/title>/);
+  assert.match(html,/v3\.6\.0/);
+  assert.match(sw,/atlas-shell-v9/);
 });
 
 test('Field Console responsive dock preserves the four core tools on mobile',()=>{
