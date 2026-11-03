@@ -30,10 +30,7 @@ test('ATLAS 3.2 spatial analytics and layer styling work on imported GeoJSON',as
   await page.locator('#overlayBtn').click();
   await expect(page.locator('#spatialMetrics')).toContainText('2 features');
   await expect(page.locator('#spatialMetrics')).toContainText('Polygon: 1');
-  await page.locator('#styleColor').fill('#ff3366');
-  await page.locator('#styleWeight').fill('5');
-  await page.locator('#styleFill').fill('40');
-  await page.locator('#styleLine').fill('80');
+  for(const [id,value] of [['styleColor','#ff3366'],['styleWeight','5'],['styleFill','40'],['styleLine','80']]) await page.locator('#'+id).evaluate((el,next)=>{el.value=next;el.dispatchEvent(new Event('input',{bubbles:true}));},value);
   await page.locator('#styleApply').click();
   await expect(page.locator('.leaflet-overlay-pane path').first()).toHaveAttribute('stroke','#ff3366');
   await expect(page.locator('.leaflet-overlay-pane path').first()).toHaveAttribute('stroke-width','5');
