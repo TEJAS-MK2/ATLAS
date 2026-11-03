@@ -118,8 +118,11 @@ function parseCsv(source){
   const nameIndex=headers.findIndex(value=>['name','title','label','feature_name'].includes(value));
   const features=[];
   for(let i=1;i<rows.length;i++){
-    const latText=String(rows[i][latIndex]??'').trim(),lngText=String(rows[i][lngIndex]??'').trim();if(!latText||!lngText)continue;const lat=Number(latText),lng=Number(lngText);
-    if(!validCoordinate(lat,lng))continue;
+    const rowNumber=i+1;
+    const latText=String(rows[i][latIndex]??'').trim(),lngText=String(rows[i][lngIndex]??'').trim();
+    if(!latText||!lngText)throw new Error('CSV row '+rowNumber+' is missing latitude or longitude.');
+    const lat=Number(latText),lng=Number(lngText);
+    if(!validCoordinate(lat,lng))throw new Error('CSV row '+rowNumber+' contains invalid coordinates.');
     features.push({type:'Feature',properties:{name:nameIndex>=0&&rows[i][nameIndex]?.trim()?rows[i][nameIndex].trim():'CSV point '+i},geometry:{type:'Point',coordinates:[lng,lat]}});
   }
   if(!features.length)throw new Error('CSV contains no valid coordinate rows.');
