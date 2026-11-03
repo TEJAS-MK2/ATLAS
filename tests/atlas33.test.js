@@ -22,3 +22,34 @@ test('monitor settings are clamped to supported radii and intervals',()=>{
  assert.deepEqual(normalizeMonitorSettings({radius:5000,interval:90,category:'hospital'}),{radius:5000,interval:60,category:'hospital'});
  assert.deepEqual(normalizeMonitorSettings({radius:123,interval:1,category:'script'}),{radius:1000,interval:2,category:'amenity'});
 });
+
+test('history chart buckets follow the rolling 24-hour window, not wall-clock hours',()=>{
+ const now=Date.UTC(2026,10,3,12,0,0);
+ const result=aggregateHistory([
+  {at:now-24*60*60*1000,type:'view',zoom:10,layer:'oldest'},
+  {at:now-23*60*60*1000,type:'view',zoom:11,layer:'early'},
+  {at:now-60*60*1000,type:'route'},
+  {at:now-1,type:'view',zoom:12,layer:'latest'},
+  {at:now+1,type:'view',zoom:99,layer:'future'}
+ ],now);
+ assert.equal(result.buckets.length,24);
+ assert.equal(result.buckets[0].count,1);
+ assert.equal(result.buckets[1].count,1);
+ assert.equal(result.buckets[22].count,0);
+ assert.equal(result.buckets[23].count,2);
+ assert.equal(result.total,4);
+});
+test('history aggregation safely handles non-array input and malformed entries',()=>{
+ const result=aggregateHistory(null,Date.UTC(2026,10,3));
+ assert.equal(result.total,0);
+ assert.equal(result.buckets.reduce((sum,bucket)=>sum+bucket.count,0),0);
+});
+
+test('monitor settings tolerate null or malformed stored values',()=>{
+ assert.deepEqual(normalizeMonitorSettings(null),{radius:1000,interval:5,category:'amenity'});
+ assert.deepEqual(normalizeMonitorSettings({radius:null,interval:null,category:null}),{radius:1000,interval:2,category:'amenity'});
+});
+test('change watch ignores missing and null object identifiers',()=>{
+ const fresh=diffObservedObjects(new Set(),[{id:null},{name:'missing id'},{id:'node/9'}]);
+ assert.deepEqual(fresh.map(item=>item.id),['node/9']);
+});

@@ -9,12 +9,16 @@ const resources = [
   { path: './src/geo.js', label: 'geospatial utilities', includes: 'haversine' },
   { path: './src/atlas32.js', label: 'ATLAS 3.2 feature module', includes: 'summarizeFeatures' },
   { path: './src/atlas33.js', label: 'ATLAS 3.3 intelligence module', includes: 'diffObservedObjects' },
-  { path: './src/atlas33.js', label: 'ATLAS 3.3 intelligence module', includes: 'diffObservedObjects' },
   { path: './sw.js', label: 'service worker', includes: "request.mode==='navigate'" },
   { path: './manifest.webmanifest', label: 'PWA manifest', json: true },
   { path: './icons/atlas-192.svg', label: '192px PWA icon', includes: '<svg' },
   { path: './icons/atlas-512.svg', label: '512px PWA icon', includes: '<svg' }
 ];
+
+const resourcePaths = resources.map(resource => resource.path);
+if (new Set(resourcePaths).size !== resourcePaths.length) {
+  throw new Error('Production smoke test contains duplicate resource paths.');
+}
 
 async function checkResource(resource) {
   const url = new URL(resource.path, base);
