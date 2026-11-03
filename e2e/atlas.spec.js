@@ -112,3 +112,25 @@ test('ATLAS 3.3 route comparison UI can select an alternate route',async({page})
  await page.locator('[data-route-index="1"]').click();
  await expect(page.locator('[data-route-index="1"]')).toHaveAttribute('aria-pressed','true');
 });
+
+test('GPS tracking starts only after explicit action and records a simulated location',async({page,context})=>{
+ await context.grantPermissions(['geolocation'],{origin:'http://127.0.0.1:4173'});
+ await context.setGeolocation({latitude:22.5726,longitude:88.3639,accuracy:12});
+ await page.locator('#trackBtn').click();
+ await expect(page.locator('#trackPanel')).toBeVisible();
+ await expect(page.locator('#trackStatus')).toContainText('Not recording');
+ await page.locator('#trackStartStop').click();
+ await expect(page.locator('#trackStatus')).toContainText('Recording',{timeout:10000});
+ await expect(page.locator('#trackPoints')).toHaveText('1');
+ await page.locator('#trackStartStop').click();
+ await expect(page.locator('#trackStatus')).toHaveText('Session paused');
+});
+
+test('GPS permission denial stops tracking and reports a recoverable message',async({page,context})=>{
+ await context.grantPermissions([],{origin:'http://127.0.0.1:4173'});
+ await page.locator('#trackBtn').click();
+ await page.locator('#trackStartStop').click();
+ await expect(page.locator('#toast')).toContainText('Location permission denied.',{timeout:10000});
+ await expect(page.locator('#trackStatus')).toHaveText('Session paused');
+ await expect(page.locator('#trackStartStop')).toHaveText('Start new session');
+});
