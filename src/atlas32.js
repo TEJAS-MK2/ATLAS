@@ -81,7 +81,7 @@ function init(){
   $('styleLine').addEventListener('input',()=>$('styleLineValue').textContent=$('styleLine').value+'%');
   $('styleApply').addEventListener('click',()=>emit('atlas:layer-style',{color:$('styleColor').value,weight:Number($('styleWeight').value),fillOpacity:Number($('styleFill').value)/100,opacity:Number($('styleLine').value)/100}));
   $('spatialSearch').addEventListener('input',updateAnalytics);
-  $('spatialQueryApply').addEventListener('click',()=>{const lat=Number($('spatialQueryLat').value),lng=Number($('spatialQueryLng').value);if(!validCoordinate(lat,lng)){$('spatialSummary').textContent='Enter a valid latitude and longitude.';return;}spatialPoint={lat,lng};updateAnalytics()});
+  $('spatialQueryApply').addEventListener('click',()=>{const latText=$('spatialQueryLat').value.trim(),lngText=$('spatialQueryLng').value.trim();if(!latText||!lngText){$('spatialSummary').textContent='Enter both latitude and longitude.';return;}const lat=Number(latText),lng=Number(lngText);if(!validCoordinate(lat,lng)){$('spatialSummary').textContent='Enter a valid latitude and longitude.';return;}spatialPoint={lat,lng};updateAnalytics()});
   $('spatialQueryClear').addEventListener('click',()=>{spatialPoint=null;$('spatialQueryLat').value='';$('spatialQueryLng').value='';updateAnalytics()});
   window.addEventListener('atlas:overlay-data',e=>{features=Array.isArray(e.detail?.features)?e.detail.features:[];updateAnalytics()});
   window.addEventListener('atlas:map-state',e=>{if(e.detail&&Array.isArray(e.detail.center))mapState={...mapState,...e.detail};if($('workspaceInspector'))$('workspaceInspector').checked=mapState.inspectorVisible!==false;if($('workspaceTheme'))$('workspaceTheme').value=mapState.theme||'dark'});
