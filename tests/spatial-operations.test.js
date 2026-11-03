@@ -88,7 +88,9 @@ test('density grid uses the short longitude arc across the antimeridian',()=>{
  const points=[feature({type:'Point',coordinates:[179.9,0]}),feature({type:'Point',coordinates:[-179.9,0.1]}),feature({type:'Point',coordinates:[179.95,0.05]})];
  const grid=createDensityGrid(points,8);
  assert.ok(grid.length>0);
- assert.ok(grid.some(cell=>cell.geometry.type==='MultiPolygon'));
+ const longitudes=grid.flatMap(cell=>collectGeometryPositions(cell.geometry).map(point=>point[0]));
+ assert.ok(longitudes.some(lng=>lng>179.8));
+ assert.ok(longitudes.some(lng=>lng< -179.8));
  assert.equal(grid.reduce((sum,cell)=>sum+cell.properties.count,0),3);
  for(const cell of grid)assertValidWrappedRings(cell.geometry);
 });
