@@ -23,7 +23,7 @@ test('CSV formula neutralization survives an import round trip as literal text',
  const source=[{type:'Feature',properties:{name:'+SUM(1,2)'},geometry:{type:'Point',coordinates:[1,2]}}];
  const csv=exportSpatialFile(source,'csv').content;
  const imported=parseSpatialFile('formula.csv',csv);
- assert.equal(imported.features[0].properties.name,"'+SUM(1");
+ assert.equal(imported.features[0].properties.name,"'+SUM(1,2)");
 });
 
 test('KML export emits escaped names, polygon rings and ATLAS geometry metadata',()=>{
