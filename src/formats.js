@@ -15,7 +15,7 @@ function firstDescendant(node,name){return descendants(node,name)[0]||null;}
 function parseCoordinateText(value){
   const source=String(value||'').trim();
   if(!source)return [];
-  return source.split(/\\s+/).map(token=>{
+  return source.split(/\s+/).map(token=>{
     const raw=token.split(',');
     if(raw.length<2||!raw[0].trim()||!raw[1].trim())throw new Error('KML contains an incomplete coordinate token.');
     const lng=Number(raw[0]),lat=Number(raw[1]);
