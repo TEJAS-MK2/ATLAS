@@ -27,8 +27,10 @@ test('CSV formula neutralization survives an import round trip as literal text',
 });
 
 test('CSV import rejects incomplete and invalid coordinate rows instead of silently dropping data',()=>{
- assert.throws(()=>parseSpatialFile('incomplete.csv','name,latitude,longitude\\nMissing longitude,22.5,\\n'),/CSV row 2 is missing latitude or longitude/);
- assert.throws(()=>parseSpatialFile('invalid.csv','name,latitude,longitude\\nOutside,91,88\\n'),/CSV row 2 contains invalid coordinates/);
+ const incomplete=['name,latitude,longitude','Missing longitude,22.5,'].join('\\n');
+ const invalid=['name,latitude,longitude','Outside,91,88'].join('\\n');
+ assert.throws(()=>parseSpatialFile('incomplete.csv',incomplete),/CSV row 2 is missing latitude or longitude/);
+ assert.throws(()=>parseSpatialFile('invalid.csv',invalid),/CSV row 2 contains invalid coordinates/);
 });
 
 test('KML export emits escaped names, polygon rings and ATLAS geometry metadata',()=>{
