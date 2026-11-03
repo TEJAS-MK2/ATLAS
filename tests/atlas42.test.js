@@ -19,7 +19,11 @@ test('ATLAS 4.2 release metadata and browser assets are versioned together',()=>
 test('ATLAS 4.2 PWA checks for updates without relying on the browser HTTP cache',()=>{
   assert.match(app,/updateViaCache:'none'/);
   assert.match(app,/registration\.update\(\)/);
-  assert.match(app,/controllerchange/);\n  assert.match(app,/updateReload/);\n  assert.match(app,/updateNoticeShown/);\n  assert.match(html,/id=\"updateNotice\"/);\n  assert.doesNotMatch(app,/location\.reload\(\)/);
+  assert.match(app,/controllerchange/);
+  assert.match(app,/updateReload/);
+  assert.match(app,/updateNoticeShown/);
+  assert.match(html,/id=\"updateNotice\"/);
+  assert.ok(app.includes("updateReload')?.addEventListener('click',()=>location.reload())"));
   assert.match(sw,/fetch\(request,\{cache:'no-store'\}\)/);
   assert.match(sw,/self\.clients\.claim\(\)/);
 });
