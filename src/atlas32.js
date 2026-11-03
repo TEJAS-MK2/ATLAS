@@ -1,4 +1,5 @@
 import {geometryMetrics,formatDistance,filterFeatures,validCoordinate} from './geo.js';
+import {filterFeaturesContainingPoint} from './spatial.js';
 
 export function summarizeFeatures(features=[]){
   const counts={Point:0,MultiPoint:0,LineString:0,MultiLineString:0,Polygon:0,MultiPolygon:0,GeometryCollection:0,Other:0};
@@ -31,19 +32,21 @@ const $=id=>document.getElementById(id);
 const emit=(name,detail)=>window.dispatchEvent(new CustomEvent(name,{detail}));
 function safe(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function init(){
-  const required=['spatialMetrics','spatialSearch','spatialSummary','styleColor','styleWeight','styleFill','styleLine','styleApply','workspacePanel','workspaceName','workspaceInspector','workspaceTheme','workspaceSave','workspaceList','workspaceOpenBtn','workspaceMapBtn','workspaceClose'];
+  const required=['spatialMetrics','spatialSearch','spatialSummary','spatialQueryLat','spatialQueryLng','spatialQueryApply','spatialQueryClear','styleColor','styleWeight','styleFill','styleLine','styleApply','workspacePanel','workspaceName','workspaceInspector','workspaceTheme','workspaceSave','workspaceList','workspaceOpenBtn','workspaceMapBtn','workspaceClose'];
   if(required.some(id=>!$(id)))return;
-  let features=[],mapState={center:[22.5726,88.3639],zoom:12,layer:'streets',theme:'dark',inspectorVisible:true};
+  let features=[],spatialPoint=null,mapState={center:[22.5726,88.3639],zoom:12,layer:'streets',theme:'dark',inspectorVisible:true};
   let profiles=readProfiles();
   function readProfiles(){try{const parsed=JSON.parse(localStorage.getItem('atlas.workspaces')||'[]');return Array.isArray(parsed)?parsed.map(normalizeWorkspace).filter(Boolean).slice(0,20):[]}catch{return[]}}
   function persist(){try{localStorage.setItem('atlas.workspaces',JSON.stringify(profiles));return true}catch{return false}}
   function updateAnalytics(){
-    const visible=filterFeatures(features,$('spatialSearch').value);
+    const textFiltered=filterFeatures(features,$('spatialSearch').value);
+    const visible=spatialPoint?filterFeaturesContainingPoint(textFiltered,spatialPoint):textFiltered;
     const summary=summarizeFeatures(visible);
     const counts=Object.entries(summary.counts).filter(([,n])=>n).map(([type,n])=>type+': '+n).join(' · ')||'No geometry types';
     $('spatialMetrics').textContent=summary.total+' features · '+counts;
     $('spatialSummary').textContent=summary.total+' filtered · '+formatDistance(summary.lengthMeters)+' total line length · '+(summary.areaSquareMeters/1e6).toFixed(3)+' km² polygon area';
     if(summary.bounds){const b=summary.bounds;$('spatialSummary').textContent+=' · Bounds '+b.south.toFixed(4)+', '+b.west.toFixed(4)+' to '+b.north.toFixed(4)+', '+b.east.toFixed(4);}
+    if(spatialPoint)$('spatialSummary').textContent+=' · Selected at '+spatialPoint.lat.toFixed(4)+', '+spatialPoint.lng.toFixed(4);
   }
   function renderProfiles(){
     $('workspaceList').innerHTML=profiles.length?profiles.map((p,i)=>'<div class="saved-view-row"><button type="button" class="saved-view-open" data-atlas-restore="'+i+'"><b>'+safe(p.name)+'</b><small>'+safe(p.layer)+' · zoom '+p.zoom+' · '+safe(p.theme)+'</small></button><button type="button" class="saved-view-delete" data-atlas-delete="'+i+'" aria-label="Delete '+safe(p.name)+'">×</button></div>').join(''):'<p class="empty-note">No saved workspace profiles yet.</p>';
@@ -78,6 +81,8 @@ function init(){
   $('styleLine').addEventListener('input',()=>$('styleLineValue').textContent=$('styleLine').value+'%');
   $('styleApply').addEventListener('click',()=>emit('atlas:layer-style',{color:$('styleColor').value,weight:Number($('styleWeight').value),fillOpacity:Number($('styleFill').value)/100,opacity:Number($('styleLine').value)/100}));
   $('spatialSearch').addEventListener('input',updateAnalytics);
+  $('spatialQueryApply').addEventListener('click',()=>{const latText=$('spatialQueryLat').value.trim(),lngText=$('spatialQueryLng').value.trim();if(!latText||!lngText){$('spatialSummary').textContent='Enter both latitude and longitude.';return;}const lat=Number(latText),lng=Number(lngText);if(!validCoordinate(lat,lng)){$('spatialSummary').textContent='Enter a valid latitude and longitude.';return;}spatialPoint={lat,lng};updateAnalytics()});
+  $('spatialQueryClear').addEventListener('click',()=>{spatialPoint=null;$('spatialQueryLat').value='';$('spatialQueryLng').value='';updateAnalytics()});
   window.addEventListener('atlas:overlay-data',e=>{features=Array.isArray(e.detail?.features)?e.detail.features:[];updateAnalytics()});
   window.addEventListener('atlas:map-state',e=>{if(e.detail&&Array.isArray(e.detail.center))mapState={...mapState,...e.detail};if($('workspaceInspector'))$('workspaceInspector').checked=mapState.inspectorVisible!==false;if($('workspaceTheme'))$('workspaceTheme').value=mapState.theme||'dark'});
   renderProfiles();updateAnalytics();

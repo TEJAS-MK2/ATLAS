@@ -1,7 +1,7 @@
 name: ATLAS continuous integration
 on:
   pull_request:
-    branches: [main]
+    branches: [main, feature/atlas-4.0-spatial-foundation]
   push:
     branches: [main]
   workflow_dispatch:
