@@ -180,7 +180,7 @@ test('ATLAS 3.5 release metadata and PWA cache version stay synchronized',()=>{
  assert.equal(packageJson.version,'3.6.0');
  assert.match(html,/<title>ATLAS 3\.6 — Geospatial Field Console<\/title>/);
  assert.match(readme,/<h1 align="center">ATLAS 3\.6 · Geospatial Field Console<\/h1>/);
- assert.match(serviceWorker,/atlas-shell-v9/);
+ assert.match(serviceWorker,/atlas-shell-v10/);
  assert.doesNotMatch(serviceWorker,/atlas-shell-v7/);
 });
 
@@ -197,7 +197,7 @@ test('ATLAS 3.6 release metadata and PWA cache are synchronized',()=>{
   assert.ok(html.includes('<title>ATLAS 3.6 — Geospatial Field Console</title>'));
   assert.ok(readme.includes('ATLAS 3.6 · Geospatial Field Console'));
   assert.ok(html.includes('ATLAS ENGINE <b>v3.6.0</b>'));
-  assert.ok(serviceWorker.includes('atlas-shell-v9'));
+  assert.ok(serviceWorker.includes('atlas-shell-v10'));
 });
 
 
@@ -216,4 +216,19 @@ test('ATLAS 4.0 geospatial interchange exposes KML GPX and CSV controls',()=>{
  assert.match(html,/\.kml/);assert.match(html,/\.gpx/);assert.match(html,/\.csv/);
  assert.match(html,/id="overlayExportFormat"/);
  assert.match(app,/parseSpatialFile/);assert.match(app,/exportSpatialFile/);
+});
+
+
+test('ATLAS 4.0 PWA precaches every local module required by the app',()=>{
+ assert.match(serviceWorker,/atlas-shell-v10/);
+ for(const path of ['./src/spatial.js','./src/spatial-operations.js','./src/formats.js'])assert.ok(serviceWorker.includes(path),path);
+ assert.match(serviceWorker,/EXTERNAL_SHELL/);
+ assert.match(serviceWorker,/externalShell/);
+});
+test('ATLAS 4.0 layer replacement clears stale geometry edit inputs',()=>{
+ assert.match(atlas32,/selectedFeatureIndex=-1;\['spatialEditFeature','spatialEditVertex','spatialEditLat','spatialEditLng'\]/);
+});
+test('ATLAS 4.0 import affordance names all supported map formats',()=>{
+ assert.match(html,/Import map file/);
+ assert.match(app,/geoOverlay\?\.getBounds/);
 });
