@@ -230,14 +230,16 @@ test('ATLAS KML round trips preserve MultiPolygon geometry type and coordinates'
  expect(geometry.coordinates).toHaveLength(2);
 });
 
-test('ATLAS 4.0 analysis clear removes the rendered Leaflet overlay',async({page})=>{
+test('ATLAS 4.0 analysis clear removes the actual Leaflet layer',async({page})=>{
  await page.locator('#overlayBtn').click();
  await page.locator('#spatialQueryLat').fill('22.5726');
  await page.locator('#spatialQueryLng').fill('88.3639');
+ await page.evaluate(()=>{window.__atlasAnalysisState=[];window.addEventListener('atlas:analysis-rendered',e=>window.__atlasAnalysisState.push({event:'rendered',visible:e.detail.visible,mode:e.detail.mode}),{once:true});window.addEventListener('atlas:analysis-cleared',e=>window.__atlasAnalysisState.push({event:'cleared',removed:e.detail.removed,visible:e.detail.visible}),{once:true})});
  await page.locator('#spatialBufferCreate').click();
- await expect(page.locator('#map .leaflet-overlay-pane path').first()).toBeVisible();
+ await expect.poll(()=>page.evaluate(()=>window.__atlasAnalysisState?.[0]?.visible)).toBe(true);
  await page.locator('#spatialAnalysisClear').click();
- await expect(page.locator('#map .leaflet-overlay-pane path')).toHaveCount(0);
+ await expect.poll(()=>page.evaluate(()=>window.__atlasAnalysisState?.[1]?.removed)).toBe(true);
+ await expect(page.locator('#spatialOperationsStatus')).toContainText('Analysis overlay cleared');
 });
 
 
