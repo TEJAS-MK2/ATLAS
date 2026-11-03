@@ -12,7 +12,7 @@ npm run test:e2e
 node scripts/smoke-test.mjs
 ```
 
-- `npm test` runs the Node.js built-in test runner, including geospatial, spatial-query, spatial-operations, spatial-analytics, history-window, UI-contract and security-contract tests.
+- `npm test` runs the Node.js built-in test runner, including geospatial, spatial-query, spatial-operations, file-format, spatial-analytics, history-window, UI-contract and security-contract tests.
 - `npm run check` runs syntax checks on the main application modules.
 - `npm run test:e2e` runs Playwright Chromium tests against a local static server. The suite checks map initialization, command palette behaviour, layer controls, GeoJSON import validation and inspection, saved map view persistence, and narrow mobile overflow.
 - `scripts/smoke-test.mjs` checks the published site and required production assets when network access is available; it also rejects duplicate resource entries.
