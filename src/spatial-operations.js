@@ -76,8 +76,8 @@ export function createDensityGrid(features,cellCount=12){
   const points=features.flatMap(feature=>feature?.type==='Feature'?collectGeometryPositions(feature.geometry):[]);
   if(points.length<2)return [];
   const size=Math.max(2,Math.min(32,Math.floor(cellCount)||12));
-  const lats=points.map(p=>p[1]),lngs=points.map(p=>p[0]);
-  const south=Math.min(...lats),north=Math.max(...lats),west=Math.min(...lngs),east=Math.max(...lngs);
+  let south=Infinity,north=-Infinity,west=Infinity,east=-Infinity;
+  for(const [lng,lat] of points){south=Math.min(south,lat);north=Math.max(north,lat);west=Math.min(west,lng);east=Math.max(east,lng);}
   const latSpan=Math.max(north-south,0.0001),lngSpan=Math.max(east-west,0.0001);
   const rows=Math.min(size,Math.max(2,Math.ceil(size*latSpan/Math.max(latSpan,lngSpan))));
   const cols=Math.min(size,Math.max(2,Math.ceil(size*lngSpan/Math.max(latSpan,lngSpan))));
