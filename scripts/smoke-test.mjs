@@ -48,7 +48,7 @@ async function checkResource(resource) {
 
 const bodies = await Promise.all(resources.map(checkResource));
 const html = bodies[0];
-for (const marker of ['<title>ATLAS 4.3 — Spatial Intelligence Workspace</title>', 'ATLAS ENGINE <b>v4.3.0</b>', 'data-atlas-build="4.3.0"', 'id="updateNotice"', 'href="./styles.css?v=4.3.0"', 'src="./app.js?v=4.3.0"', 'id="map"', 'id="routeGo"', 'id="nearbyGo"', 'id="trackStartStop"', 'id="roomCreate"', 'id="globeModal"', 'id="workspacePanel"', 'id="spatialMetrics"', 'id="styleApply"', 'id="atlasMonitorPanel"', 'id="atlasHistoryPanel"', 'id="atlasDashboardPanel"', 'id="monitorStart"', 'id="spatialBufferCreate"', 'id="spatialHeatmapCreate"', 'id="overlayExportFormat"', 'property="og:image"', 'name="twitter:card"']) {
+for (const marker of ['<title>ATLAS 4.3 — Spatial Intelligence Workspace</title>', 'ATLAS ENGINE <b>v4.3.0</b>', 'data-atlas-build="4.3.0"', 'id="updateNotice"', 'href="./styles.css?v=4.3.0"', 'href="./styles-v43.css?v=4.3.0"', 'src="./app.js?v=4.3.0"', 'id="map"', 'id="routeGo"', 'id="nearbyGo"', 'id="trackStartStop"', 'id="roomCreate"', 'id="globeModal"', 'id="workspacePanel"', 'id="spatialMetrics"', 'id="styleApply"', 'id="atlasMonitorPanel"', 'id="atlasHistoryPanel"', 'id="atlasDashboardPanel"', 'id="monitorStart"', 'id="spatialBufferCreate"', 'id="spatialHeatmapCreate"', 'id="overlayExportFormat"', 'property="og:image"', 'name="twitter:card"']) {
   if (!html.includes(marker)) throw new Error(`Homepage is missing required interface element ${marker}`);
 }
 console.log(`ATLAS production smoke test passed: ${resources.length} resources checked at ${base.href}`);
