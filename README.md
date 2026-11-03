@@ -42,13 +42,19 @@ ATLAS is a responsive, browser-based GIS workspace. The map remains the primary 
 | Explore | Interactive map, five basemaps, place search, cursor coordinates and map-center inspection |
 | Navigate | Driving routes, nearby points of interest, distance measurement and Street View handoff |
 | Analyze | Validated GeoJSON import/export, searchable feature inspector, line length, polygon area, spatial bounds and live feature summaries |
-| Organize | Saved places, up to 30 named map views, reusable workspace profiles, map sharing and seven-day guest map rooms |
+| Organize | Saved places, up to 30 named map views, reusable workspace profiles, configurable dashboard widgets, map sharing and seven-day guest map rooms |
 | Field tools | User-initiated device location, opt-in GPS track recording and 3D Earth explorer |
-| Platform | Responsive interface, dark/light appearance, customizable workspace profiles, layer styling studio, PWA shell and offline navigation fallback |
+| Platform | Responsive interface, dark/light appearance, customizable workspace profiles and dashboard widgets, layer styling studio, local historical analytics, opt-in geospatial change monitoring, PWA shell and offline navigation fallback |
 | Engineering | Unit tests, Chromium browser tests, production smoke checks and CodeQL analysis |
 ## Interface
 The ATLAS Field Console uses a restrained geospatial operations-console visual language: a high-contrast map canvas, quiet navigation, tactile controls, clear selected states and a focused intelligence inspector. Layouts adapt across desktop, tablet and narrow mobile viewports. No fabricated live traffic or telemetry is presented.
 See [the design system](./docs/DESIGN_SYSTEM.md).
+## ATLAS 3.3 capabilities
+- **Geospatial change watch:** opt-in, active-tab polling of OpenStreetMap/Overpass within a selected radius; newly observed objects are surfaced as in-session alerts. This is not a guaranteed real-time or emergency feed.
+- **Route intelligence:** compare up to three public OSRM driving alternatives by distance and estimated duration.
+- **Historical analytics:** locally stored map/route activity summaries and hourly charts.
+- **Dashboard personalization:** show/hide intelligence widgets, stored in browser-local preferences.
+
 ## ATLAS 3.2 capabilities
 - **Spatial analytics:** summarize loaded GeoJSON feature types, line length, polygon area and spatial bounds; filter the active feature set.
 - **Layer styling studio:** tune overlay color, line width, fill opacity and line opacity without changing source GeoJSON.
