@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — ATLAS 4.0 foundation
+
+- Add reusable local spatial query primitives for GeoJSON geometry bounds, antimeridian-aware bounding-box intersection, and point containment in Polygon/MultiPolygon geometries with hole handling.
+- Add focused regression coverage for invalid extents, nested geometry collections, polygon boundaries, holes, multipolygons, and feature selection.
+
 ## 3.6.0 — Field Console refinement
 
 - Refine map-first interface hierarchy, control states and surface consistency.
