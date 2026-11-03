@@ -1,6 +1,13 @@
 # Changelog
 
-## 3.3.0 — Unreleased
+## 3.4.0 — Field Console refresh
+
+- Refined the full application shell, navigation, search, map controls, inspector cards, dialogs and floating panels with a consistent visual system.
+- Reworked phone navigation into a compact four-tool dock and tightened map overlays for small screens.
+- Improved focus visibility, touch target consistency, hover/active feedback, theme surfaces and reduced-motion handling.
+- Updated the application version and service-worker shell cache for the 3.4 release.
+
+## 3.3.0 — Geospatial intelligence
 
 - Added opt-in geospatial change monitoring using active-tab OpenStreetMap/Overpass polling, with newly observed object alerts and adjustable radius/category/interval.
 - Added route alternative comparison using public OSRM route alternatives.
