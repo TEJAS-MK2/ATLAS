@@ -5,14 +5,20 @@ export function diffObservedObjects(previous,current){
   return (current||[]).filter(item=>item&&item.id!==undefined&&!known.has(String(item.id))).map(item=>({...item,id:String(item.id)}));
 }
 export function aggregateHistory(entries=[],now=Date.now()){
-  const cutoff=now-24*60*60*1000;
-  const recent=entries.filter(x=>Number.isFinite(x.at)&&x.at>=cutoff&&x.at<=now);
+  const hourMs=60*60*1000;
+  const cutoff=now-24*hourMs;
+  const source=Array.isArray(entries)?entries:[];
+  const recent=source.filter(x=>x&&Number.isFinite(x.at)&&x.at>=cutoff&&x.at<=now);
   const views=recent.filter(x=>x.type==='view');
   const routes=recent.filter(x=>x.type==='route');
   const layers=[...new Set(views.map(x=>x.layer).filter(Boolean))];
   const avgZoom=views.length?views.reduce((n,x)=>n+(Number(x.zoom)||0),0)/views.length:0;
+  // The chart is a rolling 24-hour timeline, not 24 buckets keyed by wall-clock hour.
   const buckets=Array.from({length:24},(_,hour)=>({hour,count:0}));
-  for(const item of recent){const hour=new Date(item.at).getHours();buckets[hour].count++}
+  for(const item of recent){
+    const hour=Math.min(23,Math.floor((item.at-cutoff)/hourMs));
+    buckets[hour].count++;
+  }
   return {total:recent.length,views:views.length,routes:routes.length,layers,avgZoom,buckets};
 }
 export function normalizeMonitorSettings(value={}){
