@@ -183,3 +183,17 @@ test('ATLAS 3.5 release metadata and PWA cache version stay synchronized',()=>{
  assert.match(serviceWorker,/atlas-shell-v8/);
  assert.doesNotMatch(serviceWorker,/atlas-shell-v7/);
 });
+
+test('ATLAS 3.6 field-console refinement preserves touch targets and reduced-motion support',()=>{
+  assert.match(css,/ATLAS 3\\.6 \\/ FIELD CONSOLE/);
+  assert.match(css,/min-height:44px/);
+  assert.match(css,/env\\(safe-area-inset-bottom\\)/);
+  assert.match(css,/prefers-reduced-motion:reduce/);
+  assert.match(css,/focus-visible/);
+});
+test('ATLAS 3.6 release metadata and PWA cache are synchronized',()=>{
+  assert.equal(packageJson.version,'3.6.0');
+  assert.match(html,/<title>ATLAS 3\\.6 — Geospatial Field Console<\\/title>/);
+  assert.match(readme,/<h1 align="center">ATLAS 3\\.6 · Geospatial Field Console<\\/h1>/);
+  assert.match(serviceWorker,/atlas-shell-v9/);
+});
