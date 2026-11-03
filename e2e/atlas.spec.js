@@ -30,6 +30,8 @@ test('ATLAS 3.2 spatial analytics and layer styling work on imported GeoJSON',as
   await page.locator('#overlayBtn').click();
   await expect(page.locator('#spatialMetrics')).toContainText('2 features');
   await expect(page.locator('#spatialMetrics')).toContainText('Polygon: 1');
+  await page.locator('#spatialQueryApply').click();
+  await expect(page.locator('#spatialSummary')).toContainText('Enter both latitude and longitude.');
   await page.locator('#spatialQueryLat').fill('22.575');
   await page.locator('#spatialQueryLng').fill('88.365');
   await page.locator('#spatialQueryApply').click();
