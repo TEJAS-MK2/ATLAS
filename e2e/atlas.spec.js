@@ -139,11 +139,23 @@ test('ATLAS 4.0 creates a geodesic buffer and clears analysis overlays',async({p
  await page.locator('#overlayBtn').click();
  await page.locator('#spatialQueryLat').fill('22.5726');
  await page.locator('#spatialQueryLng').fill('88.3639');
- await page.evaluate(()=>{window.__atlasAnalysis=null;window.addEventListener('atlas:analysis-rendered',e=>window.__atlasAnalysis=e.detail,{once:true})});
+ await page.evaluate(()=>{
+  window.__atlasAnalysis=null;
+  window.__atlasAnalysisLayer=null;
+  const originalGeoJSON=L.geoJSON;
+  L.geoJSON=function(data,...args){
+   const layer=originalGeoJSON.call(this,data,...args);
+   if(data?.features?.some(feature=>feature.properties?.atlasRole==='buffer'))window.__atlasAnalysisLayer=layer;
+   return layer;
+  };
+  window.addEventListener('atlas:analysis-rendered',e=>window.__atlasAnalysis=e.detail,{once:true});
+ });
  await page.locator('#spatialBufferCreate').click();
  await expect(page.locator('#spatialOperationsStatus')).toContainText('500 m geodesic buffer');
  await expect.poll(()=>page.evaluate(()=>window.__atlasAnalysis?.features?.[0]?.properties?.atlasRole)).toBe('buffer');
+ await expect.poll(()=>page.evaluate(()=>Boolean(window.__atlasAnalysisLayer?._map))).toBe(true);
  await page.locator('#spatialAnalysisClear').click();
+ await expect.poll(()=>page.evaluate(()=>Boolean(window.__atlasAnalysisLayer&&!window.__atlasAnalysisLayer._map))).toBe(true);
 });
 test('ATLAS 4.0 generates a density grid from loaded point features',async({page})=>{
  const file={name:'points.geojson',mimeType:'application/geo+json',buffer:Buffer.from(JSON.stringify({type:'FeatureCollection',features:[{type:'Feature',properties:{name:'A'},geometry:{type:'Point',coordinates:[88.36,22.57]}},{type:'Feature',properties:{name:'B'},geometry:{type:'Point',coordinates:[88.37,22.58]}}]}))};
