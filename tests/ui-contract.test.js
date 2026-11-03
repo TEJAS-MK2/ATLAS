@@ -178,22 +178,24 @@ test('historical activity chart uses a rolling window and escapes persisted labe
 
 test('ATLAS 3.5 release metadata and PWA cache version stay synchronized',()=>{
  assert.equal(packageJson.version,'3.6.0');
- assert.match(html,/<title>ATLAS 3\.5 — Geospatial Field Console<\/title>/);
- assert.match(readme,/<h1 align="center">ATLAS 3\.5 · Geospatial Field Console<\/h1>/);
+ assert.match(html,/<title>ATLAS 3\.6 — Geospatial Field Console<\/title>/);
+ assert.match(readme,/<h1 align="center">ATLAS 3\.6 · Geospatial Field Console<\/h1>/);
  assert.match(serviceWorker,/atlas-shell-v9/);
  assert.doesNotMatch(serviceWorker,/atlas-shell-v7/);
 });
 
-test('ATLAS 3.6 field-console refinement preserves touch targets and reduced-motion support',()=>{
-  assert.match(css,/ATLAS 3\\.6 \\/ FIELD CONSOLE/);
-  assert.match(css,/min-height:44px/);
-  assert.match(css,/env\\(safe-area-inset-bottom\\)/);
-  assert.match(css,/prefers-reduced-motion:reduce/);
-  assert.match(css,/focus-visible/);
+
+test('ATLAS 3.6 field-console refinement preserves touch targets and accessibility',()=>{
+  assert.ok(css.includes('ATLAS 3.6 / FIELD CONSOLE'));
+  assert.ok(css.includes('min-height:44px'));
+  assert.ok(css.includes('env(safe-area-inset-bottom)'));
+  assert.ok(css.includes('prefers-reduced-motion:reduce'));
+  assert.ok(css.includes('focus-visible'));
 });
 test('ATLAS 3.6 release metadata and PWA cache are synchronized',()=>{
   assert.equal(packageJson.version,'3.6.0');
-  assert.match(html,/<title>ATLAS 3\\.6 — Geospatial Field Console<\\/title>/);
-  assert.match(readme,/<h1 align="center">ATLAS 3\\.6 · Geospatial Field Console<\\/h1>/);
-  assert.match(serviceWorker,/atlas-shell-v9/);
+  assert.ok(html.includes('<title>ATLAS 3.6 — Geospatial Field Console</title>'));
+  assert.ok(readme.includes('ATLAS 3.6 · Geospatial Field Console'));
+  assert.ok(html.includes('ATLAS ENGINE <b>v3.6.0</b>'));
+  assert.ok(serviceWorker.includes('atlas-shell-v9'));
 });
