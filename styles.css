@@ -710,7 +710,7 @@ body.light-ui .atlas33-quickbar{background:#f7fcf8ed;border-color:#c5d9ce;box-sh
  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
 
-/* ATLAS 3.6 / FIELD CONSOLE — hierarchy, touch ergonomics and resilient surfaces */
+/* ATLAS 4.0 / FIELD CONSOLE — hierarchy, touch ergonomics and resilient surfaces */
 :root{--atlas-radius-sm:10px;--atlas-radius-md:14px;--atlas-radius-lg:20px;--atlas-ease:cubic-bezier(.2,.75,.25,1)}
 :where(button,input,select,textarea){font:inherit}
 :where(button,.tool,.action-row,.map-control,.icon-btn,.layer-row){-webkit-tap-highlight-color:transparent}
