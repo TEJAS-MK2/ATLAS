@@ -14,7 +14,7 @@ ATLAS is a static, browser-first geospatial application. The GitHub Pages site s
 - `src/spatial.js`: local spatial query primitives for geometry extents, antimeridian-aware bounds intersection, and point-in-polygon selection.
 - `src/spatial-operations.js`: immutable geometry vertex editing, geodesic point buffers, and local density-grid generation.
 - `src/formats.js`: browser-local KML, GPX, CSV and GeoJSON import/export adapters.
-- `sw.js` and `manifest.webmanifest`: PWA install/offline behaviour.
+- `sw.js` and `manifest.webmanifest`: versioned PWA shell caching, local module precaching, and a narrow allowlist of required CDN libraries. Map tiles and live provider responses remain network-only.
 - `supabase/functions/atlas-rooms`: server-side room operations, when deployed in the associated Supabase project.
 - `tests/` and `scripts/`: automated tests, static checks, and production smoke verification.
 
@@ -40,4 +40,4 @@ The project intentionally has a lightweight Node.js toolchain. `npm test` runs N
 
 ## Operational limitations
 
-Public geospatial providers may rate-limit requests or change availability. Browser geolocation depends on device permissions and secure-context support. Offline behaviour is limited to cached application assets and does not imply offline map-tile coverage. Real-device acceptance remains necessary for GPS, PWA installation, and offline scenarios.
+Public geospatial providers may rate-limit requests or change availability. Browser geolocation depends on device permissions and secure-context support. Offline behaviour covers the cached application shell, its local modules and allowlisted core CDN libraries; it does not imply offline map-tile or provider-data coverage. Real-device acceptance remains necessary for GPS, PWA installation, and offline scenarios.
