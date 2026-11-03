@@ -1,9 +1,9 @@
 name: ATLAS continuous integration
 on:
   pull_request:
-    branches: [main, feature/atlas-4.0-spatial-foundation]
+    branches: [main, feature/atlas-4.0-spatial-foundation, feature/atlas-4.0-advanced-gis]
   push:
-    branches: [main, feature/atlas-4.0-advanced-gis]
+    branches: [main, feature/atlas-4.0-advanced-gis, feature/atlas-4.0-release-hardening]
   workflow_dispatch:
 permissions:
   contents: read
