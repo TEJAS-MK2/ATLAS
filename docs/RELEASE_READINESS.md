@@ -1,14 +1,15 @@
 # ATLAS 4.0 release readiness
 
-This checklist is maintained on the isolated `work/atlas-4.0-ci-repair` branch. It is not a release approval and does not authorize merging or deployment.
+This checklist tracks the ATLAS 4.0 stacked release. It is an evidence ledger, not a substitute for passing checks or device acceptance.
 
 ## Change-control boundaries
 
-- [x] Work is isolated from `main`.
-- [x] No pull request was created as part of this work.
-- [x] No pull request was merged.
-- [x] No production deployment was initiated.
-- [ ] Do not merge or deploy until the release gates below are reviewed and explicitly authorized.
+- [x] No new pull request was created during final hardening.
+- [x] Existing PR #13 (spatial foundation) and PR #14 (advanced GIS) were merged in dependency order.
+- [x] GitHub Pages test, deploy and smoke jobs passed after PR #13 merge.
+- [ ] GitHub Pages test, deploy and smoke jobs must pass after PR #14 merge.
+- [ ] PR #15 release-hardening must pass CI and CodeQL before merge.
+- [ ] Do not tag or announce a release until the remaining acceptance gates are reviewed.
 
 ## Automated verification
 
@@ -22,7 +23,7 @@ This checklist is maintained on the isolated `work/atlas-4.0-ci-repair` branch. 
 - [x] Playwright Chromium, Firefox and WebKit suites pass.
 - [ ] Production smoke test passes against the candidate build.
 
-**Current verification status:** automated CI is passing on current branch head `5721d664cb7685f93307555e4de52d2197973c33`. CI run [41701455044](https://github.com/TEJAS-MK2/ATLAS/actions/runs/41701455044) completed successfully, including dependency installation, high-severity npm audit gate, unit tests, syntax checks, Playwright browser installation, and E2E tests. CodeQL run [41701455113](https://github.com/TEJAS-MK2/ATLAS/actions/runs/41701455113) also completed successfully. These results do not replace physical-device acceptance, manual security review, or production smoke testing.
+**Current verified PR #14 head:** `bf46c188410e9d9d065b0f0b75a92338e9c88a21`. CI run [41705818701](https://github.com/TEJAS-MK2/ATLAS/actions/runs/41705818701) passed: 92/92 unit tests, syntax checks and 20/20 Playwright tests; npm reported 0 vulnerabilities. CodeQL run [41705818695](https://github.com/TEJAS-MK2/ATLAS/actions/runs/41705818695) passed. The PR #14 Pages deployment and smoke workflow is still a separate gate. The PR #15 candidate must be validated on its final merge commit.
 
 ## GIS acceptance
 
@@ -64,4 +65,4 @@ This checklist is maintained on the isolated `work/atlas-4.0-ci-repair` branch. 
 
 ## Release decision
 
-**HOLD.** Automated CI for the corrected branch and real-device acceptance are still outstanding. This document intentionally records unverified gates instead of marking them complete.
+**HOLD for final release certification.** PR #13 and #14 are merged; PR #15 remains pending final CI/CodeQL and Pages verification. Real-device, accessibility, manual security and GIS fixture acceptance remain outstanding.
