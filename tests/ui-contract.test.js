@@ -8,6 +8,7 @@ const css=readFileSync(new URL('../styles.css',import.meta.url),'utf8');
 const readme=readFileSync(new URL('../README.md',import.meta.url),'utf8');
 const smoke=readFileSync(new URL('../scripts/smoke-test.mjs',import.meta.url),'utf8');
 const atlas33=readFileSync(new URL('../src/atlas33.js',import.meta.url),'utf8');
+const atlas32=readFileSync(new URL('../src/atlas32.js',import.meta.url),'utf8');
 const packageJson=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8'));
 const serviceWorker=readFileSync(new URL('../sw.js',import.meta.url),'utf8');
 
