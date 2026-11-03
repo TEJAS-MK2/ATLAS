@@ -44,3 +44,12 @@ test('history aggregation safely handles non-array input and malformed entries',
  assert.equal(result.total,0);
  assert.equal(result.buckets.reduce((sum,bucket)=>sum+bucket.count,0),0);
 });
+
+test('monitor settings tolerate null or malformed stored values',()=>{
+ assert.deepEqual(normalizeMonitorSettings(null),{radius:1000,interval:5,category:'amenity'});
+ assert.deepEqual(normalizeMonitorSettings({radius:null,interval:null,category:null}),{radius:1000,interval:2,category:'amenity'});
+});
+test('change watch ignores missing and null object identifiers',()=>{
+ const fresh=diffObservedObjects(new Set(),[{id:null},{name:'missing id'},{id:'node/9'}]);
+ assert.deepEqual(fresh.map(item=>item.id),['node/9']);
+});
