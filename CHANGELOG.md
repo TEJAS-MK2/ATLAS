@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — ATLAS 4.0 data interoperability
+
+- Add KML, GPX and CSV coordinate-table import/export alongside GeoJSON.
+- Document format fidelity: GPX exports polygon boundaries as tracks; CSV exports coordinate rows without topology.
+- Add regression coverage for KML, GPX and CSV exports and format dispatch.
+
 ## Unreleased — ATLAS 4.0 Advanced GIS
 
 - Add immutable GeoJSON vertex editing, geodesic point buffers and browser-local density grid generation.
