@@ -12,7 +12,7 @@ const workflow=readFileSync(resolve(root,'.github/workflows/pages.yml'),'utf8');
 
 test('all local HTML assets exist in the published repository',()=>{
   const refs=[...html.matchAll(/(?:src|href)="(\.\/[^"]+)"/g)].map(match=>match[1]);
-  for(const ref of refs)assert.ok(existsSync(resolve(root,ref.slice(2))),`missing local asset: ${ref}`);
+  for(const ref of refs){const localPath=ref.split('?')[0];assert.ok(existsSync(resolve(root,localPath.slice(2))),`missing local asset: ${ref}`);}
 });
 
 test('PWA manifest declares correctly sized install icons',()=>{
@@ -26,7 +26,7 @@ test('PWA manifest declares correctly sized install icons',()=>{
 test('offline fallback is limited to document navigations',()=>{
   assert.match(worker,/request\.mode==='navigate'/);
   assert.match(worker,/if\(cached\)return cached/);
-  assert.match(worker,/fetch\(request\)/);
+  assert.match(worker,/fetch\(request,\{cache:'no-store'\}\)/);
 });
 
 test('Pages deployment checks out source before packaging and runs tests first',()=>{
