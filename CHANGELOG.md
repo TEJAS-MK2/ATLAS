@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.6.0 — Field Console refinement
+
+- Refine map-first interface hierarchy, control states and surface consistency.
+- Improve touch targets, mobile safe-area spacing and floating-panel scrolling.
+- Strengthen keyboard focus visibility and reduced-motion handling.
+- Preserve existing map tools and browser-local privacy boundaries.
+
+
 ## 3.5.0 — Reliability and quality hardening
 
 - Corrected historical activity analytics to use a rolling 24-hour timeline instead of grouping events by wall-clock hour.
