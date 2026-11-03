@@ -210,3 +210,10 @@ test('ATLAS 4.0 advanced GIS controls and map operations are connected',()=>{
  assert.match(app,/atlas:analysis-overlay/);
  assert.match(app,/atlas:geometry-edit/);
 });
+
+
+test('ATLAS 4.0 geospatial interchange exposes KML GPX and CSV controls',()=>{
+ assert.match(html,/\.kml/);assert.match(html,/\.gpx/);assert.match(html,/\.csv/);
+ assert.match(html,/id="overlayExportFormat"/);
+ assert.match(app,/parseSpatialFile/);assert.match(app,/exportSpatialFile/);
+});
