@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.3.0 — Unreleased
+
+- Added opt-in geospatial change monitoring using active-tab OpenStreetMap/Overpass polling, with newly observed object alerts and adjustable radius/category/interval.
+- Added route alternative comparison using public OSRM route alternatives.
+- Added browser-local historical map and route analytics with hourly activity chart.
+- Added customizable inspector dashboard widgets and a refreshed responsive Field Console interface.
+- Added focused unit, UI contract, and Playwright coverage for ATLAS 3.3.
+
+
 Notable project changes are recorded here. Dates and entries are added when changes are released; this file is not an exhaustive commit history.
 
 ## Unreleased
