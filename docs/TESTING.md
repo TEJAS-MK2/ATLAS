@@ -14,7 +14,7 @@ node scripts/smoke-test.mjs
 
 - `npm test` runs the Node.js built-in test runner, including geospatial, spatial-analytics, history-window, UI-contract and security-contract tests.
 - `npm run check` runs syntax checks on the main application modules.
-- `npm run test:e2e` runs Playwright Chromium tests against a local static server. The suite checks map initialization, command palette behaviour, layer controls, GeoJSON import validation and inspection, saved map view persistence, and narrow mobile overflow.
+- `npm run test:e2e` runs Playwright Chromium tests against a local static server. The suite checks map initialization, command palette behaviour, layer controls, GeoJSON import validation and inspection, saved map view persistence, narrow mobile overflow, granted/denied geolocation permissions, GPS session lifecycle, and valid GeoJSON export for a single GPS fix.
 - `scripts/smoke-test.mjs` checks the published site and required production assets when network access is available; it also rejects duplicate resource entries.
 
 GitHub Actions runs unit tests, syntax checks, and browser tests before GitHub Pages deployment, then performs a production smoke check. CodeQL separately analyzes JavaScript/TypeScript.
