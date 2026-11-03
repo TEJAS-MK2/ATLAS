@@ -18,7 +18,11 @@ async function cacheExternalShell(){
   }));
 }
 
-self.addEventListener('message',event=>{\n  if(event.data?.type==='SKIP_WAITING')self.skipWaiting();\n});\n\nself.addEventListener('install',event=>{
+self.addEventListener('message',event=>{
+  if(event.data?.type==='SKIP_WAITING')self.skipWaiting();
+});
+
+self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE)
     .then(cache=>cache.addAll(SHELL))
     .then(cacheExternalShell)

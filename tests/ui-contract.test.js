@@ -180,7 +180,7 @@ test('historical activity chart uses a rolling window and escapes persisted labe
 test('ATLAS 4.0 release metadata and PWA cache version stay synchronized',()=>{
  assert.equal(packageJson.version,'4.2.0');
  assert.match(html,/<title>ATLAS 4\.2 — Spatial Intelligence Workspace<\/title>/);
- assert.match(readme,/<h1 align="center">ATLAS 4\.0 · Geospatial Field Console<\/h1>/);
+ assert.match(readme,/<h1 align="center">ATLAS 4\.2 · Spatial Intelligence Workspace<\/h1>/);
  assert.match(serviceWorker,/atlas-shell-v11/);
  assert.doesNotMatch(serviceWorker,/atlas-shell-v7/);
 });
