@@ -16,7 +16,7 @@ Repository tree, application shell, base styles, app and room modules, service w
 3. **PWA cache invalidation (medium):** add a distinct 4.3 stylesheet and bump the shell cache to v12 so installed sessions fetch the new visual layer. Preserve network-first refresh and offline fallback.
 4. **Place-search race (low):** overlapping Photon requests could return out of order and overwrite results for a newer query. The 4.3 candidate invalidates stale responses when input changes.
 5. **CSS cascade complexity (medium):** the existing styles.css is approximately 101 KB with hundreds of selector blocks and repeated selectors from incremental releases. Add a separately versioned design layer instead of extending the legacy file further. Full cascade consolidation remains a follow-up requiring screenshot-based visual regression.
-6. **Stale release documentation (low):** design, release readiness and phase matrix documents did not reflect the merged 4.2 production baseline. Refresh them and record explicit 4.3 gates.
+6. **Single-fix GPS export (medium):** a track containing one GPS point was exported as an invalid one-coordinate LineString. Export now emits a valid GeoJSON Point and Playwright covers granted and denied permission flows.\n7. **Stale release documentation (low):** design, release readiness and phase matrix documents did not reflect the merged 4.2 production baseline. Refresh them and record explicit 4.3 gates.
 
 ### Reviewed; follow-up verification required
 - **Guest-room rate-limit retention:** the migration creates time-bucketed rows in atlas_private.atlas_rate_limits, but no cleanup schedule is visible in the inspected migrations. Verify whether an external scheduled job exists; add bounded retention if not.
@@ -35,7 +35,7 @@ Repository tree, application shell, base styles, app and room modules, service w
 - CI includes npm audit, unit tests, syntax checks and Playwright browser coverage; CodeQL runs separately.
 
 ## Repository state at audit start
-- Open PR #12 (GPS acceptance) is based on an old main commit. Its own branch CI runs succeeded, but GitHub currently reports it as not mergeable against the current main. It needs rebase and exact-head checks.
+- Open PR #12 (GPS acceptance) is based on an old main commit and is not mergeable. Its one-point export fix and GPS permission tests are now integrated into this 4.3 candidate; close PR #12 as superseded after PR #17 merges.
 - Five Dependabot workflow-action PRs are open and GitHub reports them as not currently mergeable. Review one by one after refreshing their base.
 - 4.2 CI, CodeQL and Pages deployment/smoke all passed on the production baseline SHA. This is not evidence for the 4.3 candidate.
 
