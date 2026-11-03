@@ -1,6 +1,6 @@
 # ATLAS visual design system
 
-Version 3.1 visual direction: a focused geospatial operations console. The map remains the dominant workspace; navigation and inspection surfaces support it without competing for attention.
+Version 3.3 visual direction: a focused geospatial operations console. The map remains the dominant workspace; navigation and inspection surfaces support it without competing for attention.
 
 ## Design principles
 - **Map first:** controls frame the map instead of turning the page into a generic analytics dashboard.
@@ -45,6 +45,12 @@ The CSS refinement preserves existing map/control IDs. Keep Leaflet attribution 
 
 ## Verification matrix
 Run npm test, npm run check, npm run test:e2e and node scripts/smoke-test.mjs before release. Then manually review 1440px, 1280px, 900px, 390px and 320px viewports, both themes, keyboard-only use, reduced motion, map attribution, GPS permissions, PWA install and offline behaviour.
+
+## ATLAS 3.3 intelligence surfaces
+- Event monitoring is explicit opt-in and polls public Overpass endpoints only while the browser tab remains open. The first poll establishes a baseline; subsequent newly observed OSM object IDs become in-session events. This is not a guaranteed real-time feed.
+- Route comparisons use public OSRM alternatives. Distance and duration are estimates, not traffic-aware ETAs.
+- Historical activity is browser-local and bounded to 500 map/route events.
+- Dashboard widget visibility is a browser-local preference; no telemetry is uploaded.
 
 ## Implementation
 The refinement layer is appended to styles.css under ATLAS / FIELD CONSOLE. It intentionally preserves application DOM hooks and core JavaScript behaviours.
