@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — ATLAS 4.0 Advanced GIS
+
+- Add immutable GeoJSON vertex editing, geodesic point buffers and browser-local density grid generation.
+- Add separate map analysis overlays so buffer/density visualizations do not mutate source layers.
+- Add automated unit and browser regression coverage for geometry editing, buffer validation and density grids.
+
 ## Unreleased — ATLAS 4.0 foundation
 
 - Add reusable local spatial query primitives for GeoJSON geometry bounds, antimeridian-aware bounding-box intersection, and point containment in Polygon/MultiPolygon geometries with hole handling.
