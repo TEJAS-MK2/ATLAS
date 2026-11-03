@@ -1,5 +1,5 @@
-const CACHE='atlas-shell-v11';
-const SHELL=['./','./index.html','./styles.css?v=4.2.0','./app.js?v=4.2.0','./room-ui.js?v=4.2.0','./src/geo.js','./src/spatial.js','./src/spatial-operations.js','./src/formats.js','./src/atlas32.js?v=4.2.0','./src/atlas33.js?v=4.2.0','./manifest.webmanifest','./icons/atlas-192.svg','./icons/atlas-512.svg'];
+const CACHE='atlas-shell-v12';
+const SHELL=['./','./styles-v43.css?v=4.3.0','./index.html','./styles.css?v=4.3.0','./app.js?v=4.3.0','./room-ui.js?v=4.3.0','./src/geo.js','./src/spatial.js','./src/spatial-operations.js','./src/formats.js','./src/atlas32.js?v=4.3.0','./src/atlas33.js?v=4.3.0','./manifest.webmanifest','./icons/atlas-192.svg','./icons/atlas-512.svg'];
 const EXTERNAL_SHELL=[
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',

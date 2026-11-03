@@ -15,8 +15,8 @@ test('release compatibility: PWA caches all local application modules',async({pa
  const cached=await page.evaluate(async()=>{
   if(!('serviceWorker'in navigator))return false;
   await navigator.serviceWorker.ready;
-  const cache=await caches.open('atlas-shell-v11');
-  const paths=['./app.js?v=4.2.0','./src/spatial.js','./src/spatial-operations.js','./src/formats.js','./src/atlas32.js?v=4.2.0','./src/atlas33.js?v=4.2.0'];
+  const cache=await caches.open('atlas-shell-v12');
+  const paths=['./styles-v43.css?v=4.3.0','./app.js?v=4.3.0','./src/spatial.js','./src/spatial-operations.js','./src/formats.js','./src/atlas32.js?v=4.3.0','./src/atlas33.js?v=4.3.0'];
   for(const path of paths)if(!await cache.match(new URL(path,location.href).href))return false;
   return true;
  });

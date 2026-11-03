@@ -5,6 +5,8 @@ import {readFileSync} from 'node:fs';
 const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
 const app=readFileSync(new URL('../app.js',import.meta.url),'utf8');
 const css=readFileSync(new URL('../styles.css',import.meta.url),'utf8');
+const auroraCss=readFileSync(new URL('../styles-v43.css',import.meta.url),'utf8');
+const packageLock=JSON.parse(readFileSync(new URL('../package-lock.json',import.meta.url),'utf8'));
 const readme=readFileSync(new URL('../README.md',import.meta.url),'utf8');
 const smoke=readFileSync(new URL('../scripts/smoke-test.mjs',import.meta.url),'utf8');
 const atlas33=readFileSync(new URL('../src/atlas33.js',import.meta.url),'utf8');
@@ -178,10 +180,10 @@ test('historical activity chart uses a rolling window and escapes persisted labe
 });
 
 test('ATLAS 4.0 release metadata and PWA cache version stay synchronized',()=>{
- assert.equal(packageJson.version,'4.2.0');
- assert.match(html,/<title>ATLAS 4\.2 — Spatial Intelligence Workspace<\/title>/);
- assert.match(readme,/<h1 align="center">ATLAS 4\.2 · Spatial Intelligence Workspace<\/h1>/);
- assert.match(serviceWorker,/atlas-shell-v11/);
+ assert.equal(packageJson.version,'4.3.0');
+ assert.match(html,/<title>ATLAS 4\.3 — Spatial Intelligence Workspace<\/title>/);
+ assert.match(readme,/<h1 align="center">ATLAS 4\.3 · Aurora Spatial Workspace<\/h1>/);
+ assert.match(serviceWorker,/atlas-shell-v12/);
  assert.doesNotMatch(serviceWorker,/atlas-shell-v7/);
 });
 
@@ -194,11 +196,11 @@ test('ATLAS 4.0 field-console refinement preserves touch targets and accessibili
   assert.ok(css.includes('focus-visible'));
 });
 test('ATLAS 4.0 release metadata and PWA cache are synchronized',()=>{
-  assert.equal(packageJson.version,'4.2.0');
-  assert.ok(html.includes('<title>ATLAS 4.2 — Spatial Intelligence Workspace</title>'));
-  assert.ok(readme.includes('ATLAS 4.2 · Spatial Intelligence Workspace'));
-  assert.ok(html.includes('ATLAS ENGINE <b>v4.2.0</b>'));
-  assert.ok(serviceWorker.includes('atlas-shell-v11'));
+  assert.equal(packageJson.version,'4.3.0');
+  assert.ok(html.includes('<title>ATLAS 4.3 — Spatial Intelligence Workspace</title>'));
+  assert.ok(readme.includes('ATLAS 4.3 · Aurora Spatial Workspace'));
+  assert.ok(html.includes('ATLAS ENGINE <b>v4.3.0</b>'));
+  assert.ok(serviceWorker.includes('atlas-shell-v12'));
 });
 
 
@@ -221,7 +223,7 @@ test('ATLAS 4.0 geospatial interchange exposes KML GPX and CSV controls',()=>{
 
 
 test('ATLAS 4.0 PWA precaches every local module required by the app',()=>{
- assert.match(serviceWorker,/atlas-shell-v11/);
+ assert.match(serviceWorker,/atlas-shell-v12/);
  for(const path of ['./src/spatial.js','./src/spatial-operations.js','./src/formats.js'])assert.ok(serviceWorker.includes(path),path);
  assert.match(serviceWorker,/EXTERNAL_SHELL/);
  assert.match(serviceWorker,/externalShell/);
@@ -268,4 +270,32 @@ test('ATLAS 4.1 map controls and data panels preserve accessible touch sizing',(
   assert.match(css,/\.primary-btn,\.secondary-btn\{min-height:44px/);
   assert.match(css,/\.coordinate-card b\{font-variant-numeric:tabular-nums\}/);
   assert.match(css,/overscroll-behavior:contain/);
+});
+
+test('ATLAS 4.3 Aurora visual layer is linked, versioned and responsive',()=>{
+  assert.match(html,/styles-v43\.css\?v=4\.3\.0/);
+  assert.match(auroraCss,/ATLAS 4\.3 — Aurora spatial workspace/);
+  assert.match(auroraCss,/--atlas-accent:#75e4c3/);
+  assert.match(auroraCss,/grid-template-columns:clamp\(248px,19vw,286px\)/);
+  assert.match(auroraCss,/@media\(max-width:760px\)/);
+  assert.match(auroraCss,/grid-template-columns:repeat\(4,minmax\(0,1fr\)\)/);
+  assert.match(auroraCss,/body\.light-ui \.insight-card/);
+  assert.match(auroraCss,/prefers-reduced-motion:reduce/);
+  assert.match(auroraCss,/focus-visible/);
+});
+test('ATLAS 4.3 package, lockfile, page and PWA cache versions stay aligned',()=>{
+  assert.equal(packageJson.version,'4.3.0');
+  assert.equal(packageLock.packages[''].version,packageJson.version);
+  assert.equal(packageLock.lockfileVersion,3);
+  assert.match(html,/<title>ATLAS 4\.3 — Spatial Intelligence Workspace<\/title>/);
+  assert.match(html,/data-atlas-build="4\.3\.0"/);
+  assert.match(html,/ATLAS ENGINE <b>v4\.3\.0<\/b>/);
+  assert.match(serviceWorker,/atlas-shell-v12/);
+  assert.match(serviceWorker,/styles-v43\.css\?v=4\.3\.0/);
+});
+
+test('place search ignores stale provider responses after newer input',()=>{
+  assert.match(app,/let searchRequest=0/);
+  assert.match(app,/if\(requestId!==searchRequest\)return/);
+  assert.match(app,/const requestId=\+\+searchRequest/);
 });

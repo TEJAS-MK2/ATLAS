@@ -1,14 +1,14 @@
 {
   "id": "./",
   "name": "Atlas — Geospatial Intelligence",
-  "short_name": "ATLAS 4.2",
+  "short_name": "ATLAS 4.3",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#07111a",
-  "theme_color": "#07111a",
-  "description": "ATLAS 4.2 — a responsive spatial intelligence workspace for mapping, GIS analysis, route planning and field operations.",
+  "background_color": "#07131b",
+  "theme_color": "#07131b",
+  "description": "ATLAS 4.3 — a responsive spatial intelligence workspace for mapping, GIS analysis, route planning and field operations.",
   "icons": [
     {
       "src": "./icons/atlas-192.svg",
