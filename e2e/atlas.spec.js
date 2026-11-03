@@ -121,3 +121,79 @@ test('ATLAS 3.3 route comparison UI can select an alternate route',async({page})
  await page.locator('[data-route-index="1"]').click();
  await expect(page.locator('[data-route-index="1"]')).toHaveAttribute('aria-pressed','true');
 });
+
+test('ATLAS 4.0 geometry editor updates selected feature vertices without mutation',async({page})=>{
+ const file={name:'editable.geojson',mimeType:'application/geo+json',buffer:Buffer.from(JSON.stringify({type:'FeatureCollection',features:[{type:'Feature',properties:{name:'Editable boundary'},geometry:{type:'Polygon',coordinates:[[[88.36,22.57],[88.37,22.57],[88.37,22.58],[88.36,22.58],[88.36,22.57]]]}}]}))};
+ await page.locator('#importFile').setInputFiles(file);
+ await page.locator('#overlayBtn').click();
+ await page.locator('#overlayFeatureList [data-feature-index="0"]').click();
+ await expect(page.locator('#spatialEditFeature')).toHaveValue('0');
+ await expect(page.locator('#spatialEditLat')).toHaveValue('22.57');
+ await page.locator('#spatialEditLat').fill('22.571');
+ await page.evaluate(()=>{window.__atlasGeometryEdit=null;window.addEventListener('atlas:geometry-edit',e=>window.__atlasGeometryEdit=e.detail,{once:true})});
+ await page.locator('#spatialEditApply').click();
+ await expect.poll(()=>page.evaluate(()=>window.__atlasGeometryEdit?.features?.[0]?.geometry?.coordinates?.[0]?.[0]?.[1])).toBe(22.571);
+ await expect(page.locator('#spatialOperationsStatus')).toContainText('Updated feature 0');
+});
+test('ATLAS 4.0 creates a geodesic buffer and clears analysis overlays',async({page})=>{
+ await page.locator('#overlayBtn').click();
+ await page.locator('#spatialQueryLat').fill('22.5726');
+ await page.locator('#spatialQueryLng').fill('88.3639');
+ await page.evaluate(()=>{
+  window.__atlasAnalysis=null;
+  window.__atlasAnalysisLayer=null;
+  const originalGeoJSON=L.geoJSON;
+  L.geoJSON=function(data,...args){
+   const layer=originalGeoJSON.call(this,data,...args);
+   if(data?.features?.some(feature=>feature.properties?.atlasRole==='buffer'))window.__atlasAnalysisLayer=layer;
+   return layer;
+  };
+  window.addEventListener('atlas:analysis-rendered',e=>window.__atlasAnalysis=e.detail,{once:true});
+ });
+ await page.locator('#spatialBufferCreate').click();
+ await expect(page.locator('#spatialOperationsStatus')).toContainText('500 m geodesic buffer');
+ await expect.poll(()=>page.evaluate(()=>window.__atlasAnalysis?.features?.[0]?.properties?.atlasRole)).toBe('buffer');
+ await expect.poll(()=>page.evaluate(()=>Boolean(window.__atlasAnalysisLayer?._map))).toBe(true);
+ await page.locator('#spatialAnalysisClear').click();
+ await expect.poll(()=>page.evaluate(()=>Boolean(window.__atlasAnalysisLayer&&!window.__atlasAnalysisLayer._map))).toBe(true);
+});
+test('ATLAS 4.0 generates a density grid from loaded point features',async({page})=>{
+ const file={name:'points.geojson',mimeType:'application/geo+json',buffer:Buffer.from(JSON.stringify({type:'FeatureCollection',features:[{type:'Feature',properties:{name:'A'},geometry:{type:'Point',coordinates:[88.36,22.57]}},{type:'Feature',properties:{name:'B'},geometry:{type:'Point',coordinates:[88.37,22.58]}}]}))};
+ await page.locator('#importFile').setInputFiles(file);
+ await page.locator('#overlayBtn').click();
+ await page.evaluate(()=>{window.__atlasAnalysis=null;window.addEventListener('atlas:analysis-rendered',e=>window.__atlasAnalysis=e.detail,{once:true})});
+ await page.locator('#spatialHeatmapCreate').click();
+ await expect.poll(()=>page.evaluate(()=>window.__atlasAnalysis?.mode)).toBe('density');
+ await expect.poll(()=>page.evaluate(()=>window.__atlasAnalysis?.features?.length||0)).toBeGreaterThan(0);
+ await expect(page.locator('#spatialOperationsStatus')).toContainText('local density cells');
+});
+
+test('ATLAS 4.0 imports KML points and lines and exports the active layer',async({page})=>{
+ const kml='<?xml version="1.0"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document><Placemark><name>Park Point</name><Point><coordinates>88.36,22.57,0</coordinates></Point></Placemark><Placemark><name>Park Path</name><LineString><coordinates>88.36,22.57,0 88.37,22.58,0</coordinates></LineString></Placemark></Document></kml>';
+ const file={name:'parks.kml',mimeType:'application/vnd.google-earth.kml+xml',buffer:Buffer.from(kml)};
+ await page.locator('#importFile').setInputFiles(file);
+ await expect(page.locator('#toast')).toContainText('2 GeoJSON features imported');
+ await page.locator('#overlayBtn').click();
+ await expect(page.locator('#overlayCount')).toHaveText('2');
+ await expect(page.locator('#overlayFeatureList')).toContainText('Park Point');
+ await page.locator('#overlayExportFormat').selectOption('kml');
+ const download=page.waitForEvent('download');
+ await page.locator('#overlayExport').click();
+ expect((await download).suggestedFilename()).toContain('.kml');
+});
+test('ATLAS 4.0 imports GPX waypoints and tracks',async({page})=>{
+ const gpx='<?xml version="1.0"?><gpx version="1.1" creator="test" xmlns="http://www.topografix.com/GPX/1/1"><wpt lat="22.57" lon="88.36"><name>Start pin</name></wpt><trk><name>Field walk</name><trkseg><trkpt lat="22.57" lon="88.36"/><trkpt lat="22.58" lon="88.37"/></trkseg></trk></gpx>';
+ await page.locator('#importFile').setInputFiles({name:'walk.gpx',mimeType:'application/gpx+xml',buffer:Buffer.from(gpx)});
+ await expect(page.locator('#toast')).toContainText('2 GeoJSON features imported');
+ await page.locator('#overlayBtn').click();
+ await expect(page.locator('#overlayCount')).toHaveText('2');
+ await expect(page.locator('#overlayFeatureList')).toContainText('Field walk');
+});
+test('ATLAS 4.0 imports CSV coordinate tables including quoted names',async({page})=>{
+ const csv='name,latitude,longitude\n"Park, north",22.57,88.36\nRiver point,22.58,88.37\n';
+ await page.locator('#importFile').setInputFiles({name:'places.csv',mimeType:'text/csv',buffer:Buffer.from(csv)});
+ await expect(page.locator('#toast')).toContainText('2 GeoJSON features imported');
+ await page.locator('#overlayBtn').click();
+ await expect(page.locator('#overlayCount')).toHaveText('2');
+ await expect(page.locator('#overlayFeatureList')).toContainText('Park, north');
+});

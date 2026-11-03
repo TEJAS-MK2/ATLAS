@@ -12,6 +12,8 @@ ATLAS is a static, browser-first geospatial application. The GitHub Pages site s
 - `room-ui.js`: guest map-room client integration.
 - `src/geo.js`: coordinate validation, distance calculations, naming helpers, and GeoJSON utilities.
 - `src/spatial.js`: local spatial query primitives for geometry extents, antimeridian-aware bounds intersection, and point-in-polygon selection.
+- `src/spatial-operations.js`: immutable geometry vertex editing, geodesic point buffers, and local density-grid generation.
+- `src/formats.js`: browser-local KML, GPX, CSV and GeoJSON import/export adapters.
 - `sw.js` and `manifest.webmanifest`: PWA install/offline behaviour.
 - `supabase/functions/atlas-rooms`: server-side room operations, when deployed in the associated Supabase project.
 - `tests/` and `scripts/`: automated tests, static checks, and production smoke verification.

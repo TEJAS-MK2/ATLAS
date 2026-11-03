@@ -180,7 +180,7 @@ test('ATLAS 3.5 release metadata and PWA cache version stay synchronized',()=>{
  assert.equal(packageJson.version,'3.6.0');
  assert.match(html,/<title>ATLAS 3\.6 — Geospatial Field Console<\/title>/);
  assert.match(readme,/<h1 align="center">ATLAS 3\.6 · Geospatial Field Console<\/h1>/);
- assert.match(serviceWorker,/atlas-shell-v9/);
+ assert.match(serviceWorker,/atlas-shell-v10/);
  assert.doesNotMatch(serviceWorker,/atlas-shell-v7/);
 });
 
@@ -197,5 +197,23 @@ test('ATLAS 3.6 release metadata and PWA cache are synchronized',()=>{
   assert.ok(html.includes('<title>ATLAS 3.6 — Geospatial Field Console</title>'));
   assert.ok(readme.includes('ATLAS 3.6 · Geospatial Field Console'));
   assert.ok(html.includes('ATLAS ENGINE <b>v3.6.0</b>'));
-  assert.ok(serviceWorker.includes('atlas-shell-v9'));
+  assert.ok(serviceWorker.includes('atlas-shell-v10'));
+});
+
+
+test('ATLAS 4.0 advanced GIS controls and map operations are connected',()=>{
+ for(const id of ['spatialBufferRadius','spatialBufferCreate','spatialDensitySize','spatialHeatmapCreate','spatialEditFeature','spatialEditVertex','spatialEditLat','spatialEditLng','spatialEditApply','spatialAnalysisClear','spatialOperationsStatus'])assert.match(html,new RegExp('id="'+id+'"'));
+ const operations=readFileSync(new URL('../src/spatial-operations.js',import.meta.url),'utf8');
+ assert.match(operations,/createPointBuffer/);
+ assert.match(operations,/createDensityGrid/);
+ assert.match(operations,/updateGeometryVertex/);
+ assert.match(app,/atlas:analysis-overlay/);
+ assert.match(app,/atlas:geometry-edit/);
+});
+
+
+test('ATLAS 4.0 geospatial interchange exposes KML GPX and CSV controls',()=>{
+ assert.match(html,/\.kml/);assert.match(html,/\.gpx/);assert.match(html,/\.csv/);
+ assert.match(html,/id="overlayExportFormat"/);
+ assert.match(app,/parseSpatialFile/);assert.match(app,/exportSpatialFile/);
 });

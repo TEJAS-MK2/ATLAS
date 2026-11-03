@@ -11,7 +11,7 @@ test('ATLAS 3.6 release metadata is synchronized',()=>{
   assert.equal(pkg.version,'3.6.0');
   assert.match(html,/<title>ATLAS 3\.6 — Geospatial Field Console<\/title>/);
   assert.match(html,/v3\.6\.0/);
-  assert.match(sw,/atlas-shell-v9/);
+  assert.match(sw,/atlas-shell-v10/);
 });
 
 test('Field Console responsive dock preserves the four core tools on mobile',()=>{
