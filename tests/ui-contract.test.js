@@ -8,6 +8,8 @@ const css=readFileSync(new URL('../styles.css',import.meta.url),'utf8');
 const readme=readFileSync(new URL('../README.md',import.meta.url),'utf8');
 const smoke=readFileSync(new URL('../scripts/smoke-test.mjs',import.meta.url),'utf8');
 const atlas33=readFileSync(new URL('../src/atlas33.js',import.meta.url),'utf8');
+const packageJson=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8'));
+const serviceWorker=readFileSync(new URL('../sw.js',import.meta.url),'utf8');
 
 test('all statically referenced application elements exist in the page',()=>{
   const ids=new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));
@@ -172,4 +174,12 @@ test('historical activity chart uses a rolling window and escapes persisted labe
  assert.match(atlas33,/rolling 24-hour timeline/);
  assert.match(atlas33,/Math\.floor\(\(item\.at-cutoff\)\/hourMs\)/);
  assert.match(atlas33,/safe\(stats\.layers\.join\(', '\)\)/);
+});
+
+test('ATLAS 3.5 release metadata and PWA cache version stay synchronized',()=>{
+ assert.equal(packageJson.version,'3.5.0');
+ assert.match(html,/<title>ATLAS 3\.5 — Geospatial Field Console<\/title>/);
+ assert.match(readme,/<h1 align="center">ATLAS 3\.5 · Geospatial Field Console<\/h1>/);
+ assert.match(serviceWorker,/atlas-shell-v8/);
+ assert.doesNotMatch(serviceWorker,/atlas-shell-v7/);
 });
