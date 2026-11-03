@@ -260,8 +260,8 @@ test('ATLAS 4.0 analysis clear removes the actual Leaflet layer',async({page})=>
 test('ATLAS PWA reopens its cached application shell offline',async({page,context})=>{
  await page.evaluate(async()=>{if(!('serviceWorker'in navigator))throw new Error('Service workers are unavailable');await navigator.serviceWorker.ready});
  const cached=await page.evaluate(async()=>{
-  const cache=await caches.open('atlas-shell-v11');
-  return Boolean(await cache.match(new URL('./src/formats.js',location.href).href)&&await cache.match(new URL('./src/spatial-operations.js',location.href).href));
+  const cache=await caches.open('atlas-shell-v12');
+  return Boolean(await cache.match(new URL('./styles-v43.css?v=4.3.0',location.href).href)&&await cache.match(new URL('./src/formats.js',location.href).href)&&await cache.match(new URL('./src/spatial-operations.js',location.href).href));
  });
  expect(cached).toBe(true);
  await context.setOffline(true);
