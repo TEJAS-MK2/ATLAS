@@ -11,7 +11,7 @@ ATLAS is a static, browser-first geospatial application. The GitHub Pages site s
 - `app.js`: map lifecycle, basemaps, place search, routing, measurement, bookmarks, GPS, overlays, import/export, and command palette.
 - `room-ui.js`: guest map-room client integration.
 - `src/geo.js`: coordinate validation, distance calculations, naming helpers, and GeoJSON utilities.
-- `src/spatial.js`: local spatial query primitives for geometry extents, antimeridian-aware bounds intersection, and point-in-polygon selection.
+- `src/spatial.js`: local spatial query primitives for geometry extents, antimeridian-aware bounds intersection, and point-in-polygon selection including antimeridian-crossing polygon rings and holes.
 - `src/spatial-operations.js`: immutable geometry vertex editing, geodesic point buffers, and local density-grid generation.
 - `src/formats.js`: browser-local KML, GPX, CSV and GeoJSON import/export adapters.
 - `sw.js` and `manifest.webmanifest`: versioned PWA shell caching, local module precaching, and a narrow allowlist of required CDN libraries. Map tiles and live provider responses remain network-only.
