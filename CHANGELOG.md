@@ -1,3 +1,10 @@
+## 4.3.0 — 2026-11-04
+
+- Introduced the Aurora spatial workspace design layer in a separately versioned stylesheet.
+- Refined desktop navigation, map controls, floating panels, intelligence cards, dark/light themes and mobile navigation ergonomics.
+- Aligned package and lockfile versions and updated PWA asset/cache versioning.
+- Refreshed release, design-system and audit documentation; added regression coverage for the new visual layer.
+
 # Changelog
 
 ## Unreleased — ATLAS 4.0 release hardening
