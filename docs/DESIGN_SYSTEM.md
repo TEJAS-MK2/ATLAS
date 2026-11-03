@@ -1,74 +1,53 @@
 # ATLAS visual design system
 
-Version 3.5 visual direction: a focused geospatial operations console. The map remains the dominant workspace; navigation and inspection surfaces support it without competing for attention.
+**Current direction: ATLAS 4.3 Aurora.** A map-first spatial intelligence workspace with calm dark surfaces, precise controls, readable data panels and a restrained mint accent. The map remains the primary canvas; chrome supports rather than competes with it.
 
-## Design principles
-- **Map first:** controls frame the map instead of turning the page into a generic analytics dashboard.
-- **High signal:** clear hierarchy, compact metadata, strong selected states and restrained accent usage.
-- **Honest telemetry:** display only measurements the application actually obtains. Never imply a live server, GPS, network or traffic status that has not been measured.
-- **Touch ready:** map controls and primary actions remain comfortably targetable on phones.
-- **Accessible motion:** visible keyboard focus, semantic controls, reduced-motion support and contrast-aware dark/light themes.
+## Principles
+- **Map first:** preserve usable map area and keep controls discoverable.
+- **Operational clarity:** distinguish actions, selected state, measured data, provider status and static labels.
+- **Quiet depth:** use layered surfaces, subtle borders and controlled elevation instead of heavy glow or decorative clutter.
+- **Responsive by intent:** desktop keeps navigation and inspection close to the map; phones prioritize the map and a four-action dock.
+- **Accessible by default:** visible focus, keyboard-operable controls, adequate touch targets, readable contrast and reduced-motion support.
+- **Honest telemetry:** do not imply live server, GPS, network, traffic or provider health unless it is actually measured.
 
-## Core tokens
+## Tokens
 | Token | Dark | Light |
 |---|---|---|
-| App background | #08131b | #eaf1ee |
-| Panel | #0d1c26 | #fbfdfb |
-| Raised surface | #122531 | #f0f6f2 |
-| Divider | #203945 | #d5e2dc |
-| Primary text | #eaf3f5 | #183538 |
-| Muted text | #8ba1ad | #607b77 |
-| Accent | #77e2c2 | #238b6d |
+| App background | #07131b | #edf4f0 |
+| Panel | #0b1b25 | #f9fcfa |
+| Raised surface | #102631 | #f1f7f3 |
+| Divider | rgba(153,190,195,.15) | rgba(39,91,73,.13) |
+| Primary text | #edf7f5 | #183a32 |
+| Muted text | #91a9ae | #66847a |
+| Accent | #75e4c3 | #168b69 |
 
-Typography uses Space Grotesk for product headings and DM Sans for interface text. Surfaces use layered navy/green gradients, subtle borders, restrained shadows and 10–16px corner radii. Avoid excessive glow, glass effects that reduce legibility, and decorative metric cards with invented values.
+Space Grotesk is used for product headings and DM Sans for interface text. Use 10–17px radii, subtle gradients and restrained shadows. Numeric values should use tabular figures where helpful.
 
-## Responsive layout
-| Width | Layout |
+## Layout
+| Width | Intended layout |
 |---|---|
-| 1500px and wider | Expanded navigation, map and inspector columns |
-| 1181–1499px | Three-column console with compact panels |
-| 901–1180px | Navigation rail and map; inspector yields to map |
-| 651–900px | Compact navigation and map |
-| 381–650px | Full-screen map with compact header and bottom tool dock |
-| 320–380px | Minimal header actions and scroll-safe floating panels |
+| 1500px+ | Expanded navigation, map and live-inspector columns |
+| 1181–1499px | Balanced three-column workspace |
+| 761–1180px | Navigation and map; inspector yields space to the map |
+| 391–760px | Compact header, full map and four-action bottom dock |
+| 320–390px | Minimal header actions, scroll-safe floating panels and safe-area spacing |
 
-The CSS refinement preserves existing map/control IDs. Keep Leaflet attribution visible in all layouts.
+The 4.3 stylesheet is a separate versioned layer (styles-v43.css) loaded after the compatibility stylesheet. Keep existing element IDs and event hooks stable when refining visuals.
 
 ## Interaction and accessibility
-- Every action should have a visible hover and focus state.
-- Keep focus-visible outlines high contrast and never remove them globally.
+- All actions need visible hover, focus, disabled and selected states.
+- Never remove focus-visible outlines globally.
 - Respect prefers-reduced-motion.
-- Use semantic buttons and labels for actions and inputs.
-- Keep text legible over map tiles with opaque or blurred control surfaces.
-- Avoid relying on color alone for selected or error states.
-- Do not add fake network health, traffic, live location or server status.
+- Keep touch controls usable at narrow widths and account for device safe areas.
+- Preserve Leaflet map attribution above the map canvas.
+- Use opaque or sufficiently contrasted control surfaces over map tiles.
+- Avoid color-only communication for errors, selection or status.
 
-## Verification matrix
-Run npm test, npm run check, npm run test:e2e and node scripts/smoke-test.mjs before release. Then manually review 1440px, 1280px, 900px, 390px and 320px viewports, both themes, keyboard-only use, reduced motion, map attribution, GPS permissions, PWA install and offline behaviour.
+## Verification
+Run npm ci --no-audit --no-fund, npm audit --audit-level=high, npm test, npm run check, npm run test:e2e and node scripts/smoke-test.mjs. Review dark/light themes at 1440, 1280, 900, 390 and 320 CSS pixels. Physical-device GPS, PWA install, offline recovery, screen-reader and live-room acceptance remain separate checks.
 
-## ATLAS 3.3 intelligence surfaces
-- Event monitoring is explicit opt-in and polls public Overpass endpoints only while the browser tab remains open. The first poll establishes a baseline; subsequent newly observed OSM object IDs become in-session events. This is not a guaranteed real-time feed.
-- Route comparisons use public OSRM alternatives. Distance and duration are estimates, not traffic-aware ETAs.
-- Historical activity is browser-local and bounded to 500 map/route events.
-- Dashboard widget visibility is a browser-local preference; no telemetry is uploaded.
-
-## Implementation
-The refinement layer is appended to styles.css under ATLAS / FIELD CONSOLE. It intentionally preserves application DOM hooks and core JavaScript behaviours.
-
-
-## ATLAS 3.4 Field Console refresh
-
-- The top bar, navigation rail, inspector, floating tools and map controls share a consistent 10–20px radius scale, layered surfaces and restrained elevation.
-- The map remains the dominant canvas; desktop uses a balanced three-column workspace, tablet yields the inspector to the map, and phone uses a four-tool bottom dock.
-- Touch controls remain visible above the map; floating panels respect safe viewport space and remain scrollable.
-- Focus rings, disabled states, selection states and reduced-motion overrides are explicit. Hover movement is limited to fine pointers.
-- Dark and light themes have independently tuned surface, border and control treatments. No fake live status, traffic data or device telemetry is introduced.
-
-
-## ATLAS 3.6 Field Console refinement
-
-- Shared transition and radius tokens unify controls without changing application hooks.
-- Search focus, active tools, map controls and panels receive consistent interaction feedback.
-- Mobile floating panels account for dynamic viewport and safe-area insets; controls meet a 44px touch target where space allows.
-- Keyboard focus remains visible and reduced-motion preferences are respected.
-- The refinement is additive: existing DOM IDs, map layers and tool wiring are preserved.
+## Data and motion
+- Route alternatives are provider estimates, not traffic-aware ETAs.
+- Monitoring depends on public Overpass availability and is not a guaranteed real-time feed.
+- History, saved places and workspace preferences are browser-local unless a user explicitly shares a live map room.
+- Map tiles and provider data are network-dependent; caching the app shell does not make the basemap fully offline.
