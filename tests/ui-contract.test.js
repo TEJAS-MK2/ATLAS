@@ -246,3 +246,9 @@ test('ATLAS geometry editor synchronizes coordinate fields when the vertex index
  assert.match(atlas32,/spatialEditVertex'\)\.addEventListener\('change',loadEditorVertex\)/);
  assert.match(atlas32,/positions\[vertexIndex\]/);
 });
+
+
+test('analysis overlay lifecycle reports actual map-layer removal',()=>{
+ assert.match(app,/atlas:analysis-cleared/);
+ assert.match(app,/map\.hasLayer\(geoAnalysisOverlay\)/);
+});
