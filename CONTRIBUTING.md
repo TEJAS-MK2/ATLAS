@@ -16,6 +16,8 @@ Requirements: Node.js 22 or newer and Git.
 ```bash
 git clone https://github.com/TEJAS-MK2/ATLAS.git
 cd ATLAS
+npm ci
+npm ci
 npm test
 npm run check
 node scripts/smoke-test.mjs
