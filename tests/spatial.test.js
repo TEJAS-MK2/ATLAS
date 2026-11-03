@@ -45,6 +45,11 @@ test('point-in-ring includes boundary and rejects points outside',()=>{
   assert.equal(pointInRing({lat:2,lng:2},[[0,0],[1,1],[0,0]]),false);
 });
 
+test('closed rings do not treat the duplicated closing vertex as a zero-length edge',()=>{
+  assert.equal(pointInRing({lat:5,lng:2},square),false);
+  assert.equal(pointInRing({lat:0,lng:0},square),true);
+});
+
 test('polygon containment respects holes and multipolygon components',()=>{
   const withHole={type:'Polygon',coordinates:[square,[[1,1],[3,1],[3,3],[1,3],[1,1]]]};
   assert.equal(geometryContainsPoint(withHole,{lat:.5,lng:.5}),true);
