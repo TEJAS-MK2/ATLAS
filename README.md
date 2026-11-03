@@ -121,3 +121,9 @@ The GitHub Pages workflow runs unit tests, JavaScript syntax checks and Chromium
 Issues and pull requests are welcome. Read [CONTRIBUTING.md](./CONTRIBUTING.md), run the test suite, and include viewport details for UI bugs.
 ## License
 Released under the [MIT License](./LICENSE).
+
+
+## ATLAS 4.0 spatial foundation
+- **Spatial query primitives:** validate map bounds, compute geometry extents, select features intersecting a bounding box, and test point containment in Polygon/MultiPolygon geometries including polygon holes.
+- **Antimeridian-aware bounds:** bounding-box overlap handles extents that cross ±180° longitude.
+- **Privacy-first processing:** spatial selection runs locally in the browser; no feature geometry is uploaded by these utilities.
