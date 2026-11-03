@@ -41,14 +41,21 @@ ATLAS is a responsive, browser-based GIS workspace. The map remains the primary 
 |---|---|
 | Explore | Interactive map, five basemaps, place search, cursor coordinates and map-center inspection |
 | Navigate | Driving routes, nearby points of interest, distance measurement and Street View handoff |
-| Analyze | Validated GeoJSON import/export, searchable feature inspector, line length, polygon area and spatial bounds |
-| Organize | Saved places, up to 30 named map views, map sharing and seven-day guest map rooms |
+| Analyze | Validated GeoJSON import/export, searchable feature inspector, line length, polygon area, spatial bounds and live feature summaries |
+| Organize | Saved places, up to 30 named map views, reusable workspace profiles, map sharing and seven-day guest map rooms |
 | Field tools | User-initiated device location, opt-in GPS track recording and 3D Earth explorer |
-| Platform | Responsive interface, dark/light appearance, PWA shell and offline navigation fallback |
+| Platform | Responsive interface, dark/light appearance, customizable workspace profiles, layer styling studio, PWA shell and offline navigation fallback |
 | Engineering | Unit tests, Chromium browser tests, production smoke checks and CodeQL analysis |
 ## Interface
 The ATLAS Field Console uses a restrained geospatial operations-console visual language: a high-contrast map canvas, quiet navigation, tactile controls, clear selected states and a focused intelligence inspector. Layouts adapt across desktop, tablet and narrow mobile viewports. No fabricated live traffic or telemetry is presented.
 See [the design system](./docs/DESIGN_SYSTEM.md).
+## ATLAS 3.2 capabilities
+- **Spatial analytics:** summarize loaded GeoJSON feature types, line length, polygon area and spatial bounds; filter the active feature set.
+- **Layer styling studio:** tune overlay color, line width, fill opacity and line opacity without changing source GeoJSON.
+- **Workspace profiles:** save and restore map center, zoom, basemap, appearance and inspector visibility in local browser storage.
+
+These features operate on data already loaded into the browser. No new geolocation permissions or external telemetry are introduced.
+
 ## Keyboard shortcuts
 - **Ctrl/⌘ + K** — open the command palette
 - **/** — focus command search
