@@ -13,8 +13,8 @@ function localName(node){return String(node?.localName||node?.nodeName||'').spli
 function firstDescendant(node,name){return descendants(node,name)[0]||null;}
 function parseCoordinateText(value){
   return String(value||'').trim().split(/\s+/).map(token=>{
-    const parts=token.split(',').map(Number),lng=parts[0],lat=parts[1];
-    return parts.length>=2&&validCoordinate(lat,lng)?[lng,lat]:null;
+    const raw=token.split(',');if(raw.length<2||!raw[0].trim()||!raw[1].trim())return null;const parts=raw.map(Number),lng=parts[0],lat=parts[1];
+    return validCoordinate(lat,lng)?[lng,lat]:null;
   }).filter(Boolean);
 }
 function closeRing(ring){
@@ -95,7 +95,7 @@ function parseCsv(source){
   const nameIndex=headers.findIndex(value=>['name','title','label'].includes(value));
   const features=[];
   for(let i=1;i<rows.length;i++){
-    const lat=Number(rows[i][latIndex]),lng=Number(rows[i][lngIndex]);
+    const latText=String(rows[i][latIndex]??'').trim(),lngText=String(rows[i][lngIndex]??'').trim();if(!latText||!lngText)continue;const lat=Number(latText),lng=Number(lngText);
     if(!validCoordinate(lat,lng))continue;
     features.push({type:'Feature',properties:{name:nameIndex>=0&&rows[i][nameIndex]?.trim()?rows[i][nameIndex].trim():'CSV point '+i},geometry:{type:'Point',coordinates:[lng,lat]}});
   }
