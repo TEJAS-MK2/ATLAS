@@ -21,6 +21,8 @@ GitHub Actions installs Chromium, Firefox and WebKit, runs unit tests and syntax
 
 ## Release evidence
 
+Use the [ATLAS 4.0 release checklist](./ATLAS_4_RELEASE_CHECKLIST.md) to track final PR ordering, automated gates, physical-device acceptance, deployment evidence and rollback readiness.
+
 For every release candidate, record the exact commit SHA and the linked GitHub Actions run. A green workflow on a different commit is not evidence for the candidate. The production smoke job must run after Pages deployment and pass against the deployed URL. If a workflow or production endpoint cannot be inspected, mark that check as **not verified** rather than inferring success from configuration or badges.
 
 ## Manual UI acceptance
