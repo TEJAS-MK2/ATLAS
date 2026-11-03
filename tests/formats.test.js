@@ -26,6 +26,11 @@ test('CSV formula neutralization survives an import round trip as literal text',
  assert.equal(imported.features[0].properties.name,"'+SUM(1,2)");
 });
 
+test('CSV import rejects incomplete and invalid coordinate rows instead of silently dropping data',()=>{
+ assert.throws(()=>parseSpatialFile('incomplete.csv','name,latitude,longitude\\nMissing longitude,22.5,\\n'),/CSV row 2 is missing latitude or longitude/);
+ assert.throws(()=>parseSpatialFile('invalid.csv','name,latitude,longitude\\nOutside,91,88\\n'),/CSV row 2 contains invalid coordinates/);
+});
+
 test('KML export emits escaped names, polygon rings and ATLAS geometry metadata',()=>{
  const result=exportSpatialFile([{type:'Feature',properties:{name:'Park & lake'},geometry:{type:'MultiPolygon',coordinates:[[[[0,0],[1,0],[1,1],[0,0]]],[[[2,2],[3,2],[3,3],[2,2]]]]}}],'kml');
  assert.match(result.content,/Park &amp; lake/);
