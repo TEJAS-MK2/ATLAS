@@ -436,6 +436,12 @@ body.light-ui .topbar{background:linear-gradient(180deg,#fbfefc,#f0f6f2);border-
 .atlas32-studio input[type=range]{width:100%;accent-color:var(--accent)}
 .atlas32-studio .section-label{margin:0}
 .atlas32-divider{height:1px;background:var(--line);margin:3px 0}
+.atlas32-query{display:grid;gap:8px;padding:10px;border:1px solid var(--line);border-radius:10px;background:color-mix(in srgb,var(--panel2) 78%,transparent)}
+.atlas32-coordinate-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.atlas32-query-actions{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px}
+.atlas32-query .helper{margin:0;line-height:1.5}
+body.light-ui .atlas32-query{background:#f8fbf9;border-color:#d3e2d9}
+@media(max-width:380px){.atlas32-query-actions{grid-template-columns:1fr}.atlas32-coordinate-fields{gap:6px}}
 .atlas32-workspace-panel{width:min(390px,calc(100% - 28px));max-height:min(78vh,720px);overflow:auto}
 .atlas32-check{display:flex!important;align-items:center;gap:9px!important}
 .atlas32-check input{accent-color:var(--accent)}
