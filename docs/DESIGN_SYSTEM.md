@@ -1,6 +1,6 @@
 # ATLAS visual design system
 
-Version 3.3 visual direction: a focused geospatial operations console. The map remains the dominant workspace; navigation and inspection surfaces support it without competing for attention.
+Version 3.5 visual direction: a focused geospatial operations console. The map remains the dominant workspace; navigation and inspection surfaces support it without competing for attention.
 
 ## Design principles
 - **Map first:** controls frame the map instead of turning the page into a generic analytics dashboard.
