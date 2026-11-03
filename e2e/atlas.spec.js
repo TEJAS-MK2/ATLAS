@@ -239,3 +239,17 @@ test('ATLAS 4.0 analysis clear removes the rendered Leaflet overlay',async({page
  await page.locator('#spatialAnalysisClear').click();
  await expect(page.locator('#map .leaflet-overlay-pane path')).toHaveCount(0);
 });
+
+
+test('ATLAS PWA reopens its cached application shell offline',async({page,context})=>{
+ await page.evaluate(async()=>{if(!('serviceWorker'in navigator))throw new Error('Service workers are unavailable');await navigator.serviceWorker.ready});
+ const cached=await page.evaluate(async()=>{
+  const cache=await caches.open('atlas-shell-v10');
+  return Boolean(await cache.match(new URL('./src/formats.js',location.href).href)&&await cache.match(new URL('./src/spatial-operations.js',location.href).href));
+ });
+ expect(cached).toBe(true);
+ await context.setOffline(true);
+ await page.reload();
+ await expect(page.locator('#map.leaflet-container')).toBeVisible({timeout:20000});
+ await expect(page.locator('#commandOpen')).toBeVisible();
+});
